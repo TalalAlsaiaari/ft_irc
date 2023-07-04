@@ -6,3 +6,9 @@ It offers real-time messaging that can be either public or private. Users can ex
 direct messages and join group channels.
 IRC clients connect to IRC servers in order to join channels. IRC servers are connected
 together to form a network.
+
+ docker run -itd --name=irssi irssi
+ docker exec -it irssi irssi
+ /set nick [name]
+ /connect liberachat
+ /join TALALMR
