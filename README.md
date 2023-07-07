@@ -13,6 +13,9 @@ together to form a network.
  /connect liberachat
  /join #TALALMR
 
+get unique includes from README
+cat README.md | grep "#include" | sort -u
+
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 https://www.geeksforgeeks.org/socket-programming-cc/
 http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
@@ -313,17 +316,267 @@ Alternatively, you can set the socket to deliver SIGIO when
 activity occurs on a socket; see socket(7) for details.**
 
 ### [ htons ]
+
+	#include <arpa/inet.h>
+
+	uint16_t htons(uint16_t hostshort);
+
+converts the unsigned short integer
+hostshort from host byte order to network byte order.
+
 ### [ htonl ]
+
+	#include <arpa/inet.h>
+
+	uint32_t htonl(uint32_t hostlong);
+
+converts the unsigned integer hostlong from
+host byte order to network byte order.
+
 ### [ ntohs ]
+
+	#include <arpa/inet.h>
+
+	uint16_t ntohs(uint16_t netshort);
+
+converts the unsigned short integer netshort
+from network byte order to host byte order.
+
 ### [ ntohl ]
+
+	#include <arpa/inet.h>
+
+	uint32_t ntohl(uint32_t netlong);
+
+converts the unsigned integer netlong from
+network byte order to host byte order.
+
 ### [ inet_addr ]
+
+	#include <arpa/inet.h>
+
+	in_addr_t inet_addr(const char *cp);
+
+convert the string pointed to by
+cp, in the standard IPv4 dotted decimal notation, to an integer
+value suitable for use as an Internet address.
+
 ### [ inet_ntoa ]
+
+	#include <arpa/inet.h>
+
+	char *inet_ntoa(struct in_addr in);
+
+convert the Internet host address
+specified by in to a string in the Internet standard dot
+notation.
+
+The return value of inet_ntoa() may point to static data that may
+be overwritten by subsequent calls to inet_ntoa().
+
 ### [ send ]
+
+	#include <sys/socket.h>
+
+	ssize_t send(int sockfd, const void buf[.len], size_t len, int flags);
+
+The send() call may be used only when the socket is in a
+connected state (so that the intended recipient is known).  The
+only difference between send() and write(2) is the presence of
+flags.  With a zero flags argument, send() is equivalent to
+write(2).  Also, the following call
+
+	send(sockfd, buf, len, flags);
+
+	is equivalent to
+
+	sendto(sockfd, buf, len, flags, NULL, 0);
+
+The argument sockfd is the file descriptor of the sending socket.
+
+
 ### [ recv ]
+
+	#include <sys/socket.h>
+
+	ssize_t recv(int sockfd, void buf[.len], size_t len,
+int flags);
+
+The only difference between recv() and read(2) is the presence of
+flags.  With a zero flags argument, recv() is generally
+equivalent to read(2) (but see NOTES).  Also, the following call
+
+	recv(sockfd, buf, len, flags);
+
+	is equivalent to
+
+	recvfrom(sockfd, buf, len, flags, NULL, NULL);
+
+The recv() call is normally used only on a connected socket (see
+connect(2)).  It is equivalent to the call:
+
+	recvfrom(fd, buf, len, flags, NULL, 0);
+
+
 ### [ signal ]
+
+	#include <signal.h>
+
+	typedef void (*sighandler_t)(int);
+
+	sighandler_t signal(int signum, sighandler_t handler);
+
+WARNING: the behavior of signal() varies across UNIX versions,
+and has also varied historically across different versions of
+Linux.  Avoid its use: use sigaction(2) instead.  See Portability
+below.
+
+	Portability
+
+	The only portable use of signal() is to set a signal's
+	disposition to SIG_DFL or SIG_IGN.  The semantics when using
+	signal() to establish a signal handler vary across systems (and
+	POSIX.1 explicitly permits this variation); do not use it for
+	this purpose.
+
+**The signals SIGKILL and SIGSTOP cannot be caught or ignored.**
+
+
 ### [ sigaction ]
+
+	#include <signal.h>
+
+	int sigaction(int signum,
+const struct sigaction *_Nullable restrict act,
+struct sigaction *_Nullable restrict oldact);
+
+The sigaction structure is defined as something like:
+
+	struct sigaction {
+	    void     (*sa_handler)(int);
+	    void     (*sa_sigaction)(int, siginfo_t *, void *);
+	    sigset_t   sa_mask;
+	    int        sa_flags;
+	    void     (*sa_restorer)(void);
+	};
+
+The siginfo_t data type is a structure with the following fields:
+
+	siginfo_t {
+	    int      si_signo;     /* Signal number */
+	    int      si_errno;     /* An errno value */
+	    int      si_code;      /* Signal code */
+	    int      si_trapno;    /* Trap number that caused
+	                              hardware-generated signal
+	                              (unused on most architectures) */
+	    pid_t    si_pid;       /* Sending process ID */
+	    uid_t    si_uid;       /* Real user ID of sending process */
+	    int      si_status;    /* Exit value or signal */
+	    clock_t  si_utime;     /* User time consumed */
+	    clock_t  si_stime;     /* System time consumed */
+	    union sigval si_value; /* Signal value */
+	    int      si_int;       /* POSIX.1b signal */
+	    void    *si_ptr;       /* POSIX.1b signal */
+	    int      si_overrun;   /* Timer overrun count;
+	                              POSIX.1b timers */
+	    int      si_timerid;   /* Timer ID; POSIX.1b timers */
+	    void    *si_addr;      /* Memory location which caused fault */
+	    long     si_band;      /* Band event (was int in
+	                              glibc 2.3.2 and earlier) */
+	    int      si_fd;        /* File descriptor */
+	    short    si_addr_lsb;  /* Least significant bit of address
+	                              (since Linux 2.6.32) */
+	    void    *si_lower;     /* Lower bound when address violation
+	                              occurred (since Linux 3.19) */
+	    void    *si_upper;     /* Upper bound when address violation
+	                              occurred (since Linux 3.19) */
+	    int      si_pkey;      /* Protection key on PTE that caused
+	                              fault (since Linux 4.6) */
+	    void    *si_call_addr; /* Address of system call instruction
+	                              (since Linux 3.5) */
+	    int      si_syscall;   /* Number of attempted system call
+	                              (since Linux 3.5) */
+	    unsigned int si_arch;  /* Architecture of attempted system call
+	                              (since Linux 3.5) */
+	}
+
 ### [ lseek ]
+
+	#include <unistd.h>
+
+	off_t lseek(int fd, off_t offset, int whence);
+
+repositions the file offset of the open file description
+associated with the file descriptor fd to the argument offset
+according to the directive whence as follows:
+
+	SEEK_SET
+	       The file offset is set to offset bytes.
+
+	SEEK_CUR
+	       The file offset is set to its current location plus offset
+	       bytes.
+
+	SEEK_END
+	       The file offset is set to the size of the file plus offset
+	       bytes.
+
+allows the file offset to be set beyond the end of the
+file (but this does not change the size of the file).  If data is
+later written at this point, subsequent reads of the data in the
+gap (a "hole") return null bytes ('\0') until data is actually
+written into the gap.
+
 ### [ fstat ]
+
+	#include <sys/stat.h>
+
+	int fstat(int fildes, struct stat *buf);
+
+obtain information about an open file
+associated with the file descriptor fildes, and shall write it to
+the area pointed to by buf.
+
 ### [ fcntl ]
+
+	#include <fcntl.h>
+
+	int fcntl(int fd, int cmd, ... /* arg */ );
+
+performs one of the operations described below on the
+open file descriptor fd.  The operation is determined by cmd.
+
+F_SETFL (int)
+
+	Set the file status flags to the value specified by arg.
+	File access mode (O_RDONLY, O_WRONLY, O_RDWR) and file
+	creation flags (i.e., O_CREAT, O_EXCL, O_NOCTTY, O_TRUNC)
+	in arg are ignored.  On Linux, this command can change
+	only the O_APPEND, O_ASYNC, O_DIRECT, O_NOATIME, and
+	O_NONBLOCK flags.  It is not possible to change the
+	O_DSYNC and O_SYNC flags; see BUGS, below.
+
 ### [ poll ]
+
+	#include <poll.h>
+
+	int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+
+performs a similar task to select(2): it waits for one of
+a set of file descriptors to become ready to perform I/O.  The
+Linux-specific epoll(7) API performs a similar task, but offers
+features beyond those found in poll().
+
+The set of file descriptors to be monitored is specified in the
+fds argument, which is an array of structures of the following
+form:
+
+	struct pollfd {
+	    int   fd;         /* file descriptor */
+	    short events;     /* requested events */
+	    short revents;    /* returned events */
+	};
+
+The caller should specify the number of items in the fds array in
+nfds.
 
