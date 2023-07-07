@@ -30,7 +30,6 @@ The only network configuration allowed for IRC servers is that of a spanning tre
 >                                   [ etc. ]
 >                                      :
 
-[1] <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
 
 # TO DO
 
@@ -699,3 +698,6 @@ defined in <poll.h>:
 	channel will return 0 (end of file) only after all
 	outstanding data in the channel has been consumed.
 
+# REFERENCES
+
+[ 1 ] <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
