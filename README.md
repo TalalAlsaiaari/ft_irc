@@ -30,7 +30,7 @@ together to form a network.
 >>                                   [ etc. ]
 >>                                      :
 
-[1]: https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html 
+[1]: https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html
 
 # TO DO
 
@@ -55,8 +55,11 @@ together to form a network.
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
 
+
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
+
 https://www.geeksforgeeks.org/socket-programming-cc/
+
 http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
 
 
