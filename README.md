@@ -159,7 +159,7 @@ p_proto
 </details>
 
 <details>
-	<summary>~~[ gethostbyname ]</summary>~~
+	<summary>~~[ gethostbyname ]~~</summary>
 
 	#include <netdb.h>
 
