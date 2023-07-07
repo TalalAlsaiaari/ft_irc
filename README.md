@@ -22,7 +22,7 @@ Your executable will be run as follows:
 
 Everything in C++ 98.
 
-# [socket]
+### [socket]
 
 #include <sys/socket.h>
 
@@ -38,9 +38,11 @@ returned by a successful call will be the lowest-numbered file
 descriptor not currently open for the process.
 
 AF_INET6     IPv6 Internet protocols
+
 AF_INET      IPv4 Internet protocols
 
 SOCK_NONBLOCK
+
 	Set the O_NONBLOCK file status flag on the open file
 	description (see open(2)) referred to by the new file
 	descriptor.  Using this flag saves extra calls to fcntl(2)
@@ -48,9 +50,12 @@ SOCK_NONBLOCK
 
 SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
-~~~~~~~~~~~~~~~~[close]~~~~~~~~~~~~~~~~
+### [close]
+
 #include <unistd.h>
+
 int close(int fd);
+
 https://man7.org/linux/man-pages/man2/close.2.html
 
 closes a file descriptor, so that it no longer refers to
@@ -59,7 +64,7 @@ on the file it was associated with, and owned by the process, are
 removed (regardless of the file descriptor that was used to
 obtain the lock).
 
-~~~~~~~~~~~~~~~~[setsockopt]~~~~~~~~~~~~~~~~
+### [setsockopt]
 #include <sys/socket.h>
 
 int setsockopt(int socket, int level, int option_name,
@@ -75,8 +80,10 @@ Upon successful completion, setsockopt() shall return 0.
 Otherwise, -1 shall be returned and errno set to indicate the
 error.
 
-~~~~~~~~~~~~~~~~[getsockname]~~~~~~~~~~~~~~~~
+### [getsockname]
+
 #include <sys/socket.h>
+
 int getsockname(int sockfd, struct sockaddr *restrict addr,
 	socklen_t *restrict addrlen);
 
@@ -90,8 +97,10 @@ The returned address is truncated if the buffer provided is too
 small; in this case, addrlen will return a value greater than was
 supplied to the call.
 
-~~~~~~~~~~~~~~~~[getprotobyname]~~~~~~~~~~~~~~~~
+### [getprotobyname]
+
 #include <netdb.h>
+
 struct protoent *getprotobyname(const char *name);
 
 The getprotobyname() function shall search the database from the
@@ -124,30 +133,32 @@ p_aliases
 p_proto
        The protocol number.
 
-~~~~~~~~~~~~~~~~[gethostbyname]~~~~~~~~~~~~~~~~
+### [gethostbyname]
+
 #include <netdb.h>
+
 **The gethostbyname*(), gethostbyaddr*(), herror(), and hstrerror()
 functions are obsolete.  Applications should use getaddrinfo(3),
 getnameinfo(3), and gai_strerror(3) instead.**
 
-~~~~~~~~~~~~~~~~[getaddrinfo]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[freeaddrinfo]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[bind]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[connect]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[listen]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[accept]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[htons]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[htonl]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[ntohs]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[ntohl]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[inet_addr]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[inet_ntoa]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[send]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[recv]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[signal]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[sigaction]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[lseek]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[fstat]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[fcntl]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[poll]~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~[]~~~~~~~~~~~~~~~~
+### [getaddrinfo]
+### [freeaddrinfo]
+### [bind]
+### [connect]
+### [listen]
+### [accept]
+### [htons]
+### [htonl]
+### [ntohs]
+### [ntohl]
+### [inet_addr]
+### [inet_ntoa]
+### [send]
+### [recv]
+### [signal]
+### [sigaction]
+### [lseek]
+### [fstat]
+### [fcntl]
+### [poll]
+
