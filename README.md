@@ -23,6 +23,7 @@ Your executable will be run as follows:
 Everything in C++ 98.
 
 # [socket]
+
 #include <sys/socket.h>
 int socket(int domain, int type, int protocol);
 tcp_socket = socket(AF_INET6, SOCK_STREAM, 0);
