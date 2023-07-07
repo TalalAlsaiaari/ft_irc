@@ -61,7 +61,7 @@ Everything in C++ 98.
 
 # Man Pages
 
-### [ socket ](#man-pages-index)
+### [[ socket ]](#man-pages-index)
 
 	#include <sys/socket.h>
 
