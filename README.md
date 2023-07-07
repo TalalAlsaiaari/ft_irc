@@ -111,12 +111,11 @@ obtain the lock).
 
 <details>
 	<summary><strong>[ setsockopt ]</strong></summary>
-```javascript
+
 ```
 	#include <sys/socket.h>
-
-	int setsockopt(int socket, int level, int option_name,
-const void *option_value, socklen_t option_len);
+	int setsockopt(int socket, int level, int option_name, const void *option_value, socklen_t option_len);
+```
 
 function shall set the option specified by the
 option_name argument, at the protocol level specified by the
