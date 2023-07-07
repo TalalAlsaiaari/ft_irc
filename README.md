@@ -114,8 +114,7 @@ obtain the lock).
 
 ``` c
 	#include <sys/socket.h>
-	int setsockopt(int socket, int level, int option_name,
-	const void *option_value, socklen_t option_len);
+	int setsockopt(int socket, int level, int option_name, const void *option_value, socklen_t option_len);
 ```
 
 function shall set the option specified by the
