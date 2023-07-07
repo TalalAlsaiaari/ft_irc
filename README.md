@@ -20,9 +20,9 @@ together to form a network.
 
 	docker run -itd --name=irssi irssi
 	docker exec -it irssi irssi
-	/set nick [name]
+	/set nick <name>
 	/connect liberachat
-	/join #[channel name]
+	/join #<channel_name>
 
 ## Run Executable
 
