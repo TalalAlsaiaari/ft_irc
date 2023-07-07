@@ -6,11 +6,11 @@
 #    By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 15:34:51 by talsaiaa          #+#    #+#              #
-#    Updated: 2023/07/03 15:39:07 by talsaiaa         ###   ########.fr        #
+#    Updated: 2023/07/07 20:50:57 by talsaiaa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	irc
+NAME		=	ircserv
 
 SRCS		=	
 
