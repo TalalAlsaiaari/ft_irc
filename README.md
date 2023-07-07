@@ -133,7 +133,7 @@ p_aliases
 p_proto
        The protocol number.
 
-### [gethostbyname]
+### ~~[gethostbyname]~~
 
 #include <netdb.h>
 
