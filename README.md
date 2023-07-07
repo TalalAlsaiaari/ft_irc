@@ -271,7 +271,47 @@ Linux 2.2.)
 
 
 ### [ listen ]
+
+	#include <sys/socket.h>
+
+	int listen(int sockfd, int backlog);
+
+listen() marks the socket referred to by sockfd as a passive
+socket, that is, as a socket that will be used to accept incoming
+connection requests using accept(2).
+
+The sockfd argument is a file descriptor that refers to a socket
+of type SOCK_STREAM or SOCK_SEQPACKET.
+
+The backlog argument defines the maximum length to which the
+queue of pending connections for sockfd may grow.  If a
+connection request arrives when the queue is full, the client may
+receive an error with an indication of ECONNREFUSED or, if the
+underlying protocol supports retransmission, the request may be
+ignored so that a later reattempt at connection succeeds.
+
 ### [ accept ]
+
+	#include <sys/socket.h>
+
+	int accept(int sockfd, struct sockaddr *_Nullable restrict addr,
+socklen_t *_Nullable restrict addrlen);
+
+The accept() system call is used with connection-based socket
+types (SOCK_STREAM, SOCK_SEQPACKET).  It extracts the first
+connection request on the queue of pending connections for the
+listening socket, sockfd, creates a new connected socket, and
+returns a new file descriptor referring to that socket.  The
+newly created socket is not in the listening state.  The original
+socket sockfd is unaffected by this call.
+
+**In order to be notified of incoming connections on a socket, you
+can use select(2), poll(2), or epoll(7).  A readable event will
+be delivered when a new connection is attempted and you may then
+call accept() to get a socket for that connection.
+Alternatively, you can set the socket to deliver SIGIO when
+activity occurs on a socket; see socket(7) for details.**
+
 ### [ htons ]
 ### [ htonl ]
 ### [ ntohs ]
