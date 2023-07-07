@@ -112,7 +112,7 @@ obtain the lock).
 <details>
 	<summary><strong>[ setsockopt ]</strong></summary>
 
-```
+``` c
 	#include <sys/socket.h>
 	int setsockopt(int socket, int level, int option_name,
 	const void *option_value, socklen_t option_len);
