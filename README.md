@@ -14,7 +14,7 @@ together to form a network.
 	- [ ] figure it out
 - [ ] Parse Client Input
 
-# Run irssi in Docker
+## Run irssi in Docker
 
 	docker run -itd --name=irssi irssi
 	docker exec -it irssi irssi
@@ -22,7 +22,7 @@ together to form a network.
 	/connect liberachat
 	/join #[channel name]
 
-get unique includes from README
+### Get unique includes from README.md
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
 
