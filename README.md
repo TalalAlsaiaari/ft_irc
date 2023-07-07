@@ -18,11 +18,11 @@ together to form a network.
 
  docker exec -it irssi irssi
 
- /set nick [ name ]
+ /set nick [name]
 
  /connect liberachat
 
- /join #TALALMR
+ /join #[channel name]
 
 get unique includes from README
 
