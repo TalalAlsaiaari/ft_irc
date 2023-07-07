@@ -130,7 +130,7 @@ error.
 </details>
 
 <details>
-	<summary>[[ getsockname ]](#man-pages-index)</summary>
+	<summary> [[ getsockname ]](#man-pages-index) </summary>
 
 	#include <sys/socket.h>
 
