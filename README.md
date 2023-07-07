@@ -8,12 +8,17 @@ IRC clients connect to IRC servers in order to join channels. IRC servers are co
 together to form a network.
 
  docker run -itd --name=irssi irssi
+
  docker exec -it irssi irssi
+
  /set nick [ name ]
+
  /connect liberachat
+ 
  /join #TALALMR
 
 get unique includes from README
+
 cat README.md | grep "#include" | sort -u
 
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
@@ -21,6 +26,7 @@ https://www.geeksforgeeks.org/socket-programming-cc/
 http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
 
 Your executable will be run as follows:
+
 ./ircserv <port> <password>
 
 Everything in C++ 98.
