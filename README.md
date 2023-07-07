@@ -9,28 +9,28 @@ direct messages and join group channels.
 IRC clients connect to IRC servers in order to join channels. IRC servers are connected
 together to form a network.
 
-> The only network configuration allowed for IRC servers is that of a spanning tree where each server acts as a central node for the rest of the net it sees.
+The only network configuration allowed for IRC servers is that of a spanning tree where each server acts as a central node for the rest of the net it sees. [1](https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)
 
->>                               [ Server 15 ]  [ Server 13 ] [ Server 14]
->>                                     /                \         /
->>                                    /                  \       /
->>            [ Server 11 ] ------ [ Server 1 ]       [ Server 12]
->>                                  /        \          /
->>                                 /          \        /
->>                      [ Server 2 ]          [ Server 3 ]
->>                        /       \                      \
->>                       /         \                      \
->>               [ Server 4 ]    [ Server 5 ]         [ Server 6 ]
->>                /    |    \                           /
->>               /     |     \                         /
->>              /      |      \____                   /
->>             /       |           \                 /
->>     [ Server 7 ] [ Server 8 ] [ Server 9 ]   [ Server 10 ]
->>                                      :
->>                                   [ etc. ]
->>                                      :
+>                               [ Server 15 ]  [ Server 13 ] [ Server 14]
+>                                     /                \         /
+>                                    /                  \       /
+>            [ Server 11 ] ------ [ Server 1 ]       [ Server 12]
+>                                  /        \          /
+>                                 /          \        /
+>                      [ Server 2 ]          [ Server 3 ]
+>                        /       \                      \
+>                       /         \                      \
+>               [ Server 4 ]    [ Server 5 ]         [ Server 6 ]
+>                /    |    \                           /
+>               /     |     \                         /
+>              /      |      \____                   /
+>             /       |           \                 /
+>     [ Server 7 ] [ Server 8 ] [ Server 9 ]   [ Server 10 ]
+>                                      :
+>                                   [ etc. ]
+>                                      :
 
-[1]<https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
+[1] <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
 
 # TO DO
 
