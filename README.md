@@ -54,7 +54,7 @@ SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
 ### [close]
 
-#include <unistd.h>
+	#include <unistd.h>
 
 	int close(int fd);
 
@@ -68,7 +68,7 @@ obtain the lock).
 
 ### [setsockopt]
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
 	int setsockopt(int socket, int level, int option_name,
 const void *option_value, socklen_t option_len);
@@ -85,10 +85,10 @@ error.
 
 ### [getsockname]
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
-int getsockname(int sockfd, struct sockaddr *restrict addr,
-	socklen_t *restrict addrlen);
+	int getsockname(int sockfd, struct sockaddr *restrict addr,
+socklen_t *restrict addrlen);
 
 returns the current address to which the socket
 sockfd is bound, in the buffer pointed to by addr.  The addrlen
@@ -102,9 +102,9 @@ supplied to the call.
 
 ### [getprotobyname]
 
-#include <netdb.h>
+	#include <netdb.h>
 
-struct protoent *getprotobyname(const char *name);
+	struct protoent *getprotobyname(const char *name);
 
 The getprotobyname() function shall search the database from the
 beginning and find the first entry for which the protocol name
@@ -138,7 +138,7 @@ p_proto
 
 ### ~~[gethostbyname]~~
 
-#include <netdb.h>
+	#include <netdb.h>
 
 **The gethostbyname(), gethostbyaddr(), herror(), and hstrerror()**
 **functions are obsolete.  Applications should use getaddrinfo(3),**
@@ -146,16 +146,16 @@ p_proto
 
 ### [getaddrinfo]
 
-#include <sys/types.h>
+	#include <sys/types.h>
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
-#include <netdb.h>
+	#include <netdb.h>
 
-int getaddrinfo(const char *restrict node,
-	const char *restrict service,
-	const struct addrinfo *restrict hints,
-	struct addrinfo **restrict res);
+	int getaddrinfo(const char *restrict node,
+const char *restrict service,
+const struct addrinfo *restrict hints,
+struct addrinfo **restrict res);
 
 Given node and service, which identify an Internet host and a
 service, getaddrinfo() returns one or more addrinfo structures,
@@ -188,13 +188,13 @@ following fields:
 
 ### [freeaddrinfo]
 
-#include <sys/types.h>
+	#include <sys/types.h>
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
-#include <netdb.h>
+	#include <netdb.h>
 
-void freeaddrinfo(struct addrinfo *res);
+	void freeaddrinfo(struct addrinfo *res);
 
 The freeaddrinfo() function shall free one or more addrinfo
 structures returned by getaddrinfo(), along with any additional
@@ -206,10 +206,10 @@ getaddrinfo().
 
 ### [bind]
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
-int bind(int sockfd, const struct sockaddr *addr,
-	socklen_t addrlen);
+	int bind(int sockfd, const struct sockaddr *addr,
+socklen_t addrlen);
 
 When a socket is created with socket(2), it exists in a name
 space (address family) but has no address assigned to it.  bind()
@@ -237,10 +237,10 @@ pointer passed in addr in order to avoid compiler warnings.
 
 ### [connect]
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
-int connect(int sockfd, const struct sockaddr *addr,
-	socklen_t addrlen);
+	int connect(int sockfd, const struct sockaddr *addr,
+socklen_t addrlen);
 
 The connect() system call connects the socket referred to by the
 file descriptor sockfd to the address specified by addr.  The
