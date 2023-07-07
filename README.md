@@ -166,7 +166,7 @@ p_proto
 </details>
 
 <details>
-	<summary><strong>[ gethostbyname ]</strong></summary>
+	<summary><strong><del>[ gethostbyname ]</del></strong></summary>
 
 	#include <netdb.h>
 
