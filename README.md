@@ -7,6 +7,12 @@ direct messages and join group channels.
 IRC clients connect to IRC servers in order to join channels. IRC servers are connected
 together to form a network.
 
+# TO DO
+
+- [x] Make awesome README
+- [ ] Create Server
+- [ ] Parse Client Input
+
  docker run -itd --name=irssi irssi
 
  docker exec -it irssi irssi
