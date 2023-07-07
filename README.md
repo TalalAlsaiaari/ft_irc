@@ -11,6 +11,7 @@ together to form a network.
 
 - [x] Make awesome README
 - [ ] Create Server
+	- [ ] figure it out
 - [ ] Parse Client Input
 
  docker run -itd --name=irssi irssi
