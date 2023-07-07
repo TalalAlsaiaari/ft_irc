@@ -34,6 +34,30 @@ Everything in C++ 98.
 ##Man Pages Index
 
 [socket](#-socket-)
+[close](#-close-)
+[setsockopt](#-setsockopt-)
+[setsockopt](#-setsockopt-)
+[getprotobyname](#-getprotobyname-)
+[getaddrinfo](#-getaddrinfo-)
+[freeaddrinfo](#-freeaddrinfo-)
+[bind](#-bind-)
+[connect](#-connect-)
+[listen](#-listen-)
+[accept](#-accept-)
+[htons](#-htons-)
+[htonl](#-htonl-)
+[ntohs](#-ntohs-)
+[ntohl](#-ntohl-)
+[inet_addr](#-inet_addr-)
+[inet_ntoa](#-inet_ntoa-)
+[send](#-send-)
+[recv](#-recv-)
+[signal](#-signal-)
+[sigaction](#-sigaction-)
+[lseek](#-lseek-)
+[fstat](#-fstat-)
+[fcntl](#-fcntl-)
+[poll](#-poll-)
 
 #Man Pages
 
