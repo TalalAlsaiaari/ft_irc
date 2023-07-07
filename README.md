@@ -586,3 +586,28 @@ form:
 The caller should specify the number of items in the fds array in
 nfds.
 
+The bits that may be set/returned in events and revents are
+defined in <poll.h>:
+
+	POLLIN
+	There is data to read
+
+	POLLOUT
+	Writing is now possible, though a write larger than the
+	available space in a socket or pipe will still block
+	(unless O_NONBLOCK is set).
+
+	POLLERR
+	Error condition (only returned in revents; ignored in
+	events).  This bit is also set for a file descriptor
+	referring to the write end of a pipe when the read end has
+	been closed.
+
+	POLLHUP
+	Hang up (only returned in revents; ignored in events).
+	Note that when reading from a channel such as a pipe or a
+	stream socket, this event merely indicates that the peer
+	closed its end of the channel.  Subsequent reads from the
+	channel will return 0 (end of file) only after all
+	outstanding data in the channel has been consumed.
+
