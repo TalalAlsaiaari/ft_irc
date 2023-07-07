@@ -137,9 +137,9 @@ p_proto
 
 #include <netdb.h>
 
-*** The gethostbyname*(), gethostbyaddr*(), herror(), and hstrerror()
-functions are obsolete.  Applications should use getaddrinfo(3),
-getnameinfo(3), and gai_strerror(3) instead.***
+**The gethostbyname*(), gethostbyaddr*(), herror(), and hstrerror()**
+**functions are obsolete.  Applications should use getaddrinfo(3),**
+**getnameinfo(3), and gai_strerror(3) instead.**
 
 ### [getaddrinfo]
 ### [freeaddrinfo]
