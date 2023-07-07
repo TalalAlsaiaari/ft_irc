@@ -111,7 +111,8 @@ obtain the lock).
 
 <details>
 	<summary><strong>[ setsockopt ]</strong></summary>
-
+```javascript
+```
 	#include <sys/socket.h>
 
 	int setsockopt(int socket, int level, int option_name,
