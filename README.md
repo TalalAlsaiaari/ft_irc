@@ -40,14 +40,8 @@ Everything in C++ 98.
 
 # Man Pages
 
-<style>
-summary{
-	font-weight: bold;
-}
-</style>
-
 <details>
-	<summary>[ socket ]</summary>
+	<summary><h2>[ socket ]</h2></summary>
 
 	#include <sys/socket.h>
 
