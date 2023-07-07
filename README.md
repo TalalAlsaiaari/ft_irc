@@ -14,7 +14,7 @@ together to form a network.
  /set nick [ name ]
 
  /connect liberachat
- 
+
  /join #TALALMR
 
 get unique includes from README
@@ -27,7 +27,7 @@ http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
 
 Your executable will be run as follows:
 
-./ircserv <port> <password>
+./ircserv [port] [password]
 
 Everything in C++ 98.
 
