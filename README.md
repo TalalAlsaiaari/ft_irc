@@ -30,7 +30,7 @@ together to form a network.
 >>                                   [ etc. ]
 >>                                      :
 
-[1]:(https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)
+[1]: https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html 
 
 # TO DO
 
