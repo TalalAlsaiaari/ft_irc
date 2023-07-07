@@ -9,7 +9,7 @@ direct messages and join group channels.
 IRC clients connect to IRC servers in order to join channels. IRC servers are connected
 together to form a network.
 
-The only network configuration allowed for IRC servers is that of a spanning tree where each server acts as a central node for the rest of the net it sees.
+>> The only network configuration allowed for IRC servers is that of a spanning tree where each server acts as a central node for the rest of the net it sees.
 
                                [ Server 15 ]  [ Server 13 ] [ Server 14]
                                      /                \         /
