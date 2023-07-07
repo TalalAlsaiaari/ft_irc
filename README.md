@@ -25,8 +25,11 @@ Everything in C++ 98.
 # [socket]
 
 #include <sys/socket.h>
+
 int socket(int domain, int type, int protocol);
+
 tcp_socket = socket(AF_INET6, SOCK_STREAM, 0);
+
 https://man7.org/linux/man-pages/man7/tcp.7.html
 
 creates an endpoint for communication and returns a file
