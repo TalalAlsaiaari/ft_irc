@@ -697,7 +697,8 @@ defined in <poll.h>:
 	closed its end of the channel.  Subsequent reads from the
 	channel will return 0 (end of file) only after all
 	outstanding data in the channel has been consumed.
+</details>
 
 # REFERENCES
 
-[ 1 ] <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
+[ 1 ]  <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
