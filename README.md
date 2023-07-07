@@ -62,9 +62,9 @@ Everything in C++ 98.
 # Man Pages
 
 Markup : <details>
-<summary>### [[ socket ]](#man-pages-index)</summary>
+	<summary>### [[ socket ]](#man-pages-index)</summary>
 
-<p>	#include <sys/socket.h>
+	<p>	#include <sys/socket.h>
 
 	int socket(int domain, int type, int protocol);
 
