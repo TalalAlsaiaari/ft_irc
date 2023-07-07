@@ -33,7 +33,7 @@ Everything in C++ 98.
 
 ##Man Pages Index
 
-[socket](###-[-socket-])
+[socket](#-socket-)
 
 #Man Pages
 
