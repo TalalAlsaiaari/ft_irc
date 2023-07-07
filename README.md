@@ -14,19 +14,17 @@ together to form a network.
 	- [ ] figure it out
 - [ ] Parse Client Input
 
- docker run -itd --name=irssi irssi
+# Run irssi in Docker
 
- docker exec -it irssi irssi
-
- /set nick [name]
-
- /connect liberachat
-
- /join #[channel name]
+	docker run -itd --name=irssi irssi
+	docker exec -it irssi irssi
+	/set nick [name]
+	/connect liberachat
+	/join #[channel name]
 
 get unique includes from README
 
-cat README.md | grep "#include" | sort -u > headerfile.hpp
+	cat README.md | grep "#include" | sort -u > headerfile.hpp
 
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 https://www.geeksforgeeks.org/socket-programming-cc/
