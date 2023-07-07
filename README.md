@@ -61,7 +61,7 @@ Everything in C++ 98.
 
 # Man Pages
 
-Markup : <details font-size=100px>
+Markup : <details>
 	<summary>[[ socket ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -89,9 +89,10 @@ SOCK_NONBLOCK
 	to achieve the same result.
 
 SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
-</details>
 
-### [[ close ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ close ]](#man-pages-index)</summary>
 
 	#include <unistd.h>
 
@@ -104,8 +105,9 @@ any file and may be reused.  Any record locks (see fcntl(2)) held
 on the file it was associated with, and owned by the process, are
 removed (regardless of the file descriptor that was used to
 obtain the lock).
-
-### [[ setsockopt ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ setsockopt ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -121,8 +123,9 @@ specified by the socket argument.
 Upon successful completion, setsockopt() shall return 0.
 Otherwise, -1 shall be returned and errno set to indicate the
 error.
-
-### [[ getsockname ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ getsockname ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -138,8 +141,9 @@ size of the socket address.
 The returned address is truncated if the buffer provided is too
 small; in this case, addrlen will return a value greater than was
 supplied to the call.
-
-### [[ getprotobyname ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ getprotobyname ]](#man-pages-index)</summary>
 
 	#include <netdb.h>
 
@@ -174,16 +178,18 @@ p_aliases
 
 p_proto
        The protocol number.
-
-### ~~[[ gethostbyname ]](#man-pages-index)~~
+</details>
+Markup : <details>
+	<summary>~~[[ gethostbyname ]](#man-pages-index)</summary>~~
 
 	#include <netdb.h>
 
 **The gethostbyname(), gethostbyaddr(), herror(), and hstrerror()**
 **functions are obsolete.  Applications should use getaddrinfo(3),**
 **getnameinfo(3), and gai_strerror(3) instead.**
-
-### [[ getaddrinfo ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ getaddrinfo ]](#man-pages-index)</summary>
 
 	#include <sys/types.h>
 
@@ -224,8 +230,9 @@ following fields:
         char            *ai_canonname;
         struct addrinfo *ai_next;
     };
-
-### [[ freeaddrinfo ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ freeaddrinfo ]](#man-pages-index)</summary>
 
 	#include <sys/types.h>
 
@@ -242,8 +249,9 @@ the structure is not null, the entire list of structures shall be
 freed. The freeaddrinfo() function shall support the freeing of
 arbitrary sublists of an addrinfo list originally returned by
 getaddrinfo().
-
-### [[ bind ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ bind ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -273,8 +281,9 @@ something like:
 
 The only purpose of this structure is to cast the structure
 pointer passed in addr in order to avoid compiler warnings.
-
-### [[ connect ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ connect ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -308,8 +317,9 @@ of sockaddr set to AF_UNSPEC; thereafter, the socket can be
 connected to another address.  (AF_UNSPEC is supported since
 Linux 2.2.)
 
-
-### [[ listen ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ listen ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -328,8 +338,9 @@ connection request arrives when the queue is full, the client may
 receive an error with an indication of ECONNREFUSED or, if the
 underlying protocol supports retransmission, the request may be
 ignored so that a later reattempt at connection succeeds.
-
-### [[ accept ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ accept ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -350,8 +361,9 @@ be delivered when a new connection is attempted and you may then
 call accept() to get a socket for that connection.
 Alternatively, you can set the socket to deliver SIGIO when
 activity occurs on a socket; see socket(7) for details.**
-
-### [[ htons ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ htons ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -359,8 +371,9 @@ activity occurs on a socket; see socket(7) for details.**
 
 converts the unsigned short integer
 hostshort from host byte order to network byte order.
-
-### [[ htonl ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ htonl ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -368,8 +381,9 @@ hostshort from host byte order to network byte order.
 
 converts the unsigned integer hostlong from
 host byte order to network byte order.
-
-### [[ ntohs ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ ntohs ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -377,8 +391,9 @@ host byte order to network byte order.
 
 converts the unsigned short integer netshort
 from network byte order to host byte order.
-
-### [[ ntohl ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ ntohl ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -386,8 +401,9 @@ from network byte order to host byte order.
 
 converts the unsigned integer netlong from
 network byte order to host byte order.
-
-### [[ inet_addr ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ inet_addr ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -396,8 +412,9 @@ network byte order to host byte order.
 convert the string pointed to by
 cp, in the standard IPv4 dotted decimal notation, to an integer
 value suitable for use as an Internet address.
-
-### [[ inet_ntoa ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ inet_ntoa ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
 
@@ -409,8 +426,9 @@ notation.
 
 The return value of inet_ntoa() may point to static data that may
 be overwritten by subsequent calls to inet_ntoa().
-
-### [[ send ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ send ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -430,8 +448,9 @@ write(2).  Also, the following call
 
 The argument sockfd is the file descriptor of the sending socket.
 
-
-### [[ recv ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ recv ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
@@ -453,8 +472,9 @@ connect(2)).  It is equivalent to the call:
 
 	recvfrom(fd, buf, len, flags, NULL, 0);
 
-
-### [[ signal ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ signal ]](#man-pages-index)</summary>
 
 	#include <signal.h>
 
@@ -477,8 +497,9 @@ below.
 
 **The signals SIGKILL and SIGSTOP cannot be caught or ignored.**
 
-
-### [[ sigaction ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ sigaction ]](#man-pages-index)</summary>
 
 	#include <signal.h>
 
@@ -535,8 +556,9 @@ The siginfo_t data type is a structure with the following fields:
 	    unsigned int si_arch;  /* Architecture of attempted system call
 	                              (since Linux 3.5) */
 	}
-
-### [[ lseek ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ lseek ]](#man-pages-index)</summary>
 
 	#include <unistd.h>
 
@@ -562,8 +584,9 @@ file (but this does not change the size of the file).  If data is
 later written at this point, subsequent reads of the data in the
 gap (a "hole") return null bytes ('\0') until data is actually
 written into the gap.
-
-### [[ fstat ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ fstat ]](#man-pages-index)</summary>
 
 	#include <sys/stat.h>
 
@@ -572,8 +595,9 @@ written into the gap.
 obtain information about an open file
 associated with the file descriptor fildes, and shall write it to
 the area pointed to by buf.
-
-### [[ fcntl ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ fcntl ]](#man-pages-index)</summary>
 
 	#include <fcntl.h>
 
@@ -591,8 +615,9 @@ F_SETFL (int)
 	only the O_APPEND, O_ASYNC, O_DIRECT, O_NOATIME, and
 	O_NONBLOCK flags.  It is not possible to change the
 	O_DSYNC and O_SYNC flags; see BUGS, below.
-
-### [[ poll ]](#man-pages-index)
+</details>
+Markup : <details>
+	<summary>[[ poll ]](#man-pages-index)</summary>
 
 	#include <poll.h>
 
