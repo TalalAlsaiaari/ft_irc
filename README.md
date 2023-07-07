@@ -25,8 +25,7 @@ The only network configuration allowed for IRC servers is that of a spanning tre
            /     |     \                         /
           /      |      \____                   /
          /       |           \                 /
- [ Server 7 ] [ Server 8 ] [ Server 9 ]   [ Server 10 ]
-
+  [ Server 7 ] [ Server 8 ] [ Server 9 ]   [ Server 10 ]
                                   :
                                [ etc. ]
                                   :
