@@ -31,38 +31,10 @@ Your executable will be run as follows:
 
 Everything in C++ 98.
 
-## Man Pages Index
-
-[socket](#-socket-)
-[close](#-close-)
-[setsockopt](#-setsockopt-)
-[setsockopt](#-setsockopt-)
-[getprotobyname](#-getprotobyname-)
-[getaddrinfo](#-getaddrinfo-)
-[freeaddrinfo](#-freeaddrinfo-)
-[bind](#-bind-)
-[connect](#-connect-)
-[listen](#-listen-)
-[accept](#-accept-)
-[htons](#-htons-)
-[htonl](#-htonl-)
-[ntohs](#-ntohs-)
-[ntohl](#-ntohl-)
-[inet_addr](#-inet_addr-)
-[inet_ntoa](#-inet_ntoa-)
-[send](#-send-)
-[recv](#-recv-)
-[signal](#-signal-)
-[sigaction](#-sigaction-)
-[lseek](#-lseek-)
-[fstat](#-fstat-)
-[fcntl](#-fcntl-)
-[poll](#-poll-)
-
 # Man Pages
 
 <details>
-	<summary>[[ socket ]]</summary>
+	<summary>[ socket ]</summary>
 
 	#include <sys/socket.h>
 
@@ -94,7 +66,7 @@ SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
 
 <details>
-	<summary>[[ close ]]</summary>
+	<summary>[ close ]</summary>
 
 	#include <unistd.h>
 
@@ -111,7 +83,7 @@ obtain the lock).
 
 
 <details>
-	<summary>[[ setsockopt ]]</summary>
+	<summary>[ setsockopt ]</summary>
 
 	#include <sys/socket.h>
 
@@ -130,7 +102,7 @@ error.
 </details>
 
 <details>
-	<summary>[[ getsockname ]]</summary>
+	<summary>[ getsockname ]</summary>
 
 	#include <sys/socket.h>
 
@@ -149,7 +121,7 @@ supplied to the call.
 </details>
 
 <details>
-	<summary>[[ getprotobyname ]]</summary>
+	<summary>[ getprotobyname ]</summary>
 
 	#include <netdb.h>
 
@@ -187,7 +159,7 @@ p_proto
 </details>
 
 <details>
-	<summary>~~[[ gethostbyname ]]</summary>~~
+	<summary>~~[ gethostbyname ]</summary>~~
 
 	#include <netdb.h>
 
@@ -197,7 +169,7 @@ p_proto
 </details>
 
 <details>
-	<summary>[[ getaddrinfo ]]</summary>
+	<summary>[ getaddrinfo ]</summary>
 
 	#include <sys/types.h>
 
@@ -241,7 +213,7 @@ following fields:
 </details>
 
 <details>
-	<summary>[[ freeaddrinfo ]]</summary>
+	<summary>[ freeaddrinfo ]</summary>
 
 	#include <sys/types.h>
 
@@ -261,7 +233,7 @@ getaddrinfo().
 </details>
 
 <details>
-	<summary>[[ bind ]]</summary>
+	<summary>[ bind ]</summary>
 
 	#include <sys/socket.h>
 
@@ -294,7 +266,7 @@ pointer passed in addr in order to avoid compiler warnings.
 </details>
 
 <details>
-	<summary>[[ connect ]]</summary>
+	<summary>[ connect ]</summary>
 
 	#include <sys/socket.h>
 
@@ -331,7 +303,7 @@ Linux 2.2.)
 </details>
 
 <details>
-	<summary>[[ listen ]]</summary>
+	<summary>[ listen ]</summary>
 
 	#include <sys/socket.h>
 
@@ -353,7 +325,7 @@ ignored so that a later reattempt at connection succeeds.
 </details>
 
 <details>
-	<summary>[[ accept ]]</summary>
+	<summary>[ accept ]</summary>
 
 	#include <sys/socket.h>
 
@@ -377,7 +349,7 @@ activity occurs on a socket; see socket(7) for details.**
 </details>
 
 <details>
-	<summary>[[ htons ]]</summary>
+	<summary>[ htons ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -388,7 +360,7 @@ hostshort from host byte order to network byte order.
 </details>
 
 <details>
-	<summary>[[ htonl ]]</summary>
+	<summary>[ htonl ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -399,7 +371,7 @@ host byte order to network byte order.
 </details>
 
 <details>
-	<summary>[[ ntohs ]]</summary>
+	<summary>[ ntohs ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -410,7 +382,7 @@ from network byte order to host byte order.
 </details>
 
 <details>
-	<summary>[[ ntohl ]]</summary>
+	<summary>[ ntohl ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -421,7 +393,7 @@ network byte order to host byte order.
 </details>
 
 <details>
-	<summary>[[ inet_addr ]]</summary>
+	<summary>[ inet_addr ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -433,7 +405,7 @@ value suitable for use as an Internet address.
 </details>
 
 <details>
-	<summary>[[ inet_ntoa ]]</summary>
+	<summary>[ inet_ntoa ]</summary>
 
 	#include <arpa/inet.h>
 
@@ -448,7 +420,7 @@ be overwritten by subsequent calls to inet_ntoa().
 </details>
 
 <details>
-	<summary>[[ send ]]</summary>
+	<summary>[ send ]</summary>
 
 	#include <sys/socket.h>
 
@@ -471,7 +443,7 @@ The argument sockfd is the file descriptor of the sending socket.
 </details>
 
 <details>
-	<summary>[[ recv ]]</summary>
+	<summary>[ recv ]</summary>
 
 	#include <sys/socket.h>
 
@@ -496,7 +468,7 @@ connect(2)).  It is equivalent to the call:
 </details>
 
 <details>
-	<summary>[[ signal ]]</summary>
+	<summary>[ signal ]</summary>
 
 	#include <signal.h>
 
@@ -522,7 +494,7 @@ below.
 </details>
 
 <details>
-	<summary>[[ sigaction ]]</summary>
+	<summary>[ sigaction ]</summary>
 
 	#include <signal.h>
 
@@ -582,7 +554,7 @@ The siginfo_t data type is a structure with the following fields:
 </details>
 
 <details>
-	<summary>[[ lseek ]]</summary>
+	<summary>[ lseek ]</summary>
 
 	#include <unistd.h>
 
@@ -611,7 +583,7 @@ written into the gap.
 </details>
 
 <details>
-	<summary>[[ fstat ]]</summary>
+	<summary>[ fstat ]</summary>
 
 	#include <sys/stat.h>
 
@@ -623,7 +595,7 @@ the area pointed to by buf.
 </details>
 
 <details>
-	<summary>[[ fcntl ]]</summary>
+	<summary>[ fcntl ]</summary>
 
 	#include <fcntl.h>
 
@@ -644,7 +616,7 @@ F_SETFL (int)
 </details>
 
 <details>
-	<summary>[[ poll ]]</summary>
+	<summary>[ poll ]</summary>
 
 	#include <poll.h>
 
