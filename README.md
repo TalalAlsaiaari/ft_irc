@@ -61,9 +61,10 @@ Everything in C++ 98.
 
 # Man Pages
 
-### [[ socket ]](#man-pages-index)(#man-pages-index)
+Markup : <details>
+<summary>### [[ socket ]](#man-pages-index)</summary>
 
-	#include <sys/socket.h>
+<p>	#include <sys/socket.h>
 
 	int socket(int domain, int type, int protocol);
 
@@ -87,7 +88,8 @@ SOCK_NONBLOCK
 	descriptor.  Using this flag saves extra calls to fcntl(2)
 	to achieve the same result.
 
-SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
+SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.</p>
+</details>
 
 ### [[ close ]](#man-pages-index)
 
