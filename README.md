@@ -40,7 +40,7 @@ Everything in C++ 98.
 
 # Man Pages
 
-<details>
+<details font-weight: bold>
 	<summary>[ socket ]</summary>
 
 	#include <sys/socket.h>
