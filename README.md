@@ -61,8 +61,8 @@ Everything in C++ 98.
 
 # Man Pages
 
-Markup : <details>
-	<summary>### [[ socket ]](#man-pages-index)</summary>
+Markup : <details font-size=40px>
+	<summary>[[ socket ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
 
