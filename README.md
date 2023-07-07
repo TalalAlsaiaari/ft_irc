@@ -30,6 +30,8 @@ The only network configuration allowed for IRC servers is that of a spanning tre
 >                                   [ etc. ]
 >                                      :
 
+> A client is anything connecting to a server that is not another server. Each client is distinguished from other clients by a unique nickname having a maximum length of nine (9) characters.
+> In addition to the nickname, all servers must have the following information about all clients: the real name of the host that the client is running on, the username of the client on that host, and the server to which the client is connected. <sup>[1](https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)</sup>
 
 # TO DO
 
