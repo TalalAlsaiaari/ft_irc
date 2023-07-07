@@ -19,7 +19,7 @@ together to form a network.
 
 get unique includes from README
 
-cat README.md | grep "#include" | sort -u
+cat README.md | grep "#include" | sort -u > headerfile.hpp
 
 https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 https://www.geeksforgeeks.org/socket-programming-cc/
