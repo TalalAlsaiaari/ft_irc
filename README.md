@@ -54,14 +54,6 @@ The only network configuration allowed for IRC servers is that of a spanning tre
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
 
-
-https://www.bogotobogo.com/cplusplus/sockets_server_client.php
-
-https://www.geeksforgeeks.org/socket-programming-cc/
-
-http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
-
-
 Everything in C++ 98.
 
 # Man Pages
@@ -702,3 +694,7 @@ defined in <poll.h>:
 # REFERENCES
 
 [ 1 ]  <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
+
+[ 2 ] <https://www.bogotobogo.com/cplusplus/sockets_server_client.php>
+
+[ 3 ] <https://www.geeksforgeeks.org/socket-programming-cc/>
