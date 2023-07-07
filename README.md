@@ -26,7 +26,7 @@ together to form a network.
 
 ## Run Executable
 
-	./ircserv [port] [password]
+	./ircserv <port> <password>
 
 ### Get unique includes from README.md
 
