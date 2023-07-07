@@ -30,7 +30,7 @@ The only network configuration allowed for IRC servers is that of a spanning tre
                                    [ etc. ]
                                       :
 
-[Link to reference for tree structure](https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)
+[Tree Structure taken from here](https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)
 
 # TO DO
 
