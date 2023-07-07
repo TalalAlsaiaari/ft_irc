@@ -9,7 +9,7 @@ together to form a network.
 
  docker run -itd --name=irssi irssi
  docker exec -it irssi irssi
- /set nick [name]
+ /set nick [ name ]
  /connect liberachat
  /join #TALALMR
 
@@ -24,9 +24,9 @@ Everything in C++ 98.
 
 # Man Pages
 
-### [socket]
+### [ socket ]
 
-#include <sys/socket.h>
+	#include <sys/socket.h>
 
 	int socket(int domain, int type, int protocol);
 
@@ -52,7 +52,7 @@ SOCK_NONBLOCK
 
 SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
-### [close]
+### [ close ]
 
 	#include <unistd.h>
 
@@ -66,7 +66,7 @@ on the file it was associated with, and owned by the process, are
 removed (regardless of the file descriptor that was used to
 obtain the lock).
 
-### [setsockopt]
+### [ setsockopt ]
 
 	#include <sys/socket.h>
 
@@ -83,7 +83,7 @@ Upon successful completion, setsockopt() shall return 0.
 Otherwise, -1 shall be returned and errno set to indicate the
 error.
 
-### [getsockname]
+### [ getsockname ]
 
 	#include <sys/socket.h>
 
@@ -100,7 +100,7 @@ The returned address is truncated if the buffer provided is too
 small; in this case, addrlen will return a value greater than was
 supplied to the call.
 
-### [getprotobyname]
+### [ getprotobyname ]
 
 	#include <netdb.h>
 
@@ -136,7 +136,7 @@ p_aliases
 p_proto
        The protocol number.
 
-### ~~[gethostbyname]~~
+### ~~[ gethostbyname ]~~
 
 	#include <netdb.h>
 
@@ -144,7 +144,7 @@ p_proto
 **functions are obsolete.  Applications should use getaddrinfo(3),**
 **getnameinfo(3), and gai_strerror(3) instead.**
 
-### [getaddrinfo]
+### [ getaddrinfo ]
 
 	#include <sys/types.h>
 
@@ -186,7 +186,7 @@ following fields:
         struct addrinfo *ai_next;
     };
 
-### [freeaddrinfo]
+### [ freeaddrinfo ]
 
 	#include <sys/types.h>
 
@@ -204,7 +204,7 @@ freed. The freeaddrinfo() function shall support the freeing of
 arbitrary sublists of an addrinfo list originally returned by
 getaddrinfo().
 
-### [bind]
+### [ bind ]
 
 	#include <sys/socket.h>
 
@@ -229,13 +229,13 @@ something like:
 
     struct sockaddr {
         sa_family_t sa_family;
-        char        sa_data[14];
+        char        sa_data[ 14 ];
     }
 
 The only purpose of this structure is to cast the structure
 pointer passed in addr in order to avoid compiler warnings.
 
-### [connect]
+### [ connect ]
 
 	#include <sys/socket.h>
 
@@ -270,20 +270,20 @@ connected to another address.  (AF_UNSPEC is supported since
 Linux 2.2.)
 
 
-### [listen]
-### [accept]
-### [htons]
-### [htonl]
-### [ntohs]
-### [ntohl]
-### [inet_addr]
-### [inet_ntoa]
-### [send]
-### [recv]
-### [signal]
-### [sigaction]
-### [lseek]
-### [fstat]
-### [fcntl]
-### [poll]
+### [ listen ]
+### [ accept ]
+### [ htons ]
+### [ htonl ]
+### [ ntohs ]
+### [ ntohl ]
+### [ inet_addr ]
+### [ inet_ntoa ]
+### [ send ]
+### [ recv ]
+### [ signal ]
+### [ sigaction ]
+### [ lseek ]
+### [ fstat ]
+### [ fcntl ]
+### [ poll ]
 
