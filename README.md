@@ -1,3 +1,5 @@
+# ABOUT
+
 This project is about creating an IRC server.
 An actual IRC client will be used to connect to the server and test it.
 
