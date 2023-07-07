@@ -59,9 +59,9 @@ Everything in C++ 98.
 [fcntl](#-fcntl-)
 [poll](#-poll-)
 
-#Man Pages
+# Man Pages
 
-### [ socket ](#-man-pages-index-)
+### [ socket ](#man-pages-index)
 
 	#include <sys/socket.h>
 
