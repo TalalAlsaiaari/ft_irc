@@ -22,6 +22,10 @@ together to form a network.
 	/connect liberachat
 	/join #[channel name]
 
+## Run Executable
+
+	./ircserv [port] [password]
+
 ### Get unique includes from README.md
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
@@ -30,9 +34,6 @@ https://www.bogotobogo.com/cplusplus/sockets_server_client.php
 https://www.geeksforgeeks.org/socket-programming-cc/
 http://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter6.html
 
-Your executable will be run as follows:
-
-./ircserv [port] [password]
 
 Everything in C++ 98.
 
