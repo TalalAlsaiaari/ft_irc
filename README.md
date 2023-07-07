@@ -61,7 +61,7 @@ Everything in C++ 98.
 
 # Man Pages
 
-Markup : <details>
+<details>
 	<summary>[[ socket ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -91,7 +91,9 @@ SOCK_NONBLOCK
 SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
 </details>
-Markup : <details>
+
+
+<details>
 	<summary>[[ close ]](#man-pages-index)</summary>
 
 	#include <unistd.h>
@@ -106,7 +108,9 @@ on the file it was associated with, and owned by the process, are
 removed (regardless of the file descriptor that was used to
 obtain the lock).
 </details>
-Markup : <details>
+
+
+<details>
 	<summary>[[ setsockopt ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -124,7 +128,8 @@ Upon successful completion, setsockopt() shall return 0.
 Otherwise, -1 shall be returned and errno set to indicate the
 error.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ getsockname ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -142,7 +147,8 @@ The returned address is truncated if the buffer provided is too
 small; in this case, addrlen will return a value greater than was
 supplied to the call.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ getprotobyname ]](#man-pages-index)</summary>
 
 	#include <netdb.h>
@@ -179,7 +185,8 @@ p_aliases
 p_proto
        The protocol number.
 </details>
-Markup : <details>
+
+<details>
 	<summary>~~[[ gethostbyname ]](#man-pages-index)</summary>~~
 
 	#include <netdb.h>
@@ -188,7 +195,8 @@ Markup : <details>
 **functions are obsolete.  Applications should use getaddrinfo(3),**
 **getnameinfo(3), and gai_strerror(3) instead.**
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ getaddrinfo ]](#man-pages-index)</summary>
 
 	#include <sys/types.h>
@@ -231,7 +239,8 @@ following fields:
         struct addrinfo *ai_next;
     };
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ freeaddrinfo ]](#man-pages-index)</summary>
 
 	#include <sys/types.h>
@@ -250,7 +259,8 @@ freed. The freeaddrinfo() function shall support the freeing of
 arbitrary sublists of an addrinfo list originally returned by
 getaddrinfo().
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ bind ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -282,7 +292,8 @@ something like:
 The only purpose of this structure is to cast the structure
 pointer passed in addr in order to avoid compiler warnings.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ connect ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -318,7 +329,8 @@ connected to another address.  (AF_UNSPEC is supported since
 Linux 2.2.)
 
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ listen ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -339,7 +351,8 @@ receive an error with an indication of ECONNREFUSED or, if the
 underlying protocol supports retransmission, the request may be
 ignored so that a later reattempt at connection succeeds.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ accept ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -362,7 +375,8 @@ call accept() to get a socket for that connection.
 Alternatively, you can set the socket to deliver SIGIO when
 activity occurs on a socket; see socket(7) for details.**
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ htons ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -372,7 +386,8 @@ Markup : <details>
 converts the unsigned short integer
 hostshort from host byte order to network byte order.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ htonl ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -382,7 +397,8 @@ Markup : <details>
 converts the unsigned integer hostlong from
 host byte order to network byte order.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ ntohs ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -392,7 +408,8 @@ Markup : <details>
 converts the unsigned short integer netshort
 from network byte order to host byte order.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ ntohl ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -402,7 +419,8 @@ Markup : <details>
 converts the unsigned integer netlong from
 network byte order to host byte order.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ inet_addr ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -413,7 +431,8 @@ convert the string pointed to by
 cp, in the standard IPv4 dotted decimal notation, to an integer
 value suitable for use as an Internet address.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ inet_ntoa ]](#man-pages-index)</summary>
 
 	#include <arpa/inet.h>
@@ -427,7 +446,8 @@ notation.
 The return value of inet_ntoa() may point to static data that may
 be overwritten by subsequent calls to inet_ntoa().
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ send ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -449,7 +469,8 @@ write(2).  Also, the following call
 The argument sockfd is the file descriptor of the sending socket.
 
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ recv ]](#man-pages-index)</summary>
 
 	#include <sys/socket.h>
@@ -473,7 +494,8 @@ connect(2)).  It is equivalent to the call:
 	recvfrom(fd, buf, len, flags, NULL, 0);
 
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ signal ]](#man-pages-index)</summary>
 
 	#include <signal.h>
@@ -498,7 +520,8 @@ below.
 **The signals SIGKILL and SIGSTOP cannot be caught or ignored.**
 
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ sigaction ]](#man-pages-index)</summary>
 
 	#include <signal.h>
@@ -557,7 +580,8 @@ The siginfo_t data type is a structure with the following fields:
 	                              (since Linux 3.5) */
 	}
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ lseek ]](#man-pages-index)</summary>
 
 	#include <unistd.h>
@@ -585,7 +609,8 @@ later written at this point, subsequent reads of the data in the
 gap (a "hole") return null bytes ('\0') until data is actually
 written into the gap.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ fstat ]](#man-pages-index)</summary>
 
 	#include <sys/stat.h>
@@ -596,7 +621,8 @@ obtain information about an open file
 associated with the file descriptor fildes, and shall write it to
 the area pointed to by buf.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ fcntl ]](#man-pages-index)</summary>
 
 	#include <fcntl.h>
@@ -616,7 +642,8 @@ F_SETFL (int)
 	O_NONBLOCK flags.  It is not possible to change the
 	O_DSYNC and O_SYNC flags; see BUGS, below.
 </details>
-Markup : <details>
+
+<details>
 	<summary>[[ poll ]](#man-pages-index)</summary>
 
 	#include <poll.h>
