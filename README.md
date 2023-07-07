@@ -31,7 +31,7 @@ Your executable will be run as follows:
 
 Everything in C++ 98.
 
-##Man Pages Index
+## Man Pages Index
 
 [socket](#-socket-)
 [close](#-close-)
