@@ -56,7 +56,14 @@ together to form a network.
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
 
-Everything in C++ 98.
+## Mandatory Guidelines
+
+Program name     | ircserv
+Turn in files    | Makefile, *.{h, hpp}, *.cpp, *.tpp, *.ipp, an optional configuration file
+Makefile         | NAME, all, clean, fclean, re
+Arguments        | port: The listening port password: The connection password
+External functs. | Everything in C++ 98. socket, close, setsockopt, getsockname, getprotobyname, gethostbyname, getaddrinfo, freeaddrinfo, bind, connect, listen, accept, htons, htonl, ntohs, ntohl, inet_addr, inet_ntoa, send, recv, signal, sigaction, lseek, fstat, fcntl, poll (or equivalent)
+Description      | An IRC server in C++ 98
 
 # Man Pages
 
