@@ -751,3 +751,5 @@ defined in <poll.h>:
 [ 2 ] <https://www.bogotobogo.com/cplusplus/sockets_server_client.php>
 
 [ 3 ] <https://www.geeksforgeeks.org/socket-programming-cc/>
+
+[ 4 ] <https://man7.org/linux/man-pages/>
