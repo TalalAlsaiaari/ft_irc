@@ -63,13 +63,13 @@ Everything in C++ 98.
 <details>
 	<summary><strong>[ socket ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
 	int socket(int domain, int type, int protocol);
 
 	tcp_socket = socket(AF_INET6, SOCK_STREAM, 0);
-
-https://man7.org/linux/man-pages/man7/tcp.7.html
+```
 
 creates an endpoint for communication and returns a file
 descriptor that refers to that endpoint.  The file descriptor
@@ -100,8 +100,6 @@ SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 
 	int close(int fd);
 ```
-
-https://man7.org/linux/man-pages/man2/close.2.html
 
 closes a file descriptor, so that it no longer refers to
 any file and may be reused.  Any record locks (see fcntl(2)) held
