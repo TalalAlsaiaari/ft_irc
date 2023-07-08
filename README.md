@@ -41,13 +41,13 @@ together to form a network.
 - [ ] Parse Client Input
 
 ## Run irssi in Docker
-
+``` bash
 	docker run -itd --name=irssi irssi
 	docker exec -it irssi irssi
 	/set nick <name>
 	/connect liberachat
 	/join #<channel_name>
-
+```
 ## Run Executable
 ``` bash
 	./ircserv <port> <password>
