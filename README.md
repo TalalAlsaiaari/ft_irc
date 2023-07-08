@@ -59,6 +59,7 @@ together to form a network.
 ## Mandatory Guidelines
 
 Program name     | ircserv
+---------------- | ------------------------------------------------------------------------
 Turn in files    | Makefile, *.{h, hpp}, *.cpp, *.tpp, *.ipp, an optional configuration file
 Makefile         | NAME, all, clean, fclean, re
 Arguments        | port: The listening port password: The connection password
