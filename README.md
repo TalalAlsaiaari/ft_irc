@@ -49,9 +49,9 @@ together to form a network.
 	/join #<channel_name>
 
 ## Run Executable
-
+``` bash
 	./ircserv <port> <password>
-
+```
 ### Get unique includes from README.md
 
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
