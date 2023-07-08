@@ -95,9 +95,11 @@ SOCK_NONBLOCK and SOCK_CLOEXEC are Linux-specific.
 <details>
 	<summary><strong>[ close ]</strong></summary>
 
+``` c
 	#include <unistd.h>
 
 	int close(int fd);
+```
 
 https://man7.org/linux/man-pages/man2/close.2.html
 
@@ -114,6 +116,7 @@ obtain the lock).
 
 ``` c
 	#include <sys/socket.h>
+
 	int setsockopt(int socket, int level, int option_name, const void *option_value, socklen_t option_len);
 ```
 
@@ -131,10 +134,11 @@ error.
 <details>
 	<summary><strong>[ getsockname ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
-	int getsockname(int sockfd, struct sockaddr *restrict addr,
-socklen_t *restrict addrlen);
+	int getsockname(int sockfd, struct sockaddr *restrict addr, socklen_t *restrict addrlen);
+```
 
 returns the current address to which the socket
 sockfd is bound, in the buffer pointed to by addr.  The addrlen
@@ -150,9 +154,11 @@ supplied to the call.
 <details>
 	<summary><strong>[ getprotobyname ]</strong></summary>
 
+``` c
 	#include <netdb.h>
 
 	struct protoent *getprotobyname(const char *name);
+```
 
 The getprotobyname() function shall search the database from the
 beginning and find the first entry for which the protocol name
@@ -167,11 +173,13 @@ Otherwise, a null pointer is returned.
 
 The protoent structure is defined in <netdb.h> as follows:
 
+``` c
     struct protoent {
         char  *p_name;       /* official protocol name */
         char **p_aliases;    /* alias list */
         int    p_proto;      /* protocol number */
     }
+```
 
 The members of the protoent structure are:
 
@@ -198,16 +206,15 @@ p_proto
 <details>
 	<summary><strong>[ getaddrinfo ]</strong></summary>
 
+``` c
 	#include <sys/types.h>
 
 	#include <sys/socket.h>
 
 	#include <netdb.h>
 
-	int getaddrinfo(const char *restrict node,
-const char *restrict service,
-const struct addrinfo *restrict hints,
-struct addrinfo **restrict res);
+	int getaddrinfo(const char *restrict node, const char *restrict service, const struct addrinfo *restrict hints, struct addrinfo **restrict res);
+```
 
 Given node and service, which identify an Internet host and a
 service, getaddrinfo() returns one or more addrinfo structures,
@@ -227,6 +234,7 @@ programs to eliminate IPv4-versus-IPv6 dependencies.
 The addrinfo structure used by getaddrinfo() contains the
 following fields:
 
+``` c
     struct addrinfo {
         int              ai_flags;
         int              ai_family;
@@ -237,11 +245,14 @@ following fields:
         char            *ai_canonname;
         struct addrinfo *ai_next;
     };
+```
+
 </details>
 
 <details>
 	<summary><strong>[ freeaddrinfo ]</strong></summary>
 
+``` c
 	#include <sys/types.h>
 
 	#include <sys/socket.h>
@@ -249,6 +260,7 @@ following fields:
 	#include <netdb.h>
 
 	void freeaddrinfo(struct addrinfo *res);
+```
 
 The freeaddrinfo() function shall free one or more addrinfo
 structures returned by getaddrinfo(), along with any additional
@@ -262,10 +274,11 @@ getaddrinfo().
 <details>
 	<summary><strong>[ bind ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
-	int bind(int sockfd, const struct sockaddr *addr,
-socklen_t addrlen);
+	int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
 
 When a socket is created with socket(2), it exists in a name
 space (address family) but has no address assigned to it.  bind()
@@ -283,10 +296,12 @@ The actual structure passed for the addr argument will depend on
 the address family.  The sockaddr structure is defined as
 something like:
 
+``` c
     struct sockaddr {
         sa_family_t sa_family;
         char        sa_data[ 14 ];
     }
+```
 
 The only purpose of this structure is to cast the structure
 pointer passed in addr in order to avoid compiler warnings.
@@ -295,10 +310,11 @@ pointer passed in addr in order to avoid compiler warnings.
 <details>
 	<summary><strong>[ connect ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
-	int connect(int sockfd, const struct sockaddr *addr,
-socklen_t addrlen);
+	int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+```
 
 The connect() system call connects the socket referred to by the
 file descriptor sockfd to the address specified by addr.  The
@@ -332,9 +348,11 @@ Linux 2.2.)
 <details>
 	<summary><strong>[ listen ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
 	int listen(int sockfd, int backlog);
+```
 
 listen() marks the socket referred to by sockfd as a passive
 socket, that is, as a socket that will be used to accept incoming
@@ -354,10 +372,11 @@ ignored so that a later reattempt at connection succeeds.
 <details>
 	<summary><strong>[ accept ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
-	int accept(int sockfd, struct sockaddr *_Nullable restrict addr,
-socklen_t *_Nullable restrict addrlen);
+	int accept(int sockfd, struct sockaddr *_Nullable restrict addr, socklen_t *_Nullable restrict addrlen);
+```
 
 The accept() system call is used with connection-based socket
 types (SOCK_STREAM, SOCK_SEQPACKET).  It extracts the first
@@ -378,9 +397,11 @@ activity occurs on a socket; see socket(7) for details.**
 <details>
 	<summary><strong>[ htons ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	uint16_t htons(uint16_t hostshort);
+```
 
 converts the unsigned short integer
 hostshort from host byte order to network byte order.
@@ -389,10 +410,11 @@ hostshort from host byte order to network byte order.
 <details>
 	<summary><strong>[ htonl ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	uint32_t htonl(uint32_t hostlong);
-
+```
 converts the unsigned integer hostlong from
 host byte order to network byte order.
 </details>
@@ -400,9 +422,11 @@ host byte order to network byte order.
 <details>
 	<summary><strong>[ ntohs ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	uint16_t ntohs(uint16_t netshort);
+```
 
 converts the unsigned short integer netshort
 from network byte order to host byte order.
@@ -411,9 +435,11 @@ from network byte order to host byte order.
 <details>
 	<summary><strong>[ ntohl ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	uint32_t ntohl(uint32_t netlong);
+```
 
 converts the unsigned integer netlong from
 network byte order to host byte order.
@@ -422,9 +448,11 @@ network byte order to host byte order.
 <details>
 	<summary><strong>[ inet_addr ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	in_addr_t inet_addr(const char *cp);
+```
 
 convert the string pointed to by
 cp, in the standard IPv4 dotted decimal notation, to an integer
@@ -434,9 +462,11 @@ value suitable for use as an Internet address.
 <details>
 	<summary><strong>[ inet_ntoa ]</strong></summary>
 
+``` c
 	#include <arpa/inet.h>
 
 	char *inet_ntoa(struct in_addr in);
+```
 
 convert the Internet host address
 specified by in to a string in the Internet standard dot
@@ -449,9 +479,11 @@ be overwritten by subsequent calls to inet_ntoa().
 <details>
 	<summary><strong>[ send ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
 	ssize_t send(int sockfd, const void buf[.len], size_t len, int flags);
+```
 
 The send() call may be used only when the socket is in a
 connected state (so that the intended recipient is known).  The
@@ -459,11 +491,13 @@ only difference between send() and write(2) is the presence of
 flags.  With a zero flags argument, send() is equivalent to
 write(2).  Also, the following call
 
+``` c
 	send(sockfd, buf, len, flags);
 
-	is equivalent to
+	// is equivalent to
 
 	sendto(sockfd, buf, len, flags, NULL, 0);
+```
 
 The argument sockfd is the file descriptor of the sending socket.
 
@@ -472,20 +506,23 @@ The argument sockfd is the file descriptor of the sending socket.
 <details>
 	<summary><strong>[ recv ]</strong></summary>
 
+``` c
 	#include <sys/socket.h>
 
-	ssize_t recv(int sockfd, void buf[.len], size_t len,
-int flags);
+	ssize_t recv(int sockfd, void buf[.len], size_t len, int flags);
+```
 
 The only difference between recv() and read(2) is the presence of
 flags.  With a zero flags argument, recv() is generally
 equivalent to read(2) (but see NOTES).  Also, the following call
 
+``` c
 	recv(sockfd, buf, len, flags);
 
-	is equivalent to
+	// is equivalent to
 
 	recvfrom(sockfd, buf, len, flags, NULL, NULL);
+```
 
 The recv() call is normally used only on a connected socket (see
 connect(2)).  It is equivalent to the call:
@@ -497,11 +534,13 @@ connect(2)).  It is equivalent to the call:
 <details>
 	<summary><strong>[ signal ]</strong></summary>
 
+``` c
 	#include <signal.h>
 
 	typedef void (*sighandler_t)(int);
 
 	sighandler_t signal(int signum, sighandler_t handler);
+```
 
 WARNING: the behavior of signal() varies across UNIX versions,
 and has also varied historically across different versions of
@@ -523,14 +562,15 @@ below.
 <details>
 	<summary><strong>[ sigaction ]</strong></summary>
 
+``` c
 	#include <signal.h>
 
-	int sigaction(int signum,
-const struct sigaction *_Nullable restrict act,
-struct sigaction *_Nullable restrict oldact);
+	int sigaction(int signum, const struct sigaction *_Nullable restrict act, struct sigaction *_Nullable restrict oldact);
+```
 
 The sigaction structure is defined as something like:
 
+``` c
 	struct sigaction {
 	    void     (*sa_handler)(int);
 	    void     (*sa_sigaction)(int, siginfo_t *, void *);
@@ -538,9 +578,11 @@ The sigaction structure is defined as something like:
 	    int        sa_flags;
 	    void     (*sa_restorer)(void);
 	};
+```
 
 The siginfo_t data type is a structure with the following fields:
 
+``` c
 	siginfo_t {
 	    int      si_signo;     /* Signal number */
 	    int      si_errno;     /* An errno value */
@@ -578,14 +620,17 @@ The siginfo_t data type is a structure with the following fields:
 	    unsigned int si_arch;  /* Architecture of attempted system call
 	                              (since Linux 3.5) */
 	}
+```
 </details>
 
 <details>
 	<summary><strong>[ lseek ]</strong></summary>
 
+``` c
 	#include <unistd.h>
 
 	off_t lseek(int fd, off_t offset, int whence);
+```
 
 repositions the file offset of the open file description
 associated with the file descriptor fd to the argument offset
@@ -612,9 +657,11 @@ written into the gap.
 <details>
 	<summary><strong>[ fstat ]</strong></summary>
 
+``` c
 	#include <sys/stat.h>
 
 	int fstat(int fildes, struct stat *buf);
+```
 
 obtain information about an open file
 associated with the file descriptor fildes, and shall write it to
@@ -624,9 +671,11 @@ the area pointed to by buf.
 <details>
 	<summary><strong>[ fcntl ]</strong></summary>
 
+``` c
 	#include <fcntl.h>
 
 	int fcntl(int fd, int cmd, ... /* arg */ );
+```
 
 performs one of the operations described below on the
 open file descriptor fd.  The operation is determined by cmd.
@@ -645,9 +694,11 @@ F_SETFL (int)
 <details>
 	<summary><strong>[ poll ]</strong></summary>
 
+``` c
 	#include <poll.h>
 
 	int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+```
 
 performs a similar task to select(2): it waits for one of
 a set of file descriptors to become ready to perform I/O.  The
@@ -658,11 +709,13 @@ The set of file descriptors to be monitored is specified in the
 fds argument, which is an array of structures of the following
 form:
 
+``` c
 	struct pollfd {
 	    int   fd;         /* file descriptor */
 	    short events;     /* requested events */
 	    short revents;    /* returned events */
 	};
+```
 
 The caller should specify the number of items in the fds array in
 nfds.
