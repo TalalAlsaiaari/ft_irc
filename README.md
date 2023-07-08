@@ -53,9 +53,9 @@ together to form a network.
 	./ircserv <port> <password>
 ```
 ### Get unique includes from README.md
-
+``` bash
 	cat README.md | grep "#include" | sort -u > headerfile.hpp
-
+```
 # Man Pages
 
 <details>
