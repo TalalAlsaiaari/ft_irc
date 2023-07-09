@@ -8,6 +8,7 @@ class Client {
 		std::string real_name;
 		std::string user_name;
 		std::string server_name;
+		std::vector<char> buff(5000);
 	public:
 		Client();
 		Client( int );
