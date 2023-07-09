@@ -528,6 +528,18 @@ connect(2)).  It is equivalent to the call:
 
 	recvfrom(fd, buf, len, flags, NULL, 0);
 
+MSG_DONTWAIT (since Linux 2.2)
+	Enables nonblocking operation; if the operation would
+	block, the call fails with the error EAGAIN or
+	EWOULDBLOCK.  This provides similar behavior to setting
+	the O_NONBLOCK flag (via the fcntl(2) F_SETFL operation),
+	but differs in that MSG_DONTWAIT is a per-call option,
+	whereas O_NONBLOCK is a setting on the open file
+	description (see open(2)), which will affect all threads
+	in the calling process and as well as other processes that
+	hold file descriptors referring to the same open file
+	description.
+
 </details>
 
 <details>
@@ -754,3 +766,7 @@ defined in <poll.h>:
 [ 3 ] <https://www.geeksforgeeks.org/socket-programming-cc/>
 
 [ 4 ] <https://man7.org/linux/man-pages/>
+
+[ 5 ] <https://marketsplash.com/tutorials/cpp/cplusplus-scoket/>
+
+[ 6 ] <https://irssi.org/documentation>
