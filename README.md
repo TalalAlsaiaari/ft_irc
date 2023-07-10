@@ -787,31 +787,30 @@ defined in <poll.h>:
 # Parsing
 
 	The protocol messages must be extracted from the contiguous stream of
-   octets.  The current solution is to designate two characters, CR and
-   LF, as message separators.   Empty  messages  are  silently  ignored,
-   which permits  use  of  the  sequence  CR-LF  between  messages
-   without extra problems.
+	octets.  The current solution is to designate two characters, CR and
+	LF, as message separators.   Empty  messages  are  silently  ignored,
+	which permits  use  of  the  sequence  CR-LF  between  messages
+	without extra problems.	
+	The extracted message is parsed into the components <prefix>,
+	<command> and list of parameters matched either by <middle> or
+	<trailing> components.	
 
-   The extracted message is parsed into the components <prefix>,
-   <command> and list of parameters matched either by <middle> or
-   <trailing> components.
+	The BNF representation for this is:
 
-   The BNF representation for this is:
+``` abnf
+	<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+	<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+	<command>  ::= <letter> { <letter> } | <number> <number> <number>
+	<SPACE>    ::= ' ' { ' ' }
+	<params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
 
+	<middle>   ::= <Any *non-empty* sequence of octets not including SPACE
+	               or NUL or CR or LF, the first of which may not be ':'>
+	<trailing> ::= <Any, possibly *empty*, sequence of octets not including
+	                 NUL or CR or LF>
 
-<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
-<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
-<command>  ::= <letter> { <letter> } | <number> <number> <number>
-<SPACE>    ::= ' ' { ' ' }
-<params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
-
-<middle>   ::= <Any *non-empty* sequence of octets not including SPACE
-               or NUL or CR or LF, the first of which may not be ':'>
-<trailing> ::= <Any, possibly *empty*, sequence of octets not including
-                 NUL or CR or LF>
-
-<crlf>     ::= CR LF
-
+	<crlf>     ::= CR LF
+```
 
 
 # REFERENCES
