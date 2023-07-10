@@ -43,6 +43,26 @@ For this project we only focus on client-server communication.
 	- [ ] figure it out
 - [ ] Parse Client Input
 
+### Requirements
+
+	- You must have operators and regular users.
+		- To allow a reasonable amount of order to be kept within the IRC
+   		network, a special class of clients (operators) is allowed to perform
+   		general maintenance functions on the network.  Although the powers
+   		granted to an operator can be considered as 'dangerous', they are
+   		nonetheless required.  Operators should be able to perform basic
+   		network tasks such as disconnecting and reconnecting servers as
+   		needed to prevent long-term use of bad network routing.  In
+   		recognition of this need, the protocol discussed herein provides for
+   		operators only to be able to perform such functions.  See sections
+   		4.1.7 (SQUIT) and 4.3.5 (CONNECT).
+   		A more controversial power of operators is the ability  to  remove  a
+   		user  from  the connected network by 'force', i.e. operators are able
+   		to close the connection between any client and server.   The
+   		justification for  this  is delicate since its abuse is both
+   		destructive and annoying.  For further details on this type of
+   		action, see section 4.6.1 (KILL).
+
 ## Run irssi in Docker
 ``` bash
 	docker run -itd --name=irssi irssi
@@ -756,6 +776,43 @@ defined in <poll.h>:
 	channel will return 0 (end of file) only after all
 	outstanding data in the channel has been consumed.
 </details>
+
+# Random Info dump
+
+	Because of IRC's scandanavian origin, the characters {}| are
+	considered to be the lower case equivalents of the characters []\,
+	respectively. This is a critical issue when determining the
+	equivalence of two nicknames.
+
+# Parsing
+
+	The protocol messages must be extracted from the contiguous stream of
+   octets.  The current solution is to designate two characters, CR and
+   LF, as message separators.   Empty  messages  are  silently  ignored,
+   which permits  use  of  the  sequence  CR-LF  between  messages
+   without extra problems.
+
+   The extracted message is parsed into the components <prefix>,
+   <command> and list of parameters matched either by <middle> or
+   <trailing> components.
+
+   The BNF representation for this is:
+
+
+<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+<command>  ::= <letter> { <letter> } | <number> <number> <number>
+<SPACE>    ::= ' ' { ' ' }
+<params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
+
+<middle>   ::= <Any *non-empty* sequence of octets not including SPACE
+               or NUL or CR or LF, the first of which may not be ':'>
+<trailing> ::= <Any, possibly *empty*, sequence of octets not including
+                 NUL or CR or LF>
+
+<crlf>     ::= CR LF
+
+
 
 # REFERENCES
 
