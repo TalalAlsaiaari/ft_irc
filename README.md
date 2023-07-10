@@ -797,7 +797,7 @@ defined in <poll.h>:
 
 	The BNF representation for this is:
 
-``` abnf
+``` bnf
 	<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
 	<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
 	<command>  ::= <letter> { <letter> } | <number> <number> <number>
