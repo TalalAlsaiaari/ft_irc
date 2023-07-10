@@ -770,3 +770,5 @@ defined in <poll.h>:
 [ 5 ] <https://marketsplash.com/tutorials/cpp/cplusplus-scoket/>
 
 [ 6 ] <https://irssi.org/documentation>
+
+[ 7 ] <https://www.rfc-editor.org/rfc/rfc1459>
