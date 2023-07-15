@@ -36,6 +36,12 @@ together to form a network.
 
 For this project we only focus on client-server communication.
 
+### What is a socket? <sup>[7](https://beej.us/guide/bgnet/)</sup>
+
+They are a way to speak to other programs using standard UNIX file descriptors. UNIX programs use file descriptors for any sort of
+I/O. File descriptors are an integer associated with an open file, but that file can be a network connection, a FIFO, a pipe, a terminal, a real on-the-disk file, or just about
+anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
+
 # TO DO
 
 - [x] Make awesome README
@@ -770,3 +776,5 @@ defined in <poll.h>:
 [ 5 ] <https://marketsplash.com/tutorials/cpp/cplusplus-scoket/>
 
 [ 6 ] <https://irssi.org/documentation>
+
+[ 7 ] <https://beej.us/guide/bgnet/>
