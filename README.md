@@ -441,7 +441,7 @@ hostshort from host byte order to network byte order.
 	uint32_t htonl(uint32_t hostlong);
 ```
 converts the unsigned integer hostlong from
-host byte order to network byte order.
+host byte order to network byte order. (see Big-endian / little-endian)
 </details>
 
 <details>
@@ -785,6 +785,9 @@ defined in <poll.h>:
 
 # Random Info dump
 
+	From Karim use rawlog to see commands and expected replies "/help rawlog"
+
+
 	Because of IRC's scandanavian origin, the characters {}| are
 	considered to be the lower case equivalents of the characters []\,
 	respectively. This is a critical issue when determining the
@@ -836,3 +839,5 @@ defined in <poll.h>:
 [ 7 ] <https://beej.us/guide/bgnet/>
 
 [ 8 ] <https://www.rfc-editor.org/rfc/rfc1459>
+
+[ 9 ] <https://ircv3.net/specs/extensions/capability-negotiation.html>
