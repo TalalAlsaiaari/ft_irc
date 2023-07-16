@@ -1,66 +1,253 @@
-// Server side C/C++ program to demonstrate Socket
-// programming
-#include <netinet/in.h>
+/*
+** pollserver.c -- a cheezy multiperson chat server
+*/
+
+// 001    RPL_WELCOME
+    //    "Welcome to the Internet Relay Network
+    //  @return   <nick>!<user>@<host>"
+#define RPL_WELCOME 001
+
+// 332     RPL_TOPIC
+#define RPL_TOPIC 332
+
+    //   376     RPL_ENDOFMOTD
+    //                     ":End of /MOTD command"
+#define RPL_ENDOFMOTD 376
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
 #include <unistd.h>
-#include <vector>
-#include <string>
-#include <iostream>
-#define PORT 6667
-int main(int argc, char const* argv[])
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <poll.h>
+#include <fcntl.h>
+#include "Client.hpp"
+#include "Parser.hpp"
+
+#define PORT "9034"   // Port we're listening on
+
+// Get sockaddr, IPv4 or IPv6:
+void *get_in_addr(struct sockaddr *sa)
 {
-	int server_fd, new_socket, valread;
-	struct sockaddr_in address;
-	int opt = 1;
-	int addrlen = sizeof(address);
-	std::vector<char> buffer(5000);
-	char* hello = "Hello from server";
+    if (sa->sa_family == AF_INET) {
+        return &(((struct sockaddr_in*)sa)->sin_addr);
+    }
 
-	// Creating socket file descriptor
-	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		perror("socket failed");
-		exit(EXIT_FAILURE);
-	}
+    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
 
-	// Forcefully attaching socket to the port 8080
-	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR , &opt, sizeof(opt))) {
-		perror("setsockopt");
-		exit(EXIT_FAILURE);
-	}
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(PORT);
+// Return a listening socket
+int get_listener_socket(void)
+{
+    int listener;     // Listening socket descriptor
+    int yes=1;        // For setsockopt() SO_REUSEADDR, below
+    int rv;
 
-	// Forcefully attaching socket to the port 8080
-	if (bind(server_fd, (struct sockaddr*)&address,
-			sizeof(address))
-		< 0) {
-		perror("bind failed");
-		exit(EXIT_FAILURE);
-	}
-	if (listen(server_fd, 3) < 0) {
-		perror("listen");
-		exit(EXIT_FAILURE);
-	}
-	if ((new_socket
-		= accept(server_fd, (struct sockaddr*)&address,
-				(socklen_t*)&addrlen))
-		< 0) {
-		perror("accept");
-		exit(EXIT_FAILURE);
-	}
-	valread = recv(new_socket, buffer.data(), buffer.size(), 0);
-	std::string mes = buffer.data();
-	std::cout << mes << std::endl;
-	send(new_socket, hello, strlen(hello), 0);
-	printf("Hello message sent\n");
+    struct addrinfo hints, *ai, *p;
 
-	// closing the connected socket
-	close(new_socket);
-	// closing the listening socket
-	shutdown(server_fd, SHUT_RDWR);
-	return 0;
+    // Get us a socket and bind it
+    memset(&hints, 0, sizeof hints);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;
+    if ((rv = getaddrinfo(NULL, PORT, &hints, &ai)) != 0) {
+        fprintf(stderr, "selectserver: %s\n", gai_strerror(rv));
+        exit(1);
+    }
+    for(p = ai; p != NULL; p = p->ai_next) {
+        listener = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+        if (listener < 0) {
+            continue;
+        }
+
+        // Lose the pesky "address already in use" error message
+        setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+
+        if (bind(listener, p->ai_addr, p->ai_addrlen) < 0) {
+            close(listener);
+            continue;
+        }
+
+        break;
+    }
+
+    // If we got here, it means we didn't get bound
+    if (p == NULL) {
+        return -1;
+    }
+
+    freeaddrinfo(ai); // All done with this
+
+    // Listen
+    if (listen(listener, 10) == -1) {
+        return -1;
+    }
+
+    return listener;
+}
+
+// Add a new file descriptor to the set
+void add_to_pfds(struct pollfd *pfds[], int newfd, int *fd_count, int *fd_size)
+{
+    // If we don't have room, add more space in the pfds array
+    if (*fd_count == *fd_size) {
+        *fd_size *= 2; // Double it
+
+        *pfds = (pollfd *)realloc(*pfds, sizeof(**pfds) * (*fd_size));
+    }
+
+    (*pfds)[*fd_count].fd = newfd;
+    (*pfds)[*fd_count].events = POLLIN; // Check ready-to-read
+
+    (*fd_count)++;
+}
+
+// Remove an index from the set
+void del_from_pfds(struct pollfd pfds[], int i, int *fd_count)
+{
+    // Copy the one from the end over this one
+    pfds[i] = pfds[*fd_count-1];
+
+    (*fd_count)--;
+}
+#include <map>
+// Main
+int main(void)
+{
+    int listener;     // Listening socket descriptor
+
+    int newfd;        // Newly accept()ed socket descriptor
+    struct sockaddr_storage remoteaddr; // Client address
+    socklen_t addrlen;
+
+    char buf[256];    // Buffer for client data
+
+    char remoteIP[INET6_ADDRSTRLEN];
+
+    std::map<int, Client> clients;
+    Parser parse;
+    // Start off with room for 5 connections
+    // (We'll realloc as necessary)
+    int fd_count = 0;
+    int fd_size = 5;
+    struct pollfd *pfds = (pollfd *)malloc(sizeof *pfds * fd_size);
+
+    // Set up and get a listening socket
+    listener = get_listener_socket();
+
+    if (listener == -1) {
+        fprintf(stderr, "error getting listening socket\n");
+        exit(1);
+    }
+
+    // Add the listener to set
+    pfds[0].fd = listener;
+    pfds[0].events = POLLIN; // Report ready to read on incoming connection
+
+    fd_count = 1; // For the listener
+
+    // Main loop
+    for(;;) {
+        int poll_count = poll(pfds, fd_count, -1);
+        printf("polled\n");
+        if (poll_count == -1) {
+            perror("poll");
+            exit(1);
+        }
+
+        // Run through the existing connections looking for data to read
+        for(int i = 0; i < fd_count; i++) {
+
+            // Check if someone's ready to read
+            if (pfds[i].revents & POLLIN) { // We got one!!
+
+                if (pfds[i].fd == listener) {
+                    // If listener is ready to read, handle new connection
+
+                    addrlen = sizeof remoteaddr;
+                    newfd = accept(listener,
+                        (struct sockaddr *)&remoteaddr,
+                        &addrlen);
+					fcntl(newfd, F_SETFL, O_NONBLOCK);
+                    if (newfd == -1) {
+                        perror("accept");
+                    } else {
+                        add_to_pfds(&pfds, newfd, &fd_count, &fd_size);
+                        clients[newfd] = Client(newfd);
+                        printf("pollserver: new connection from %s on "
+                            "socket %d\n",
+                            inet_ntop(remoteaddr.ss_family,
+                                get_in_addr((struct sockaddr*)&remoteaddr),
+                                remoteIP, INET6_ADDRSTRLEN),
+                            newfd);
+                        // printf("welcomed\n");
+						// send(newfd, ":Welcome nick!user@host", strlen(":Welcome nick!user@host"), RPL_WELCOME);
+                    // int nbytes = recv(newfd, buf, sizeof buf, 0);
+                    }
+                } else {
+                    // If not the listener, we're just a regular client
+                    int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
+
+                    int sender_fd = pfds[i].fd;
+					printf("%s\n", buf);
+                    // send()
+                    if (nbytes <= 0) {
+                        // Got error or connection closed by client
+                        if (nbytes == 0) {
+                            // Connection closed
+                            printf("pollserver: socket %d hung up\n", sender_fd);
+                        } else {
+                            perror("recv");
+                        }
+						printf("bye\n");
+                        close(pfds[i].fd); // Bye!
+
+                        del_from_pfds(pfds, i, &fd_count);
+
+                    } else {
+                        // We got some good data from a client
+                        // for(int j = 0; j < fd_count; j++) {
+                        //     // Send to everyone!
+                        //     int dest_fd = pfds[j].fd;
+                                printf("%d\n", nbytes);
+                                printf("%s\n", buf);
+                                parse.takeInput(buf);
+                                // parse.findCmd();
+                                if (nbytes == 12)
+						            send(clients[sender_fd].getFD(), "CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
+                                else if (nbytes == 8)
+                                    send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
+                                else if (nbytes == 35)
+                                    send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
+                                else if (parse.getCmd() == "NICK")
+                                    parse.findNick(buf, clients[sender_fd]);
+                                // else
+                                //     send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
+
+                                // else if (nbytes == 8) {
+						        //     // send(sender_fd, "", strlen(buf), RPL_TOPIC);
+						        //     send(sender_fd, ":End of /MOTD command", strlen(":End of /MOTD command"), 0);
+                                // }
+                            memset(buf, 0, strlen(buf));
+                        //     // Except the listener and ourselves
+
+                        //     if (dest_fd != listener && dest_fd != sender_fd) {
+						// 		printf("hello\n");
+                        //         // if (send(dest_fd, buf, nbytes, 0) == -1) {
+                        //         //     perror("send");
+                        //         // }
+                        //     }
+                        // }
+                    }
+                } // END handle data from client
+            } // END got ready-to-read from poll()
+        } // END looping through file descriptors
+    } // END for(;;)--and you thought it would never end!
+
+    return 0;
 }
