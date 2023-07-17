@@ -1,5 +1,10 @@
 #pragma once
 
+// 001    RPL_WELCOME
+    //    "Welcome to the Internet Relay Network
+    //  @return   <nick>!<user>@<host>"
+#define RPL_WELCOME 001
+
 //         401     ERR_NOSUCHNICK
 //                         "<nickname> :No such nick/channel"
 //                 - Used to indicate the nickname parameter supplied to a

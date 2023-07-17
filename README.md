@@ -841,3 +841,5 @@ defined in <poll.h>:
 [ 8 ] <https://www.rfc-editor.org/rfc/rfc1459>
 
 [ 9 ] <https://ircv3.net/specs/extensions/capability-negotiation.html>
+
+[ 10 ] <http://chi.cs.uchicago.edu/chirc/irc_examples.html>

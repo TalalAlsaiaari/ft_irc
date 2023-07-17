@@ -1,6 +1,6 @@
 NAME=ircserv
 
-SRCS = test_server.cpp Client.cpp Parser.cpp
+SRCS = test_server.cpp Client.cpp Parser.cpp Functions.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
