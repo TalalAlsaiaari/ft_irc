@@ -27,6 +27,7 @@ class Client {
 		std::string getServerName( void );
 		int getFD( void );
 		bool isRegistered( void );
+		void registration( void );
 };
 
 #endif

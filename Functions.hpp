@@ -49,5 +49,7 @@ class Functions {
 		void addNick( std::string nick );
 		void findNick( void );
 		void NICK( void );
+		void CAP( void );
+		void JOIN( void );
 };
 

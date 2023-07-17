@@ -1,8 +1,8 @@
 #include "Client.hpp"
 
-Client::Client() : registered(false) {}
+Client::Client() : nick("*"), registered(false) {}
 
-Client::Client( int fd ) : fd(fd), registered(false) {}
+Client::Client( int fd ) : fd(fd), nick("*"), registered(false) {}
 
 Client::~Client( ) {}
 
@@ -44,4 +44,8 @@ int Client::getFD( void ) {
 
 bool Client::isRegistered( void ) {
 	return registered;
+}
+
+void Client::registration( void ) {
+	registered = true;
 }
