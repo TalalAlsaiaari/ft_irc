@@ -802,7 +802,7 @@ defined in <poll.h>:
 	without extra problems.
 	The extracted message is parsed into the components <prefix>,
 	<command> and list of parameters matched either by <middle> or
-	<trailing> components.<sup>[8](https://www.rfc-editor.org/rfc/rfc1459)</sup>
+	<trailing> components. <sup>[8](https://www.rfc-editor.org/rfc/rfc1459)</sup>
 
 	The BNF representation for this is:
 
