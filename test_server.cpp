@@ -217,14 +217,14 @@ int main(void)
                                 printf("%d\n", nbytes);
                                 printf("%s\n", buf);
                                 parse.takeInput(buf, sender_fd, clients[sender_fd]);
-                                // if (nbytes == 12)
-						        //     send(clients[sender_fd].getFD(), "CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
-                                // else if (nbytes == 8)
-                                //     send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
-                                // else if (nbytes == 35)
-                                //     send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
-                                // else
-                                //     send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
+                                if (nbytes == 12)
+						            send(clients[sender_fd].getFD(), ":localhost CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
+                                else if (nbytes == 8)
+                                    send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
+                                else if (nbytes == 35)
+                                    send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
+                                else
+                                    send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
                                 // else if (parse.getCmd() == "NICK")
                                 //     parse.findNick();
 

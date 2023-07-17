@@ -820,7 +820,7 @@ defined in <poll.h>:
 
 	<crlf>     ::= CR LF
 ```
-
+![PRIVMSG](http://chi.cs.uchicago.edu/_images/privmsg.png)
 
 # REFERENCES
 
