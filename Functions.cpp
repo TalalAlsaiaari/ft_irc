@@ -8,8 +8,13 @@ Functions::~Functions( ) {
 
 }
 
-Functions::ErrorMessage(std::string error, std::string message) {
+void Functions::ServerMessage(std::string error, std::string message) {
 	std::string mes = ":" + clients[fd].getServerName() + error + clients[fd].getNick() + " " + message;
+	send(fd, &mes[0], mes.length(), 0);
+}
+
+void Functions::UserMessage(std::string message) {
+	std::string mes = ":" + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + " " + cmd + " " + message;
 	send(fd, &mes[0], mes.length(), 0);
 }
 
@@ -17,7 +22,6 @@ Functions::ErrorMessage(std::string error, std::string message) {
 void Functions::addNick( std::string nick ) {
 	for (int i = 0; i < 2 && args.size(); i++)
 		args.pop_front();
-	// args.pop_front();
 	if (args.size() > 0) {
 		cmd = args.front();
 		args.pop_front();
@@ -27,20 +31,17 @@ void Functions::addNick( std::string nick ) {
 	}
 	try {
 		nicks.at(nick);
-		ErrorMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
+		ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
 	} catch ( std::exception &e ) {
-		std::string yes;
 		if (clients[fd].getNick().empty()) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
-			ErrorMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n");
+			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n");
 		} else {
-			yes = ":" + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + " " + cmd + " " + nick + " :" + nick + " \n";
+			UserMessage(" " + nick + " :" + nick + "\n");
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
 		}
-		std::cout << yes;
-
 	}
 }
 
@@ -63,13 +64,10 @@ void Functions::CAP( void ) {
 }
 
 void Functions::JOIN( void ) {
-	std::string mes = ":" + clients[fd].getServerName();
 	if (args[0] == ":")
-		mes += " 461 " + cmd + " :Not enough parameters\n";
+		ServerMessage(ERR_NEEDMOREPARAMS, cmd + " :Not enough parameters\n");
 	else
-		mes += " 403 " + args[0] + " :No such channel\n";
-	send(fd, &mes[0], mes.length(), 0);
-	// send(fd, ":No such channel\n", strlen(":No such channel\n"), 0);
+		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
 }
 
 void Functions::USER( void ) {
@@ -83,6 +81,7 @@ void Functions::USER( void ) {
 		args.at(0);
 		clients[fd].setServerName(args[0]);
 		args.pop_front();
+		args.at(0);
 		clients[fd].setRealName(args[0]);
 		args.pop_front();
 	} catch (std::exception &e) {
@@ -95,8 +94,52 @@ void Functions::MODE( void ) {
 }
 
 void Functions::PING( void ) {
-
+	std::string pong = ":" + clients[fd].getServerName() + " PONG " + clients[fd].getServerName() + " :" + clients[fd].getServerName() + "\n";
+	send(fd, &pong[0], pong.length(), 0);
 }
+
+void Functions::PART( void ) {
+	try {
+		//need to check for multiple channels in args
+		args.at(0);
+		//need to check user is in the channel / channel exists
+		UserMessage(args[0] + "\n");
+		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + "\n");
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
+void Functions::UsertoUser(Client origin, Client dest) {
+	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
+	message += " " + cmd + " " + origin.getNick() + " ";
+	args.pop_front();
+	for (size_t i = 0; i < args.size(); i++) {
+		message += args[i] + " ";
+	}
+	message += "\n";
+	std::cout << message << std::endl;
+	send(dest.getFD(), &message[0], message.length(), 0);
+}
+
+void Functions::PRIVMSG( void ) {
+	try {
+		args.at(0);
+		args.at(1);
+		try {
+			//need to send to multiple users / channels
+			nicks.at(args[0]);
+			UsertoUser(clients[fd], nicks[args[0]]);
+		} catch (std::exception &e) {
+			ServerMessage(ERR_NOSUCHNICK, args[0] + "\n");
+		}
+	} catch ( std::exception &e ) {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
+// PRIVMSG alexhmball :hey
+// :alexandraballer!~user@5.195.225.158 PRIVMSG alexhmball :hey
 
 // NICK aballer
 //      user_name   host_name        server_name      :real_name
