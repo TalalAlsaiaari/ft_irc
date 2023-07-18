@@ -11,12 +11,17 @@
 #include <netdb.h>
 #include <string>
 #include <vector>
+#include <deque>
 #include <iostream>
 #include <map>
 #include <exception>
 #include <sstream>
 #include "Client.hpp"
 #include "ErrorCodes.hpp"
+
+// #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+
+#define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
 
 template < typename T >
 void StrtoAny(std::string str, T &value) {
@@ -38,18 +43,23 @@ class Functions {
 		int fd;
 		std::string input;
 		std::string cmd;
-		std::vector<std::string> args;
+		std::deque<std::string> args;
 		std::map<std::string, Client> nicks;
 		std::map<int, Client> clients;
+		std::string trailing;
 		std::string pass;
 	public:
 		Functions( );
 		virtual ~Functions( );
 		virtual void takeInput( std::string input, int fd, Client client ) = 0;
 		void addNick( std::string nick );
-		void findNick( void );
+		void ErrorMessage(std::string error, std::string message);
+		void UserMessage(std::string message);
 		void NICK( void );
 		void CAP( void );
 		void JOIN( void );
+		void USER( void );
+		void MODE( void );
+		void PING( void );
 };
 

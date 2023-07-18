@@ -3,24 +3,24 @@
 // 001    RPL_WELCOME
     //    "Welcome to the Internet Relay Network
     //  @return   <nick>!<user>@<host>"
-#define RPL_WELCOME 001
+#define RPL_WELCOME " 001 "
 
 //         401     ERR_NOSUCHNICK
 //                         "<nickname> :No such nick/channel"
 //                 - Used to indicate the nickname parameter supplied to a
 //                   command is currently unused.
-#define ERR_NOSUCHNICK 401
+#define ERR_NOSUCHNICK " 401 "
 
 //         402     ERR_NOSUCHSERVER
 //                         "<server name> :No such server"
 //                 - Used to indicate the server name given currently
 //                   doesn't exist.
-#define ERR_NOSUCHSERVER 402
+#define ERR_NOSUCHSERVER " 402 "
 
 //         403     ERR_NOSUCHCHANNEL
 //                         "<channel name> :No such channel"
 //                 - Used to indicate the given channel name is invalid.
-#define ERR_NOSUCHCHANNEL 403
+#define ERR_NOSUCHCHANNEL " 403 "
 
 //         404     ERR_CANNOTSENDTOCHAN
 //                         "<channel name> :Cannot send to channel"
@@ -28,7 +28,7 @@
 //                   which is mode +n or (b) not a chanop (or mode +v) on
 //                   a channel which has mode +m set and is trying to send
 //                   a PRIVMSG message to that channel.
-#define ERR_CANNOTSENDTOCHAN 404
+#define ERR_CANNOTSENDTOCHAN " 404 "
 
 //         405     ERR_TOOMANYCHANNELS
 //                         "<channel name> :You have joined too many \
@@ -36,13 +36,13 @@
 //                 - Sent to a user when they have joined the maximum
 //                   number of allowed channels and they try to join
 //                   another channel.
-#define ERR_TOOMANYCHANNELS 405
+#define ERR_TOOMANYCHANNELS " 405 "
 
 //         406     ERR_WASNOSUCHNICK
 //                         "<nickname> :There was no such nickname"
 //                 - Returned by WHOWAS to indicate there is no history
 //                   information for that nickname.
-#define ERR_WASNOSUCHNICK 406
+#define ERR_WASNOSUCHNICK " 406 "
 
 //         407     ERR_TOOMANYTARGETS
 //                         "<target> :Duplicate recipients. No message \
@@ -50,7 +50,7 @@
 //                 - Returned to a client which is attempting to send a
 //                   PRIVMSG/NOTICE using the user@host destination format
 //                   and for a user@host which has several occurrences.
-#define ERR_TOOMANYTARGETS 407
+#define ERR_TOOMANYTARGETS " 407 "
 
 //         409     ERR_NOORIGIN
 //                         ":No origin specified"
@@ -79,7 +79,7 @@
 //                         "<command> :Unknown command"
 //                 - Returned to a registered client to indicate that the
 //                   command sent is unknown by the server.
-#define ERR_UNKNOWNCOMMAND 421
+#define ERR_UNKNOWNCOMMAND " 421 "
 
 //         422     ERR_NOMOTD
 //                         ":MOTD File is missing"
@@ -100,7 +100,7 @@
 //                         ":No nickname given"
 //                 - Returned when a nickname parameter expected for a
 //                   command and isn't found.
-#define ERR_NONICKNAMEGIVEN 431
+#define ERR_NONICKNAMEGIVEN " 431 "
 
 //         432     ERR_ERRONEUSNICKNAME
 //                         "<nick> :Erroneus nickname"
@@ -113,14 +113,14 @@
 //                 - Returned when a NICK message is processed that results
 //                   in an attempt to change to a currently existing
 //                   nickname.
-#define ERR_NICKNAMEINUSE 433
+#define ERR_NICKNAMEINUSE " 433 "
 
 //         436     ERR_NICKCOLLISION
 //                         "<nick> :Nickname collision KILL"
 //                 - Returned by a server to a client when it detects a
 //                   nickname collision (registered of a NICK that
 //                   already exists by another server).
-#define ERR_NICKCOLLISON 436
+#define ERR_NICKCOLLISON " 436 "
 
 
 //         441     ERR_USERNOTINCHANNEL
@@ -162,13 +162,15 @@
 //                 - Returned by the server to indicate that the client
 //                   must be registered before the server will allow it
 //                   to be parsed in detail.
-#define ERR_NOTREGISTERED 451
+#define ERR_NOTREGISTERED " 451 "
 
 //         461     ERR_NEEDMOREPARAMS
 //                         "<command> :Not enough parameters"
 //                 - Returned by the server by numerous commands to
 //                   indicate to the client that it didn't supply enough
 //                   parameters.
+#define ERR_NEEDMOREPARAMS " 461 "
+
 
 //         462     ERR_ALREADYREGISTRED
 //                         ":You may not reregister"
@@ -190,7 +192,7 @@
 //                 - Returned to indicate a failed attempt at registering
 //                   a connection for which a password was required and
 //                   was either not given or incorrect.
-#define ERR_PASSWDMISMATCH 464
+#define ERR_PASSWDMISMATCH " 464 "
 
 //         465     ERR_YOUREBANNEDCREEP
 //                         ":You are banned from this server"
