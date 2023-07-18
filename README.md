@@ -71,11 +71,11 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 ## Run irssi in Docker
 ``` bash
-	docker run -itd --name=irssi irssi
-	docker exec -it irssi irssi
+	docker run -it --name irssi --network host irssi
 	/set nick <name>
-	/connect <server>
+	/connect host.docker.internal <port>
 	/join #<channel_name>
+	/msg <nick> <message>
 ```
 ## Run Executable
 ``` bash
