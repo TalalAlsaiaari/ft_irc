@@ -29,13 +29,14 @@
 //                   a channel which has mode +m set and is trying to send
 //                   a PRIVMSG message to that channel.
 #define ERR_CANNOTSENDTOCHAN " 404 "
-
+/*
 //         405     ERR_TOOMANYCHANNELS
 //                         "<channel name> :You have joined too many \
 //                          channels"
 //                 - Sent to a user when they have joined the maximum
 //                   number of allowed channels and they try to join
 //                   another channel.
+*/
 #define ERR_TOOMANYCHANNELS " 405 "
 
 //         406     ERR_WASNOSUCHNICK
@@ -43,13 +44,14 @@
 //                 - Returned by WHOWAS to indicate there is no history
 //                   information for that nickname.
 #define ERR_WASNOSUCHNICK " 406 "
-
+/*
 //         407     ERR_TOOMANYTARGETS
 //                         "<target> :Duplicate recipients. No message \
 //                          delivered"
 //                 - Returned to a client which is attempting to send a
 //                   PRIVMSG/NOTICE using the user@host destination format
 //                   and for a user@host which has several occurrences.
+*/
 #define ERR_TOOMANYTARGETS " 407 "
 
 //         409     ERR_NOORIGIN
@@ -133,6 +135,8 @@
 //                 - Returned by the server whenever a client tries to
 //                   perform a channel effecting command for which the
 //                   client isn't a member.
+#define ERR_NOTONCHANNEL " 442 "
+
 
 //         443     ERR_USERONCHANNEL
 //                         "<user> <channel> :is already on channel"
@@ -193,7 +197,7 @@
 //                   a connection for which a password was required and
 //                   was either not given or incorrect.
 #define ERR_PASSWDMISMATCH " 464 "
-
+/*
 //         465     ERR_YOUREBANNEDCREEP
 //                         ":You are banned from this server"
 //                 - Returned after an attempt to connect and register
@@ -634,3 +638,4 @@
 //                           (RPL_ADMINLOC2) and finally the administrative
 //                           contact for the server (an email address here
 //                           is required) in RPL_ADMINEMAIL.
+*/

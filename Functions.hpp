@@ -18,25 +18,8 @@
 #include <sstream>
 #include "Client.hpp"
 #include "ErrorCodes.hpp"
-
 // #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
-
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
-
-template < typename T >
-void StrtoAny(std::string str, T &value) {
-	std::stringstream ss(str);
-
-	ss >> value;
-}
-
-template < typename T >
-std::string AnytoStr(T value) {
-	std::stringstream ss;
-
-	ss << value;
-	return ss.str();
-}
 
 class Functions {
 	protected:
@@ -53,13 +36,16 @@ class Functions {
 		virtual ~Functions( );
 		virtual void takeInput( std::string input, int fd, Client client ) = 0;
 		void addNick( std::string nick );
-		void ErrorMessage(std::string error, std::string message);
+		void ServerMessage(std::string error, std::string message);
 		void UserMessage(std::string message);
+		void UsertoUser(Client orgin, Client dest);
 		void NICK( void );
 		void CAP( void );
 		void JOIN( void );
 		void USER( void );
 		void MODE( void );
 		void PING( void );
+		void PART( void );
+		void PRIVMSG( void );
 };
 
