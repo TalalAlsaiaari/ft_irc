@@ -5,14 +5,14 @@
 // 001    RPL_WELCOME
     //    "Welcome to the Internet Relay Network
     //  @return   <nick>!<user>@<host>"
-#define RPL_WELCOME 001
+// #define RPL_WELCOME 001
 
-// 332     RPL_TOPIC
-#define RPL_TOPIC 332
+// // 332     RPL_TOPIC
+// #define RPL_TOPIC 332
 
-    //   376     RPL_ENDOFMOTD
-    //                     ":End of /MOTD command"
-#define RPL_ENDOFMOTD 376
+//     //   376     RPL_ENDOFMOTD
+//     //                     ":End of /MOTD command"
+// #define RPL_ENDOFMOTD 376
 
 
 #include <stdio.h>
@@ -214,17 +214,17 @@ int main(void)
                         // for(int j = 0; j < fd_count; j++) {
                         //     // Send to everyone!
                         //     int dest_fd = pfds[j].fd;
-                                printf("%d\n", nbytes);
+                                // printf("%d\n", nbytes);
                                 printf("%s\n", buf);
                                 parse.takeInput(buf, sender_fd, clients[sender_fd]);
-                                if (nbytes == 12)
-						            send(clients[sender_fd].getFD(), ":localhost CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
-                                else if (nbytes == 8)
-                                    send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
-                                else if (nbytes == 35)
-                                    send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
-                                else
-                                    send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
+                                // if (nbytes == 12)
+						        //     send(clients[sender_fd].getFD(), ":localhost CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
+                                // else if (nbytes == 8)
+                                //     send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
+                                // else if (nbytes == 35)
+                                //     send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
+                                // else
+                                //     send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
                                 // else if (parse.getCmd() == "NICK")
                                 //     parse.findNick();
 
