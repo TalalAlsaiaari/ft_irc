@@ -9,6 +9,7 @@ int main()
 {
 	int status;
 	struct addrinfo hints;
+	struct addrinfo *test;
 	struct addrinfo *servinfo; // will point to the results
 
 	memset(&hints, 0, sizeof hints); // make sure the struct is empty
@@ -31,19 +32,20 @@ int main()
 		exit(1);
 	}
 	int i = 1;
-	while (servinfo)
+	test = servinfo;
+	while (test)
 	{
 		printf("\n~~~~~~~~~~~~~~~~~~~~ serv info ~~~~~~~~~~~~~~~~~~~~~~\n");
-		printf("ai_flags[%d]: %d\n",i, servinfo->ai_flags);
-		printf("ai_family[%d]: %d\n",i, servinfo->ai_family);
-		printf("ai_socktype[%d]: %d\n",i, servinfo->ai_socktype);
-		printf("ai_protocol[%d]: %d\n",i, servinfo->ai_protocol);
-		printf("ai_addrlen[%d]: %u\n",i, servinfo->ai_addrlen);
-		printf("ai_canonname[%d]: %s\n",i, servinfo->ai_canonname);
-		printf("ai_ai_addr->sa_family[%d]: %hhu\n",i, servinfo->ai_addr->sa_family);
-		printf("ai_ai_addr->sa_data[%d]: %s\n",i, servinfo->ai_addr->sa_data);
+		printf("ai_flags[%d]: %d\n",i, test->ai_flags);
+		printf("ai_family[%d]: %d\n",i, test->ai_family);
+		printf("ai_socktype[%d]: %d\n",i, test->ai_socktype);
+		printf("ai_protocol[%d]: %d\n",i, test->ai_protocol);
+		printf("ai_addrlen[%d]: %u\n",i, test->ai_addrlen);
+		printf("ai_canonname[%d]: %s\n",i, test->ai_canonname);
+		printf("ai_ai_addr->sa_family[%d]: %hhu\n",i, test->ai_addr->sa_family);
+		printf("ai_ai_addr->sa_data[%d]: %s\n",i, test->ai_addr->sa_data);
 		printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-		servinfo = servinfo->ai_next;
+		test = test->ai_next;
 		i++;
 	}
 

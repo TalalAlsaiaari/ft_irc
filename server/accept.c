@@ -8,26 +8,12 @@
 
 int main()
 {
-	// struct addrinfo hints, *res;
-	// int sockfd;
-	// // first, load up address structs with getaddrinfo():
-	// memset(&hints, 0, sizeof hints);
-	// hints.ai_family = AF_UNSPEC; // use IPv4 or IPv6, whichever
-	// hints.ai_socktype = SOCK_STREAM;
-	// hints.ai_flags = AI_PASSIVE; // fill in my IP for me
-
-	// getaddrinfo(NULL, "3490", &hints, &res);
-
-	// // make a socket:
-
-	// sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-
-	// // bind it to the port we passed in to getaddrinfo():
-
-	// bind(sockfd, res->ai_addr, res->ai_addrlen);
 	struct addrinfo	hints, *res;
 	int	sockfd;
 	int	yes = 1;
+	struct sockaddr_storage	their_addr; // Can use sockaddr_in??
+	socklen_t	addr_size;
+	int	new_fd;
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
@@ -56,9 +42,18 @@ int main()
 		printf("bind: %s. Exiting\n", strerror(errno));
 		exit(1);
 	}
+	if ((listen(sockfd, 10)) < 0)
+	{
+		printf("listen: %s. Exiting\n", strerror(errno));
+		exit(1);
+	}
+	addr_size = sizeof(their_addr);
+	/*accept will return a new_fd specified for that connection which can be used for communicating. listen
+	will still use the old fd to listen for other connections*/
+	if ((new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &addr_size)) < 0)
+	{
+		printf("accept: %s. Exiting\n", strerror(errno));
+		exit(1);
+	}
 	return 0;
 }
-
-/*By using the AI_PASSIVE flag, I’m telling the program to bind to the IP of the host it’s running on. If
-you want to bind to a specific local IP address, drop the AI_PASSIVE and put an IP address in for the first
-argument to getaddrinfo().*/
