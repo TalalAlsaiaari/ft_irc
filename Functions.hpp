@@ -35,6 +35,8 @@ class Functions {
 		Functions( );
 		virtual ~Functions( );
 		virtual void takeInput( std::string input, int fd, Client client ) = 0;
+		void setPass( std::string pass );
+		std::string getPass( void ) const;
 		void addNick( std::string nick );
 		void ServerMessage(std::string error, std::string message);
 		void UserMessage(std::string message);
@@ -47,5 +49,6 @@ class Functions {
 		void PING( void );
 		void PART( void );
 		void PRIVMSG( void );
+		void PASS( void );
 };
 

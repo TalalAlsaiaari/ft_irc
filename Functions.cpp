@@ -8,6 +8,14 @@ Functions::~Functions( ) {
 
 }
 
+void Functions::setPass( std::string pass ) {
+	this->pass = pass;
+}
+
+std::string Functions::getPass( void ) const {
+	return this->pass;
+}
+
 void Functions::ServerMessage(std::string error, std::string message) {
 	std::string mes = ":" + clients[fd].getServerName() + error + clients[fd].getNick() + " " + message;
 	send(fd, &mes[0], mes.length(), 0);
@@ -117,6 +125,7 @@ void Functions::UsertoUser(Client origin, Client dest) {
 	for (size_t i = 0; i < args.size(); i++) {
 		message += args[i] + " ";
 	}
+	// might not need this line depending on parsing
 	message += "\n";
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
@@ -135,6 +144,27 @@ void Functions::PRIVMSG( void ) {
 		}
 	} catch ( std::exception &e ) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
+void Functions::PASS( void ) {
+	if (clients[fd].getNick().empty()) {
+		try {
+			args.at(0);
+			if (args[0] == pass) {
+				args.pop_front();
+				args.pop_front();
+				cmd = args.front();
+				args.pop_front();
+				this->NICK();
+			} else {
+				ServerMessage(ERR_PASSWDMISMATCH, ":password doesn't match\n");
+			}
+		} catch (std::exception &e) {
+			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n");
+		}
+	} else {
+		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n");
 	}
 }
 

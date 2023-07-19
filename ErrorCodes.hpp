@@ -181,7 +181,7 @@
 //                 - Returned by the server to any link which tries to
 //                   change part of the registered details (such as
 //                   password or user details from second USER message).
-
+#define ERR_ALREADYREGISTERED " 462 "
 
 //         463     ERR_NOPERMFORHOST
 //                         ":Your host isn't among the privileged"
