@@ -29,7 +29,7 @@
 #include "Client.hpp"
 #include "Parser.hpp"
 
-#define PORT "9034"   // Port we're listening on
+// #define PORT "9034"   // Port we're listening on
 
 // Get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
@@ -42,7 +42,7 @@ void *get_in_addr(struct sockaddr *sa)
 }
 
 // Return a listening socket
-int get_listener_socket(void)
+int get_listener_socket(std::string port)
 {
     int listener;     // Listening socket descriptor
     int yes=1;        // For setsockopt() SO_REUSEADDR, below
@@ -52,10 +52,10 @@ int get_listener_socket(void)
 
     // Get us a socket and bind it
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
-    if ((rv = getaddrinfo(NULL, PORT, &hints, &ai)) != 0) {
+    if ((rv = getaddrinfo(NULL, &port[0], &hints, &ai)) != 0) {
         fprintf(stderr, "selectserver: %s\n", gai_strerror(rv));
         exit(1);
     }
@@ -117,28 +117,35 @@ void del_from_pfds(struct pollfd pfds[], int i, int *fd_count)
 }
 #include <map>
 // Main
-int main(void)
+int main(int ac, char **av)
 {
     int listener;     // Listening socket descriptor
-
     int newfd;        // Newly accept()ed socket descriptor
     struct sockaddr_storage remoteaddr; // Client address
     socklen_t addrlen;
-
     char buf[256];    // Buffer for client data
-
-    char remoteIP[INET6_ADDRSTRLEN];
-
+    char remoteIP[INET_ADDRSTRLEN];
     std::map<int, Client> clients;
     Parser parse;
+    // std::string pass;
+    std::string port;
     // Start off with room for 5 connections
     // (We'll realloc as necessary)
+
+    if (ac == 3) {
+        port = av[1];
+        // pass = av[2];
+        parse.setPass(av[2]);
+    } else {
+        std::cout << "expected params: <port> <password>\n";
+        return 1;
+    }
     int fd_count = 0;
     int fd_size = 5;
     struct pollfd *pfds = (pollfd *)malloc(sizeof *pfds * fd_size);
 
     // Set up and get a listening socket
-    listener = get_listener_socket();
+    listener = get_listener_socket(port);
 
     if (listener == -1) {
         fprintf(stderr, "error getting listening socket\n");
@@ -154,7 +161,7 @@ int main(void)
     // Main loop
     for(;;) {
         int poll_count = poll(pfds, fd_count, -1);
-        printf("polled\n");
+        // printf("polled\n");
         if (poll_count == -1) {
             perror("poll");
             exit(1);
@@ -178,23 +185,16 @@ int main(void)
                         perror("accept");
                     } else {
                         add_to_pfds(&pfds, newfd, &fd_count, &fd_size);
+                        printf("pollserver: new connection from %s on ""socket %d\n",inet_ntop(remoteaddr.ss_family,get_in_addr((struct sockaddr*)&remoteaddr),remoteIP, INET_ADDRSTRLEN), newfd);
+                        std::cout << std::string(inet_ntop(remoteaddr.ss_family, get_in_addr((struct sockaddr*)&remoteaddr), remoteIP, INET_ADDRSTRLEN)) << std::endl;
                         clients[newfd] = Client(newfd);
-                        printf("pollserver: new connection from %s on "
-                            "socket %d\n",
-                            inet_ntop(remoteaddr.ss_family,
-                                get_in_addr((struct sockaddr*)&remoteaddr),
-                                remoteIP, INET6_ADDRSTRLEN),
-                            newfd);
-                        // printf("welcomed\n");
-						// send(newfd, ":Welcome nick!user@host", strlen(":Welcome nick!user@host"), RPL_WELCOME);
-                    // int nbytes = recv(newfd, buf, sizeof buf, 0);
                     }
                 } else {
                     // If not the listener, we're just a regular client
                     int nbytes = recv(pfds[i].fd, buf, sizeof buf, 0);
 
                     int sender_fd = pfds[i].fd;
-					printf("%s\n", buf);
+					// printf("%s\n", buf);
                     // send()
                     if (nbytes <= 0) {
                         // Got error or connection closed by client
@@ -211,37 +211,9 @@ int main(void)
 
                     } else {
                         // We got some good data from a client
-                        // for(int j = 0; j < fd_count; j++) {
-                        //     // Send to everyone!
-                        //     int dest_fd = pfds[j].fd;
-                                // printf("%d\n", nbytes);
-                                printf("%s\n", buf);
-                                parse.takeInput(buf, sender_fd, clients[sender_fd]);
-                                // if (nbytes == 12)
-						        //     send(clients[sender_fd].getFD(), ":localhost CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
-                                // else if (nbytes == 8)
-                                //     send(sender_fd, ":No such channel\n", strlen(":No such channel\n"), 0);
-                                // else if (nbytes == 35)
-                                //     send(sender_fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
-                                // else
-                                //     send(sender_fd, "yeah yeah\n", strlen("yeah yeah\n"), 0);
-                                // else if (parse.getCmd() == "NICK")
-                                //     parse.findNick();
-
-                                // else if (nbytes == 8) {
-						        //     // send(sender_fd, "", strlen(buf), RPL_TOPIC);
-						        //     send(sender_fd, ":End of /MOTD command", strlen(":End of /MOTD command"), 0);
-                                // }
-                            memset(buf, 0, strlen(buf));
-                        //     // Except the listener and ourselves
-
-                        //     if (dest_fd != listener && dest_fd != sender_fd) {
-						// 		printf("hello\n");
-                        //         // if (send(dest_fd, buf, nbytes, 0) == -1) {
-                        //         //     perror("send");
-                        //         // }
-                        //     }
-                        // }
+                        printf("%s\n", buf);
+                        parse.takeInput(buf, sender_fd, clients[sender_fd]);
+                        memset(buf, 0, strlen(buf));
                     }
                 } // END handle data from client
             } // END got ready-to-read from poll()

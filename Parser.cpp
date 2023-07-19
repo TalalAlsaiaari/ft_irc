@@ -9,6 +9,7 @@ Parser::Parser() {
 	func[std::string("PING")] = &Parser::PING;
 	func[std::string("PART")] = &Parser::PART;
 	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
+	func[std::string("PASS")] = &Parser::PASS;
 }
 
 Parser::~Parser() {}
