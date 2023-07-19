@@ -5,18 +5,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <arpa/inet.h>
 
-void	ft_putstr_fd(char *, int);
-void	ft_putnbr_fd(int, int);
+// void	ft_putstr_fd(char *, int);
+// void	ft_putnbr_fd(int, int);
 int main()
 {
 	struct addrinfo	hints, *res;
 	int	sockfd;
 	int	yes = 1;
 	struct sockaddr_storage	their_addr; // Can use sockaddr_in??
+	struct sockaddr_in *test;
 	socklen_t	addr_size;
 	int	new_fd;
-	char	*serv_msg = "Hello from server!";
+	char	*serv_msg = "Hello from server!\n";
 	int	len, bytes_sent, bytes_recvd;
 	char	*buf;
 
@@ -60,18 +62,18 @@ int main()
 		printf("accept: %s. Exiting\n", strerror(errno));
 		exit(1);
 	}
+	test = (struct sockaddr_in *)&their_addr;
+	printf("family: %d\n", test->sin_family);
+	printf("port: %d\n", ntohs(test->sin_port));
+	printf("IP address: %s\n", inet_ntoa(test->sin_addr));
 	len = strlen(serv_msg);
-	ft_putstr_fd("number of bytes supposed to send: ", 2);
-	ft_putnbr_fd(len, 2);
-	ft_putstr_fd("\n", 2);
+	printf("number of bytes supposed to send: %d\n", len);
 	if ((bytes_sent = send(new_fd, serv_msg, len, 0)) < 0)
 	{
 		printf("send: %s. Exiting\n", strerror(errno));
 		exit(1);
 	}
-	ft_putstr_fd("number of bytes actually sent: ", 2);
-	ft_putnbr_fd(bytes_sent, 2);
-	ft_putstr_fd("\n", 2);
+	printf("number of bytes actually sent: %d\n", bytes_sent);
 	while (1)
 	{
 		buf = (char *)malloc(1000);
@@ -87,7 +89,7 @@ int main()
 			break ;
 		}
 		else
-			ft_putstr_fd(buf, 1);
+			printf("%s", buf);
 		free(buf);
 	}
 	return 0;
