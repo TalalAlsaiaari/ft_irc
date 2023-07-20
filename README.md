@@ -786,8 +786,23 @@ defined in <poll.h>:
 # Random Info dump
 
 From Karim use rawlog to see commands and expected replies "/help rawlog"
-example from rawlog from liberachat
 
+run inside docker container after connecting to liberachat
+``` bash
+	/rawlog save <filename>.log
+```
+
+run in terminal to connect to docker container
+``` bash
+	docker exec -it <container_name> sh
+```
+
+once in the container
+``` bash
+	cat <filename>.log
+```
+
+example from rawlog from liberachat
 	> << CAP LS 302
 	> << JOIN :
 	> >> :lead.libera.chat NOTICE * :*** Checking Ident
