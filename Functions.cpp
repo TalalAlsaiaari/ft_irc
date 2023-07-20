@@ -1,5 +1,6 @@
 #include "Functions.hpp"
 
+
 Functions::Functions( ) {
 
 }
@@ -47,7 +48,7 @@ void Functions::addNick( std::string nick ) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
 			if (clients[fd].isRegistered())
-				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n");
+				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" + "\x02Hello There, Please be nice\x02" + "\n");
 			else
 				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 		} else {
@@ -70,10 +71,12 @@ void Functions::NICK( void ) {
 }
 
 void Functions::CAP( void ) {
+	std::string mes = "CAP * ACK " + args[1] + "\n";
 	if (args[0] == "LS")
-		send(fd, "CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL draft/packing=EX1,EX2\n\r", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL draft/packing=EX1,EX2\n"), 0);
+		send(fd, "CAP * LS :multi-prefix userhost-in-names\n", strlen("CAP * LS :multi-prefix userhost-in-names\n"), 0);
 	if (args[0] == "REQ")
-		send(fd, "CAP * ACK multi-prefix\n\r", strlen("CAP * ACK multi-prefix\n"), 0);
+		send(fd, &mes[0], mes.length(), 0);
+		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
 }
 
 void Functions::JOIN( void ) {
