@@ -33,6 +33,14 @@ together to form a network.
 > A client is anything connecting to a server that is not another server. Each client is distinguished from other clients by a unique nickname having a maximum length of nine (9) characters.
 > In addition to the nickname, all servers must have the following information about all clients: the real name of the host that the client is running on, the username of the client on that host, and the server to which the client is connected.
 > The real name of the client's host should be obtained via a reverse lookup of the client's IP address. If the reverse lookup fails, use the IP address as the real name.<sup>[1](https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html)</sup>
+> For this project we only focus on client-server communication.
+
+
+### What is a socket? <sup>[7](https://beej.us/guide/bgnet/)</sup>
+
+They are a way to speak to other programs using standard UNIX file descriptors. UNIX programs use file descriptors for any sort of
+I/O. File descriptors are an integer associated with an open file, but that file can be a network connection, a FIFO, a pipe, a terminal, a real on-the-disk file, or just about
+anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # TO DO
 
@@ -41,13 +49,33 @@ together to form a network.
 	- [ ] figure it out
 - [ ] Parse Client Input
 
+### Requirements
+
+	- You must have operators and regular users.
+		- To allow a reasonable amount of order to be kept within the IRC
+   		network, a special class of clients (operators) is allowed to perform
+   		general maintenance functions on the network.  Although the powers
+   		granted to an operator can be considered as 'dangerous', they are
+   		nonetheless required.  Operators should be able to perform basic
+   		network tasks such as disconnecting and reconnecting servers as
+   		needed to prevent long-term use of bad network routing.  In
+   		recognition of this need, the protocol discussed herein provides for
+   		operators only to be able to perform such functions.  See sections
+   		4.1.7 (SQUIT) and 4.3.5 (CONNECT).
+   		A more controversial power of operators is the ability  to  remove  a
+   		user  from  the connected network by 'force', i.e. operators are able
+   		to close the connection between any client and server.   The
+   		justification for  this  is delicate since its abuse is both
+   		destructive and annoying.  For further details on this type of
+   		action, see section 4.6.1 (KILL).
+
 ## Run irssi in Docker
 ``` bash
-	docker run -itd --name=irssi irssi
-	docker exec -it irssi irssi
+	docker run -it --name irssi --network host irssi
 	/set nick <name>
-	/connect <server>
+	/connect host.docker.internal <port>
 	/join #<channel_name>
+	/msg <nick> <message>
 ```
 ## Run Executable
 ``` bash
@@ -413,7 +441,7 @@ hostshort from host byte order to network byte order.
 	uint32_t htonl(uint32_t hostlong);
 ```
 converts the unsigned integer hostlong from
-host byte order to network byte order.
+host byte order to network byte order. (see Big-endian / little-endian)
 </details>
 
 <details>
@@ -525,6 +553,18 @@ The recv() call is normally used only on a connected socket (see
 connect(2)).  It is equivalent to the call:
 
 	recvfrom(fd, buf, len, flags, NULL, 0);
+
+MSG_DONTWAIT (since Linux 2.2)
+	Enables nonblocking operation; if the operation would
+	block, the call fails with the error EAGAIN or
+	EWOULDBLOCK.  This provides similar behavior to setting
+	the O_NONBLOCK flag (via the fcntl(2) F_SETFL operation),
+	but differs in that MSG_DONTWAIT is a per-call option,
+	whereas O_NONBLOCK is a setting on the open file
+	description (see open(2)), which will affect all threads
+	in the calling process and as well as other processes that
+	hold file descriptors referring to the same open file
+	description.
 
 </details>
 
@@ -743,6 +783,178 @@ defined in <poll.h>:
 	outstanding data in the channel has been consumed.
 </details>
 
+# Random Info dump
+
+From Karim use rawlog to see commands and expected replies "/help rawlog"
+
+inside irssi container connect to liberachat
+```bash
+	/connect liberachat
+```
+
+after connecting to liberachat
+``` bash
+	/rawlog save <filename>.log
+```
+
+run in terminal to connect to docker container
+``` bash
+	docker exec -it <container_name> sh
+```
+
+once in the container
+``` bash
+	cat <filename>.log
+```
+
+to update rawlog after running more commands use the rawlog save command in irssi again then cat the file from the other terminal
+
+example from rawlog from liberachat
+
+messages starting with "<<" are from the client to the server
+
+messages starting with ">>" are from the server to the client
+
+
+	> << CAP LS 302
+	> << JOIN :
+	> >> :lead.libera.chat NOTICE * :*** Checking Ident
+	> >> :lead.libera.chat NOTICE * :*** Looking up your hostname...
+	> >> :lead.libera.chat NOTICE * :*** Couldn't look up your hostname
+	> >> :lead.libera.chat NOTICE * :*** No Ident response
+	> >> :lead.libera.chat CAP * LS :account-notify away-notify chghost extended-join multi-prefix sasl=PLAIN,ECDSA-NIST256P-CHALLENGE,EXTERNAL tls account-tag cap-notify echo-message server-time solanum.chat/identify-msg solanum.chat/oper solanum.chat/realhost
+	> << CAP REQ :multi-prefix extended-join away-notify chghost account-notify server-time
+	> >> :lead.libera.chat 451 * :You have not registered
+	> >> :lead.libera.chat CAP * ACK :multi-prefix extended-join away-notify chghost account-notify server-time
+	> << CAP END
+	> << NICK aballerisabigmotherfuckerandyoucantstopme
+	> << USER user user irc.libera.chat :Unknown
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 001 aballerisabigmot :Welcome to the Libera.Chat Internet Relay Chat Network aballerisabigmot
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 002 aballerisabigmot :Your host is lead.libera.chat[94.125.182.252/6697], running version solanum-1.0-dev
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 003 aballerisabigmot :This server was created Fri Jun 16 2023 at 22:50:54 UTC
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 004 aballerisabigmot lead.libera.chat solanum-1.0-dev DGMQRSZaghilopsuwz CFILMPQRSTbcefgijklmnopqrstuvz bkloveqjfI
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot FNC WHOX CALLERID=g ETRACE MONITOR=100 KNOCK SAFELIST ELIST=CMNTU CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQRSTcgimnprstuz :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot CHANLIMIT=#:250 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=Libera.Chat STATUSMSG=@+ CASEMAPPING=rfc1459 NICKLEN=16 MAXNICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,agjrxz :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 251 aballerisabigmot :There are 64 users and 44076 invisible on 28 servers
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 252 aballerisabigmot 33 :IRC Operators online
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 253 aballerisabigmot 66 :unknown connection(s)
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 254 aballerisabigmot 23392 :channels formed
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 255 aballerisabigmot :I have 2355 clients and 1 servers
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 265 aballerisabigmot 2355 3239 :Current local users 2355, max 3239
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 266 aballerisabigmot 44140 45718 :Current global users 44140, max 45718
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 250 aballerisabigmot :Highest connection count: 3240 (3239 clients) (104844 connections received)
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 375 aballerisabigmot :- lead.libera.chat Message of the Day -
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Welcome to Libera Chat, the IRC network for
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- free & open-source software and peer directed projects.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Use of Libera Chat is governed by our network policies.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- To reduce network abuses we perform open proxy checks
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- on hosts at connection time.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Please visit us in #libera for questions and support.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Website and documentation:  https://libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Webchat:                    https://web.libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Network policies:           https://libera.chat/policies
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Email:                      support@libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 376 aballerisabigmot :End of /MOTD command.
+	> >> @time=2023-07-20T17:51:26.293Z :aballerisabigmot MODE aballerisabigmot :+Ziw
+	> << MODE aballerisabigmot +i
+	> << WHOIS aballerisabigmotherfuckerandyoucantstopme
+	> >> @time=2023-07-20T17:51:32.010Z :lead.libera.chat 401 aballerisabigmot aballerisabigmotherfuckerandyoucantstopme :No such nick/channel
+	> --> event empty
+	> >> @time=2023-07-20T17:51:32.010Z :lead.libera.chat 318 aballerisabigmot aballerisabigmotherfuckerandyoucantstopme :End of /WHOIS list.
+	> --> event empty
+	> << PING lead.libera.chat
+	> >> @time=2023-07-20T17:51:36.853Z :lead.libera.chat PONG lead.libera.chat :lead.libera.chat
+	> --> lag pong
+
+	Because of IRC's scandanavian origin, the characters {}| are
+	considered to be the lower case equivalents of the characters []\,
+	respectively. This is a critical issue when determining the
+	equivalence of two nicknames.
+
+# Parsing
+
+	The protocol messages must be extracted from the contiguous stream of
+	octets.  The current solution is to designate two characters, CR and
+	LF, as message separators.   Empty  messages  are  silently  ignored,
+	which permits  use  of  the  sequence  CR-LF  between  messages
+	without extra problems.
+	The extracted message is parsed into the components <prefix>,
+	<command> and list of parameters matched either by <middle> or
+	<trailing> components. <sup>[8](https://www.rfc-editor.org/rfc/rfc1459)</sup>
+
+	The BNF representation for this is:
+
+``` bnf
+	<message>  ::= [':' <prefix> <SPACE> ] <command> <params> <crlf>
+	<prefix>   ::= <servername> | <nick> [ '!' <user> ] [ '@' <host> ]
+	<command>  ::= <letter> { <letter> } | <number> <number> <number>
+	<SPACE>    ::= ' ' { ' ' }
+	<params>   ::= <SPACE> [ ':' <trailing> | <middle> <params> ]
+
+	<middle>   ::= <Any *non-empty* sequence of octets not including SPACE
+	               or NUL or CR or LF, the first of which may not be ':'>
+	<trailing> ::= <Any, possibly *empty*, sequence of octets not including
+	                 NUL or CR or LF>
+
+	<crlf>     ::= CR LF
+```
+  1)    <SPACE> is consists only of SPACE character(s) (0x20).
+        Specially notice that TABULATION, and all other control
+        characters are considered NON-WHITE-SPACE.
+
+  2)    After extracting the parameter list, all parameters are equal,
+        whether matched by <middle> or <trailing>. <Trailing> is just
+        a syntactic trick to allow SPACE within parameter.
+
+  3)    The fact that CR and LF cannot appear in parameter strings is
+        just artifact of the message framing. This might change later.
+
+  4)    The NUL character is not special in message framing, and
+        basically could end up inside a parameter, but as it would
+        cause extra complexities in normal C string handling. Therefore
+        NUL is not allowed within messages.
+
+  5)    The last parameter may be an empty string.
+
+  6)    Use of the extended prefix (['!' <user> ] ['@' <host> ]) must
+        not be used in server to server communications and is only
+        intended for server to client messages in order to provide
+        clients with more useful information about who a message is
+        from without the need for additional queries.
+
+   Most protocol messages specify additional semantics and syntax for
+   the extracted parameter strings dictated by their position in the
+   list.  For example, many server commands will assume that the first
+   parameter after the command is the list of targets, which can be
+   described with:
+
+   <target>     ::= <to> [ "," <target> ]
+   <to>         ::= <channel> | <user> '@' <servername> | <nick> | <mask>
+   <channel>    ::= ('#' | '&') <chstring>
+   <servername> ::= <host>
+   <host>       ::= see RFC 952 [DNS:4] for details on allowed hostnames
+   <nick>       ::= <letter> { <letter> | <number> | <special> }
+   <mask>       ::= ('#' | '$') <chstring>
+   <chstring>   ::= <any 8bit code except SPACE, BELL, NUL, CR, LF and
+                     comma (',')>
+
+   Other parameter syntaxes are:
+
+   <user>       ::= <nonwhite> { <nonwhite> }
+   <letter>     ::= 'a' ... 'z' | 'A' ... 'Z'
+   <number>     ::= '0' ... '9'
+   <special>    ::= '-' | '[' | ']' | '\' | '`' | '^' | '{' | '}'
+   <nonwhite>   ::= <any 8bit code except SPACE (0x20), NUL (0x0), CR
+                     (0xd), and LF (0xa)>
+
+
+![PRIVMSG](http://chi.cs.uchicago.edu/_images/privmsg.png) <sup>[ [10] ](http://chi.cs.uchicago.edu/chirc/irc_examples.html)</sup>
+
 # REFERENCES
 
 [ 1 ]  <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
@@ -752,3 +964,15 @@ defined in <poll.h>:
 [ 3 ] <https://www.geeksforgeeks.org/socket-programming-cc/>
 
 [ 4 ] <https://man7.org/linux/man-pages/>
+
+[ 5 ] <https://marketsplash.com/tutorials/cpp/cplusplus-scoket/>
+
+[ 6 ] <https://irssi.org/documentation>
+
+[ 7 ] <https://beej.us/guide/bgnet/>
+
+[ 8 ] <https://www.rfc-editor.org/rfc/rfc1459>
+
+[ 9 ] <https://ircv3.net/specs/extensions/capability-negotiation.html>
+
+[ 10 ] <http://chi.cs.uchicago.edu/chirc/irc_examples.html>
