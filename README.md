@@ -787,7 +787,12 @@ defined in <poll.h>:
 
 From Karim use rawlog to see commands and expected replies "/help rawlog"
 
-run inside docker container after connecting to liberachat
+inside irssi container connect to liberachat
+```bash
+	/connect liberachat
+```
+
+after connecting to liberachat
 ``` bash
 	/rawlog save <filename>.log
 ```
@@ -801,6 +806,8 @@ once in the container
 ``` bash
 	cat <filename>.log
 ```
+
+to update rawlog after running more commands use the rawlog save command in irssi again then cat the file from the other terminal
 
 example from rawlog from liberachat
 
