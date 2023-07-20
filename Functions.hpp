@@ -19,7 +19,7 @@
 #include "Client.hpp"
 #include "ErrorCodes.hpp"
 #include "devector.hpp"
-#include "Channel.hpp"
+// #include "Channel.hpp"
 // #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
 
@@ -30,7 +30,7 @@ class Functions {
 		std::string cmd;
 		devector<std::string> args;
 		std::map<std::string, Client> nicks;
-		std::map<std::string, Channel> channels;
+		// std::map<std::string, Channel> channels;
 		std::map<int, Client> clients;
 		std::string trailing;
 		std::string pass;

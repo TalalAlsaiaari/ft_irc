@@ -17,10 +17,9 @@ class Channel {
 		bool l;
 		bool t;
 		bool o;
-		bool l;
 	public:
 		Channel();
 		Channel( std::string name, Client creator );
 		~Channel();
 		void echotoAll( std::string message , Client origin);
-}
+};
