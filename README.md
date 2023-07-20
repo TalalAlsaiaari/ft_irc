@@ -804,8 +804,9 @@ once in the container
 
 example from rawlog from liberachat
 
-- messages starting with "<<" are from the client to the server
-- messages starting with ">>" are from the server to the client
+messages starting with "<<" are from the client to the server
+
+messages starting with ">>" are from the server to the client
 
 
 	> << CAP LS 302
