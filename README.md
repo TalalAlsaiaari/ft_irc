@@ -786,7 +786,62 @@ defined in <poll.h>:
 # Random Info dump
 
 	From Karim use rawlog to see commands and expected replies "/help rawlog"
+	example from rawlog from liberachat
 
+	> << CAP LS 302
+	> << JOIN :
+	> >> :lead.libera.chat NOTICE * :*** Checking Ident
+	> >> :lead.libera.chat NOTICE * :*** Looking up your hostname...
+	> >> :lead.libera.chat NOTICE * :*** Couldn't look up your hostname
+	> >> :lead.libera.chat NOTICE * :*** No Ident response
+	> >> :lead.libera.chat CAP * LS :account-notify away-notify chghost extended-join multi-prefix sasl=PLAIN,ECDSA-NIST256P-CHALLENGE,EXTERNAL tls account-tag cap-notify echo-message server-time solanum.chat/identify-msg solanum.chat/oper solanum.chat/realhost
+	> << CAP REQ :multi-prefix extended-join away-notify chghost account-notify server-time
+	> >> :lead.libera.chat 451 * :You have not registered
+	> >> :lead.libera.chat CAP * ACK :multi-prefix extended-join away-notify chghost account-notify server-time
+	> << CAP END
+	> << NICK aballerisabigmotherfuckerandyoucantstopme
+	> << USER user user irc.libera.chat :Unknown
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 001 aballerisabigmot :Welcome to the Libera.Chat Internet Relay Chat Network aballerisabigmot
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 002 aballerisabigmot :Your host is lead.libera.chat[94.125.182.252/6697], running version solanum-1.0-dev
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 003 aballerisabigmot :This server was created Fri Jun 16 2023 at 22:50:54 UTC
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 004 aballerisabigmot lead.libera.chat solanum-1.0-dev DGMQRSZaghilopsuwz CFILMPQRSTbcefgijklmnopqrstuvz bkloveqjfI
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot FNC WHOX CALLERID=g ETRACE MONITOR=100 KNOCK SAFELIST ELIST=CMNTU CHANTYPES=# EXCEPTS INVEX CHANMODES=eIbq,k,flj,CFLMPQRSTcgimnprstuz :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot CHANLIMIT=#:250 PREFIX=(ov)@+ MAXLIST=bqeI:100 MODES=4 NETWORK=Libera.Chat STATUSMSG=@+ CASEMAPPING=rfc1459 NICKLEN=16 MAXNICKLEN=16 CHANNELLEN=50 TOPICLEN=390 DEAF=D :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 005 aballerisabigmot TARGMAX=NAMES:1,LIST:1,KICK:1,WHOIS:1,PRIVMSG:4,NOTICE:4,ACCEPT:,MONITOR: EXTBAN=$,agjrxz :are supported by this server
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 251 aballerisabigmot :There are 64 users and 44076 invisible on 28 servers
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 252 aballerisabigmot 33 :IRC Operators online
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 253 aballerisabigmot 66 :unknown connection(s)
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 254 aballerisabigmot 23392 :channels formed
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 255 aballerisabigmot :I have 2355 clients and 1 servers
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 265 aballerisabigmot 2355 3239 :Current local users 2355, max 3239
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 266 aballerisabigmot 44140 45718 :Current global users 44140, max 45718
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 250 aballerisabigmot :Highest connection count: 3240 (3239 clients) (104844 connections received)
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 375 aballerisabigmot :- lead.libera.chat Message of the Day -
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Welcome to Libera Chat, the IRC network for
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- free & open-source software and peer directed projects.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Use of Libera Chat is governed by our network policies.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- To reduce network abuses we perform open proxy checks
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- on hosts at connection time.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Please visit us in #libera for questions and support.
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :-
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Website and documentation:  https://libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Webchat:                    https://web.libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Network policies:           https://libera.chat/policies
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 372 aballerisabigmot :- Email:                      support@libera.chat
+	> >> @time=2023-07-20T17:51:26.293Z :lead.libera.chat 376 aballerisabigmot :End of /MOTD command.
+	> >> @time=2023-07-20T17:51:26.293Z :aballerisabigmot MODE aballerisabigmot :+Ziw
+	> << MODE aballerisabigmot +i
+	> << WHOIS aballerisabigmotherfuckerandyoucantstopme
+	> >> @time=2023-07-20T17:51:32.010Z :lead.libera.chat 401 aballerisabigmot aballerisabigmotherfuckerandyoucantstopme :No such nick/channel
+	> --> event empty
+	> >> @time=2023-07-20T17:51:32.010Z :lead.libera.chat 318 aballerisabigmot aballerisabigmotherfuckerandyoucantstopme :End of /WHOIS list.
+	> --> event empty
+	> << PING lead.libera.chat
+	> >> @time=2023-07-20T17:51:36.853Z :lead.libera.chat PONG lead.libera.chat :lead.libera.chat
+	> --> lag pong
 
 	Because of IRC's scandanavian origin, the characters {}| are
 	considered to be the lower case equivalents of the characters []\,

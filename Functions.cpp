@@ -71,7 +71,7 @@ void Functions::NICK( void ) {
 
 void Functions::CAP( void ) {
 	if (args[0] == "LS")
-		send(fd, "CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n\r", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL server-time draft/packing=EX1,EX2\n"), 0);
+		send(fd, "CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL draft/packing=EX1,EX2\n\r", strlen("CAP * LS :multi-prefix sasl=PLAIN,EXTERNAL draft/packing=EX1,EX2\n"), 0);
 	if (args[0] == "REQ")
 		send(fd, "CAP * ACK multi-prefix\n\r", strlen("CAP * ACK multi-prefix\n"), 0);
 }

@@ -37,7 +37,10 @@ void Parser::findCmd( ) {
 	while (!input.empty()) {
 		std::string::size_type pos1 = input.find_first_of("\r\n");
 		std::string::size_type pos2 = input.find_first_of(" ");
-		if (pos1 < pos2) {
+		if (input[0] == ':') {
+			args.push_back(input);
+			break;
+		} else if (pos1 < pos2) {
 			std::cout << 1 << std::endl;
 			args.push_back(input.substr(0, pos1));
 			input.erase(0, pos1 + 1);
