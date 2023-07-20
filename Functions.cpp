@@ -36,6 +36,8 @@ void Functions::addNick( std::string nick ) {
 		if (cmd == "USER")
 			this->USER();
 		std::cout << cmd << std::endl;
+	} else if (nick.empty()) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
 	}
 	try {
 		nicks.at(nick);
@@ -44,7 +46,10 @@ void Functions::addNick( std::string nick ) {
 		if (clients[fd].getNick().empty()) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
-			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n");
+			if (clients[fd].isRegistered())
+				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n");
+			else
+				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 		} else {
 			UserMessage(" " + nick + " :" + nick + "\n");
 			clients[fd].setNick(nick);
@@ -56,12 +61,12 @@ void Functions::addNick( std::string nick ) {
 void Functions::NICK( void ) {
 	try {
 		args.at(0);
+		std::string nick = args[0];
 		this->addNick(args[0]);
-		// args.pop_front();
-		// args.pop_front();
 	} catch (std::exception &e) {
 		std::cout << "no nick given\n";
 	}
+	// ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 }
 
 void Functions::CAP( void ) {
@@ -89,6 +94,7 @@ void Functions::USER( void ) {
 		args.at(0);
 		clients[fd].setServerName(args[0]);
 		args.pop_front();
+		clients[fd].registration();
 		args.at(0);
 		clients[fd].setRealName(args[0]);
 		args.pop_front();
@@ -148,15 +154,19 @@ void Functions::PRIVMSG( void ) {
 }
 
 void Functions::PASS( void ) {
-	if (clients[fd].getNick().empty()) {
+	if (!clients[fd].isRegistered()) {
 		try {
 			args.at(0);
 			if (args[0] == pass) {
-				args.pop_front();
-				args.pop_front();
-				cmd = args.front();
-				args.pop_front();
-				this->NICK();
+				// clients[fd].registration();
+				if (args.size() > 3) {
+					args.pop_front();
+					args.pop_front();
+					cmd = args.front();
+					args.pop_front();
+					if (cmd == "NICK")
+						this->NICK();
+				}
 			} else {
 				ServerMessage(ERR_PASSWDMISMATCH, ":password doesn't match\n");
 			}
