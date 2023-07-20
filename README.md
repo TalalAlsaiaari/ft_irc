@@ -971,8 +971,13 @@ messages starting with ">>" are from the server to the client
 
 [ 7 ] <https://beej.us/guide/bgnet/>
 
+first documentation for IRC protocol
 [ 8 ] <https://www.rfc-editor.org/rfc/rfc1459>
 
+CAP LS command and client registration
 [ 9 ] <https://ircv3.net/specs/extensions/capability-negotiation.html>
 
 [ 10 ] <http://chi.cs.uchicago.edu/chirc/irc_examples.html>
+
+more recent documentation for IRC protocol
+[ 11 ] <https://www.rfc-editor.org/rfc/rfc2813>

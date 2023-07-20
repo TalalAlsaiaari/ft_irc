@@ -5,6 +5,22 @@
     //  @return   <nick>!<user>@<host>"
 #define RPL_WELCOME " 001 "
 
+/*       002    RPL_YOURHOST
+              "Your host is <servername>, running version <ver>"
+       003    RPL_CREATED
+              "This server was created <date>"
+       004    RPL_MYINFO
+              "<servername> <version> <available user modes>
+               <available channel modes>" 
+         - The server sends Replies 001 to 004 to a user upon
+           successful registration.
+       005    RPL_BOUNCE
+              "Try server <server name>, port <port number>"
+
+         - Sent by the server to a user to suggest an alternative
+           server.  This is often used when the connection is
+           refused because the server is already full.*/
+
 //         401     ERR_NOSUCHNICK
 //                         "<nickname> :No such nick/channel"
 //                 - Used to indicate the nickname parameter supplied to a
