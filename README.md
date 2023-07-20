@@ -785,8 +785,8 @@ defined in <poll.h>:
 
 # Random Info dump
 
-	From Karim use rawlog to see commands and expected replies "/help rawlog"
-	example from rawlog from liberachat
+From Karim use rawlog to see commands and expected replies "/help rawlog"
+example from rawlog from liberachat
 
 	> << CAP LS 302
 	> << JOIN :
