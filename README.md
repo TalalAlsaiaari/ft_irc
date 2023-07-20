@@ -981,3 +981,5 @@ CAP LS command and client registration
 
 more recent documentation for IRC protocol
 [ 11 ] <https://www.rfc-editor.org/rfc/rfc2813>
+
+[ 12 ] <https://ircv3.net/registry#capabilities>
