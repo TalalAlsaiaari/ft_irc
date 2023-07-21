@@ -58,11 +58,11 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [ ] USER
 	- [ ] PING/PONG
 	- [ ] PRIVMSG
-		- [ ] forward channel messages to all clients in channel
 	- [ ] MODE
 	- [ ] WHO/WHOIS
 - [ ] create channels
 	- [ ] create channel operators
+	- [ ] forward channel messages to all clients in channel
 	- [ ] create channel functions
 		- [ ] JOIN
 		- [ ] PART
