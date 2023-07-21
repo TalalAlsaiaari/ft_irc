@@ -48,10 +48,10 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 - [ ] Create Server _(Talal)_
 	- [ ] Simple Server with one client
 	- [ ] Server accepting multiple clients
-- [ ] Parse Client Input
+- [ ] Parse Client Input _(Alex)_
 	- [ ] error handling (wrong command/not enough parmas/etc.)
 - [ ] Create server operators
-- [ ] Create server functions
+- [ ] Create server functions _(Alex)_
 	- [ ] CAP registration
 	- [ ] PASS
 	- [ ] NICK
@@ -60,7 +60,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [ ] PRIVMSG
 	- [ ] MODE
 	- [ ] WHO/WHOIS
-- [ ] create channels
+- [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel
 	- [ ] create channel functions
@@ -822,6 +822,7 @@ The recommended order of commands during registration is as follows:
 6. CAP END
 
 > Upon successful completion of the registration process, the server MUST send, in this order, the RPL_WELCOME (001), RPL_YOURHOST (002), RPL_CREATED (003), RPL_MYINFO (004), and at least one RPL_ISUPPORT (005) numeric to the client.
+> The first parameter of the RPL_WELCOME (001) message is the nickname assigned by the network to the client. Since it may differ from the nickname the client requested with the NICK command (due to, e.g. length limits or policy restrictions on nicknames), the client SHOULD use this parameter to determine its actual nickname at the time of connection. Subsequent nickname changes, client-initiated or not, will be communicated by the server sending a NICK message.
 
 # Random Info dump
 
