@@ -6,13 +6,13 @@
 #    By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/07/03 15:34:51 by talsaiaa          #+#    #+#              #
-#    Updated: 2023/07/07 20:50:57 by talsaiaa         ###   ########.fr        #
+#    Updated: 2023/07/21 22:13:40 by talsaiaa         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	ircserv
 
-SRCS		=	
+SRCS		=	ft_irc.cpp
 
 OBJS		=	$(SRCS:.cpp=.o)
 
