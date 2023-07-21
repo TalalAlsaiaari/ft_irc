@@ -15,6 +15,7 @@
 #include <iostream>
 #include <map>
 #include <exception>
+#include <algorithm>
 #include <sstream>
 #include "Client.hpp"
 #include "ErrorCodes.hpp"

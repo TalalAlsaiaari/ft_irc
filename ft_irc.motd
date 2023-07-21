@@ -1,16 +1,25 @@
  
  
-███████╗████████╗     ██╗██████╗  ██████╗
-██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝
-█████╗     ██║        ██║██████╔╝██║
-██╔══╝     ██║        ██║██╔══██╗██║
-██║        ██║███████╗██║██║  ██║╚██████╗
-╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝
+03███████╗████████╗     ██╗██████╗  ██████╗
+03██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝
+03█████╗     ██║        ██║██████╔╝██║
+03██╔══╝     ██║        ██║██╔══██╗██║
+03██║        ██║███████╗██║██║  ██║╚██████╗
+03╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝
  
 Server made by: talsaiaa, aball, numussan
  
  
-Add colours to messages:
-^C1 = black
-^C4 = red
-blah blah blah
+*** Make your messages 03colorful ***
+  
+   ^C = cntrl-C
+   
+   ^C00 - White      ^C08 - Yellow
+   ^C01 - Black      ^C09 - Light Green
+   ^C02 - Blue       ^C10 - Cyan
+   ^C03 - Green      ^C11 - Light Cyan
+   ^C04 - Red        ^C12 - Light Blue
+   ^C05 - Brown      ^C13 - Pink
+   ^C06 - Magenta    ^C14 - Grey
+   ^C07 - Orange     ^C15 - Light Grey
+ 
