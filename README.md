@@ -46,8 +46,9 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 - [x] Make awesome README
 - [ ] Create Server _(Talal)_
-	- [ ] Simple Server with one client
-	- [ ] Server accepting multiple clients
+	- [ ] Simple Server with one client _(Talal)_
+	- [ ] Server accepting multiple clients _(Talal)_
+	- [ ] DNS lookup _(Talal)_
 - [ ] Parse Client Input _(Alex)_
 	- [ ] error handling (wrong command/not enough parmas/etc.) _(Alex)_
 - [ ] Create server operators

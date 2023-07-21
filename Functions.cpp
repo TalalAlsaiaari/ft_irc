@@ -48,7 +48,7 @@ void Functions::addNick( std::string nick ) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
 			if (clients[fd].isRegistered())
-				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" + GREEN + "███████╗████████╗     ██╗██████╗  ██████╗\n" + GREEN + "██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝\n" + GREEN + "█████╗     ██║        ██║██████╔╝██║\n" + GREEN + "██╔══╝     ██║        ██║██╔══██╗██║\n" + GREEN + "██║        ██║███████╗██║██║  ██║╚██████╗\n" + GREEN + "╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝\n" + PURPLE + "Server made by: talsaiaa, aball, numussan\n");
+				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
 			else
 				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 		} else {
@@ -178,6 +178,28 @@ void Functions::PASS( void ) {
 		}
 	} else {
 		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n");
+	}
+}
+
+void Functions::MOTD( void ) {
+	std::fstream file;
+	std::string tmp;
+	std::string message;
+
+	file.open("ft_irc.motd");
+	if (!file.is_open()) {
+		ServerMessage(ERR_NOMOTD, ":no MOTD\n");
+	} else {
+		ServerMessage(RPL_MOTDSTART, ":Message of the Day\n");
+		while (std::getline(file, tmp)) {
+			if (tmp.find("█") != tmp.npos || tmp.find("═") != tmp.npos) {
+				tmp.insert(0, "3");
+				tmp.insert(0, "\x03");
+			}
+			ServerMessage(RPL_MOTD, tmp + "\n");
+		}
+		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\n");
+		std::cout << message << std::endl;
 	}
 }
 
