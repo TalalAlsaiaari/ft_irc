@@ -45,9 +45,36 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 # TO DO
 
 - [x] Make awesome README
-- [ ] Create Server
-	- [ ] figure it out
+- [ ] Create Server _(Talal)_
+	- [ ] Simple Server with one client
+	- [ ] Server accepting multiple clients
 - [ ] Parse Client Input
+	- [ ] error handling (wrong command/not enough parmas/etc.)
+- [ ] Create server operators
+- [ ] Create server functions
+	- [ ] CAP registration
+	- [ ] PASS
+	- [ ] NICK
+	- [ ] USER
+	- [ ] PING/PONG
+	- [ ] PRIVMSG
+		- [ ] forward channel messages to all clients in channel
+	- [ ] MODE
+	- [ ] WHO/WHOIS
+- [ ] create channels
+	- [ ] create channel operators
+	- [ ] create channel functions
+		- [ ] JOIN
+		- [ ] PART
+		- [ ] INVITE
+		- [ ] KICK
+		- [ ] TOPIC
+		- [ ] MODE
+			- [ ] i (Set/remove Invite-only channel)
+			- [ ] t (Set/remove the restrictions of the TOPIC command to channel operators)
+			- [ ] k (Set/remove the channel key (password))
+			- [ ] o (Give/take channel operator privilege)
+			- [ ] l (Set/remove the user limit to channel)
 
 ### Requirements
 
