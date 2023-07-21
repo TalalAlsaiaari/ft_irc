@@ -48,7 +48,7 @@ void Functions::addNick( std::string nick ) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
 			if (clients[fd].isRegistered())
-				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" + "\x02Hello There, Please be nice\x02" + "\n");
+				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" + GREEN + "███████╗████████╗     ██╗██████╗  ██████╗\n" + GREEN + "██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝\n" + GREEN + "█████╗     ██║        ██║██████╔╝██║\n" + GREEN + "██╔══╝     ██║        ██║██╔══██╗██║\n" + GREEN + "██║        ██║███████╗██║██║  ██║╚██████╗\n" + GREEN + "╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝\n" + PURPLE + "Server made by: talsaiaa, aball, numussan\n");
 			else
 				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 		} else {

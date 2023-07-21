@@ -783,6 +783,17 @@ defined in <poll.h>:
 	outstanding data in the channel has been consumed.
 </details>
 
+# Connection registration
+
+The recommended order of commands during registration is as follows:
+
+1. CAP LS 302
+2. PASS
+3. NICK and USER
+4. Capability Negotiation
+5. SASL (if negotiated)
+6. CAP END
+
 # Random Info dump
 
 From Karim use rawlog to see commands and expected replies "/help rawlog"
@@ -983,3 +994,7 @@ more recent documentation for IRC protocol
 [ 11 ] <https://www.rfc-editor.org/rfc/rfc2813>
 
 [ 12 ] <https://ircv3.net/registry#capabilities>
+
+
+modern irc docs (very useful)
+[ 13 ] <https://modern.ircdocs.horse/>
