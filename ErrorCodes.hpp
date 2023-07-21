@@ -11,7 +11,7 @@
               "This server was created <date>"
        004    RPL_MYINFO
               "<servername> <version> <available user modes>
-               <available channel modes>" 
+               <available channel modes>"
          - The server sends Replies 001 to 004 to a user upon
            successful registration.
        005    RPL_BOUNCE
@@ -464,11 +464,15 @@
 //                   replies.
 
 //         375     RPL_MOTDSTART
-//                         ":- <server> Message of the day - "
+//                         ":- <server> Message of the day - " */
+#define RPL_MOTDSTART " 375 "
 
+/*
 //         372     RPL_MOTD
 //                         ":- <text>"
-
+*/
+#define RPL_MOTD " 372 "
+/*
 //         376     RPL_ENDOFMOTD
 //                         ":End of /MOTD command"
 //                 - When responding to the MOTD message and the MOTD file
@@ -477,7 +481,10 @@
 //                   RPL_MOTD format replies.  These should be surrounded
 //                   by a RPL_MOTDSTART (before the RPL_MOTDs) and an
 //                   RPL_ENDOFMOTD (after).
+*/
+#define RPL_ENDOFMOTD " 376 "
 
+/*
 //         381     RPL_YOUREOPER
 //                         ":You are now an IRC operator"
 //                 - RPL_YOUREOPER is sent back to a client which has

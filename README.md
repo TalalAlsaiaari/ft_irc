@@ -49,10 +49,11 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [ ] Simple Server with one client
 	- [ ] Server accepting multiple clients
 - [ ] Parse Client Input _(Alex)_
-	- [ ] error handling (wrong command/not enough parmas/etc.)
+	- [ ] error handling (wrong command/not enough parmas/etc.) _(Alex)_
 - [ ] Create server operators
 - [ ] Create server functions _(Alex)_
-	- [ ] CAP registration
+	- [ ] CAP registration _(Alex)_
+	- [ ] MOTD (message of the day) _(Alex)_
 	- [ ] PASS
 	- [ ] NICK
 	- [ ] USER
