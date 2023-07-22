@@ -1,28 +1,36 @@
  
- 
-03███████╗████████╗     ██╗██████╗  ██████╗
-03██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝
-03█████╗     ██║        ██║██████╔╝██║
-03██╔══╝     ██║        ██║██╔══██╗██║
-03██║        ██║███████╗██║██║  ██║╚██████╗
-03╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝
- 
-06Server made by: talsaiaa, aball, numussan
- 
- 
-00*** Make your messages 04c07o08l09o12r06f05u01l00 ***
   
-   Prefix the message with ^CXX
-   ^C = cntrl-C
+^C10███████╗████████╗     ██╗██████╗  ██████╗
+^C10██╔════╝╚══██╔══╝     ██║██╔══██╗██╔════╝
+^C10█████╗     ██║        ██║██████╔╝██║
+^C10██╔══╝     ██║        ██║██╔══██╗██║
+^C10██║        ██║███████╗██║██║  ██║╚██████╗
+^C10╚═╝        ╚═╝╚══════╝╚═╝╚═╝  ╚═╝ ╚═════╝
+ 
+^C06Server made by: talsaiaa, aball, numussan
+ 
+ 
+^C00*** Make your messages ^C04c^C07o^C08l^C09o^C12r^C06f^C05u^C01l^C00 ***
+  
+   Prefix the message with Cntrl-CXX
    XX = the numbers below
    
-   ^C00 - White      ^C08 - Yellow
-   ^C01 - Black      ^C09 - Light Green
-   ^C02 - Blue       ^C10 - Cyan
-   ^C03 - Green      ^C11 - Light Cyan
-   ^C04 - Red        ^C12 - Light Blue
-   ^C05 - Brown      ^C13 - Pink
-   ^C06 - Magenta    ^C14 - Grey
-   ^C07 - Orange     ^C15 - Light Grey
+   00^C00 - White      ^O08^C08 - Yellow
+   01^C01 - Black      ^O09^C09 - Light Green
+   02^C02 - Blue       ^O10^C10 - Cyan
+   03^C03 - Green      ^O11^C11 - Light Cyan
+   04^C04 - Red        ^O12^C12 - Light Blue
+   05^C05 - Brown      ^O13^C13 - Pink
+   06^C06 - Magenta    ^O14^C14 - Grey
+   07^C07 - Orange     ^O15^C15 - Light Grey
  
+   Cntrl-CXX,XX sets the background 
  
+   00^C01,00 - White      ^O08^C01,08 - Yellow     
+   01^C00,01 - Black      ^O09^C01,09 - Light Green
+   02^C01,02 - Blue       ^O10^C01,10 - Cyan       
+   03^C01,03 - Green      ^O11^C01,11 - Light Cyan 
+   04^C01,04 - Red        ^O12^C01,12 - Light Blue 
+   05^C01,05 - Brown      ^O13^C01,13 - Pink       
+   06^C01,06 - Magenta    ^O14^C00,14 - Grey       
+   07^C01,07 - Orange     ^O15^C01,15 - Light Grey 
