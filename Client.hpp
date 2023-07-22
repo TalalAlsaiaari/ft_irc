@@ -14,7 +14,6 @@ class Client {
 		std::string server_name;
 		std::string host_name;
 		bool registered;
-		// std::vector<char> buff(5000);
 	public:
 		Client( );
 		Client( int );
