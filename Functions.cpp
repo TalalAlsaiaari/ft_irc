@@ -47,8 +47,10 @@ void Functions::addNick( std::string nick ) {
 		if (clients[fd].getNick().empty()) {
 			clients[fd].setNick(nick);
 			nicks[nick] = clients[fd];
-			if (clients[fd].isRegistered())
+			if (clients[fd].isRegistered()) {
 				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
+				this->MOTD();
+			}
 			else
 				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 		} else {
@@ -196,13 +198,17 @@ void Functions::MOTD( void ) {
 			pos = tmp.find_first_of("01", 0);
 			while( pos != tmp.npos) {
 				tmp.insert(pos, "\x03");
-				if (tmp.find_first_of("██║") == tmp.npos)
+				if (tmp.find("^C") != tmp.npos)
+				{
 					tmp.insert(pos, tmp.substr(pos + 1, 2));
-				pos = tmp.find_first_of("01", pos + 4);
+					tmp.insert(pos - 3, "\x0F");
+					pos += 4;
+				}
+				pos = tmp.find_first_of("01", pos + 2);
 			}
-			ServerMessage(RPL_MOTD, tmp + "\n");
+			ServerMessage(RPL_MOTD, tmp + "\a\n");
 		}
-		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\n");
+		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\a\n");
 		std::cout << message << std::endl;
 	}
 }
