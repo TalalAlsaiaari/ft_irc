@@ -198,6 +198,23 @@ void Functions::MOTD( void ) {
 	}
 }
 
+void Functions::QUIT( void ) {
+	std::map<int, Client>::iterator cli_fd;
+	std::map<std::string, Client>::iterator cli_nick;
+	std::string nick = clients[fd].getNick();
+	cli_fd = clients.find(fd);
+	cli_nick = nicks.find(nick);
+
+	if (cli_fd != clients.end())
+		clients.erase(cli_fd);
+	else
+		std::cerr << "no cli fd found\n";
+	if (cli_nick != nicks.end())
+		nicks.erase(cli_nick);
+	else
+		std::cerr << "no cli nick found\n";
+}
+
 // PRIVMSG alexhmball :hey
 // :alexandraballer!~user@5.195.225.158 PRIVMSG alexhmball :hey
 

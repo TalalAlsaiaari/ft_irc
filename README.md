@@ -62,6 +62,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [ ] PRIVMSG
 	- [ ] MODE
 	- [ ] WHO/WHOIS
+	- [ ] QUIT _(Alex)_
 - [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel

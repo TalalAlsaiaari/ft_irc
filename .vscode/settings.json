@@ -62,6 +62,11 @@
 		"vector": "cpp",
 		"map": "cpp",
 		"__tree": "cpp",
-		"deque": "cpp"
-	}
+		"deque": "cpp",
+		"fstream": "cpp",
+		"iomanip": "cpp",
+		"stack": "cpp"
+	},
+	"editor.trimAutoWhitespace": false,
+	"editor.comments.ignoreEmptyLines": false
 }
