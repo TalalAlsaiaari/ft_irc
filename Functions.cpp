@@ -186,20 +186,14 @@ void Functions::PASS( void ) {
 void Functions::MOTD( void ) {
 	std::fstream file;
 	std::string tmp;
-	size_t pos;
 
 	file.open("ft_irc.motd");
 	if (!file.is_open()) {
 		ServerMessage(ERR_NOMOTD, ":no MOTD\n");
 	} else {
 		ServerMessage(RPL_MOTDSTART, ":Message of the Day\n");
-		while (std::getline(file, tmp)) {
-			while ((pos = tmp.find("^C")) != tmp.npos)
-				tmp.replace(pos, 2, "\x03");
-			while ((pos = tmp.find("^O")) != tmp.npos)
-				tmp.replace(pos, 2, "\x0F");
+		while (std::getline(file, tmp))
 			ServerMessage(RPL_MOTD, tmp + "\n");
-		}
 		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\a\n");
 	}
 }

@@ -1,40 +1,43 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
-	func[std::string("NICK")] = &Parser::NICK;
-	func[std::string("CAP")] = &Parser::CAP;
-	func[std::string("JOIN")] = &Parser::JOIN;
-	func[std::string("USER")] = &Parser::USER;
-	func[std::string("MODE")] = &Parser::MODE;
-	func[std::string("PING")] = &Parser::PING;
-	func[std::string("PART")] = &Parser::PART;
-	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
-	func[std::string("PASS")] = &Parser::PASS;
+	func[std::string("nick")] = &Parser::NICK;
+	func[std::string("cap")] = &Parser::CAP;
+	func[std::string("join")] = &Parser::JOIN;
+	func[std::string("user")] = &Parser::USER;
+	func[std::string("mode")] = &Parser::MODE;
+	func[std::string("ping")] = &Parser::PING;
+	func[std::string("part")] = &Parser::PART;
+	func[std::string("privmsg")] = &Parser::PRIVMSG;
+	func[std::string("pass")] = &Parser::PASS;
 	func[std::string("motd")] = &Parser::MOTD;
 }
 
 Parser::~Parser() {}
 
 void Parser::takeInput( std::string Input, int fd, Client client ) {
+	std::map<std::string, Funcs>::iterator command;
+	std::map<int, Client>::iterator origin;
+
 	this->input = Input;
 	this->fd = fd;
 	this->findCmd();
-	try {
-		clients.at(fd);
-	} catch (std::exception &e) {
+
+	origin = clients.find(fd);
+	if (origin == clients.end())
 		clients[fd] = client;
-	} try {
-		func.at(cmd);
-		((*this).*(func[cmd]))();
-	} catch (std::exception &e) {
-		// cmd not found
-		std::cout << "cmd not found\n";
-	}
+
+	command = func.find(cmd);
+	if (command != func.end())
+		(this->*command->second)();
+	else
+		ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
 }
 
-void Parser::findCmd( ) {
+void Parser::findCmd( void ) {
 	args.clear();
 	int x = 0;
+
 	while (!input.empty()) {
 		std::string::size_type pos1 = input.find_first_of("\r\n");
 		std::string::size_type pos2 = input.find_first_of(" ");
@@ -57,6 +60,7 @@ void Parser::findCmd( ) {
 		std::cout << args[x++] << std::endl;
 	}
 	cmd = args.front();
+	std::transform(cmd.begin(), cmd.end(), cmd.begin(), tolower);
 	args.pop_front();
 	std::cout << "|" << cmd << "|" << std::endl;
 	for (size_t i = 0; i < args.size(); i++)

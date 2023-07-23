@@ -1,10 +1,6 @@
-#include "Parser.cpp"
+#include <iostream>
 
 int main(void) {
-	Parser parse;
-
-	parse.takeInput("join");
-	parse.findCmd();
-	parse.printCmd();
+	std::cout << "\x01";
 	return 0;
 }

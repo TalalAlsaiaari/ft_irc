@@ -9,7 +9,7 @@ class Parser : public Functions {
 		Parser( );
 		~Parser( );
 		void takeInput( std::string input, int fd, Client client );
-		void findCmd( );
+		void findCmd( void );
 		std::string getCmd( void );
 	private:
 		typedef void (Parser::*Funcs)(void);
