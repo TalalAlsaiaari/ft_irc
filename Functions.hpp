@@ -24,12 +24,7 @@
 // #include "Channel.hpp"
 // #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
-#define CTRL_C "\x03"
-#define CTRL_V "\x16"
-#define GREEN "\x03" + "3"
-#define PURPLE CTRL_C + "13"
-#define RED CTRL_C + "4"
-#define YELLOW CTRL_C + "8"
+
 
 class Functions {
 	protected:
@@ -62,5 +57,6 @@ class Functions {
 		void PRIVMSG( void );
 		void PASS( void );
 		void MOTD( void );
+		void QUIT( void );
 };
 
