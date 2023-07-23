@@ -11,6 +11,7 @@ Parser::Parser() {
 	func[std::string("privmsg")] = &Parser::PRIVMSG;
 	func[std::string("pass")] = &Parser::PASS;
 	func[std::string("motd")] = &Parser::MOTD;
+	func[std::string("quit")] = &Parser::QUIT;
 }
 
 Parser::~Parser() {}

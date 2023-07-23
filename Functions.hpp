@@ -57,5 +57,6 @@ class Functions {
 		void PRIVMSG( void );
 		void PASS( void );
 		void MOTD( void );
+		void QUIT( void );
 };
 
