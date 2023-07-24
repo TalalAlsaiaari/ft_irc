@@ -14,6 +14,7 @@ class Client {
 		std::string server_name;
 		std::string host_name;
 		bool registered;
+		bool pass_registered;
 	public:
 		Client( );
 		Client( int );
@@ -31,6 +32,8 @@ class Client {
 		int getFD( void );
 		bool isRegistered( void );
 		void registration( void );
+		bool isPassGood( void );
+		void passGood( void );
 };
 
 #endif
