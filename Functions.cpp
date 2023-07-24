@@ -29,15 +29,15 @@ void Functions::UserMessage(std::string message) {
 
 // @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
-	for (int i = 0; i < 2 && args.size(); i++)
-		args.pop_front();
-	if (args.size() > 0) {
-		cmd = args.front();
-		args.pop_front();
-		if (cmd == "USER")
-			this->USER();
-		std::cout << cmd << std::endl;
-	}
+	// for (int i = 0; i < 2 && args.size(); i++)
+	// 	args.pop_front();
+	// if (args.size() > 0) {
+	// 	cmd = args.front();
+	// 	args.pop_front();
+	// 	if (cmd == "USER")
+	// 		this->USER();
+	// 	std::cout << cmd << std::endl;
+	// }
 	if (nick.empty()) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
 		return ;
@@ -56,8 +56,10 @@ void Functions::addNick( std::string nick ) {
 					ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
 					this->MOTD();
 				}
-				else
+				else {
 					ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
+					std::cout << "not registered\n";
+				}
 			} else {
 				UserMessage(" " + nick + " :" + nick + "\n");
 				nicks.erase(clients[fd].getNick());
@@ -74,16 +76,18 @@ void Functions::NICK( void ) {
 		std::string nick = args[0];
 		this->addNick(args[0]);
 	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
 		std::cout << "no nick given\n";
 	}
 }
 
 void Functions::CAP( void ) {
-	std::string mes = "CAP * ACK " + args[1] + "\n";
 	if (args[0] == "LS")
 		send(fd, "CAP * LS :multi-prefix userhost-in-names\n", strlen("CAP * LS :multi-prefix userhost-in-names\n"), 0);
-	if (args[0] == "REQ")
+	if (args[0] == "REQ") {
+		std::string mes = "CAP * ACK " + args[1] + "\n";
 		send(fd, &mes[0], mes.length(), 0);
+	}
 		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
 }
 
@@ -98,23 +102,26 @@ void Functions::JOIN( void ) {
 }
 
 void Functions::USER( void ) {
-	try {
-		args.at(0);
-		clients[fd].setUserName(args[0]);
-		args.pop_front();
-		args.at(0);
-		clients[fd].setHostName(args[0]);
-		args.pop_front();
-		args.at(0);
-		clients[fd].setServerName(args[0]);
-		args.pop_front();
-		clients[fd].registration();
-		args.at(0);
-		clients[fd].setRealName(args[0]);
-		args.pop_front();
-	} catch (std::exception &e) {
-		std::cout << "user registration problem" << std::endl;
-	}
+	if (!clients[fd].isRegistered()) {
+		try {
+			args.at(0);
+			clients[fd].setUserName(args[0]);
+			args.pop_front();
+			args.at(0);
+			clients[fd].setHostName(args[0]);
+			args.pop_front();
+			args.at(0);
+			clients[fd].setServerName(args[0]);
+			args.pop_front();
+			clients[fd].registration();
+			args.at(0);
+			clients[fd].setRealName(args[0]);
+			args.pop_front();
+		} catch (std::exception &e) {
+			std::cout << "user registration problem" << std::endl;
+		}
+	} else
+		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n");
 }
 
 void Functions::MODE( void ) {
@@ -141,16 +148,38 @@ void Functions::PART( void ) {
 void Functions::UsertoUser(Client origin, Client dest) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
-	args.pop_front();
-	// for (size_t i = 0; i < args.size(); i++) {
-	// 	message += args[i] + " ";
-	// }
-	message += args[0];
+	// args.pop_front();
+	message += args.front();
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
 }
 
 void Functions::PRIVMSG( void ) {
+// 	std::vector<std::string> targets;
+// 	std::map<std::string, Client>::iterator cli_dest;
+// 	// std::map<std::string, Channel>::iterator chan_dest;
+// 	std::string::size_type pos;
+//
+// 	while (args.size() > 0 && !args.front().empty()) {
+// 		if ((pos = args.front().find_first_of(",")) != args.front().npos) {
+// 			targets.push_back(args.front().substr(0, pos));
+// 			args.front().erase(0, pos + 1);
+// 		} else {
+// 			targets.push_back(args.front());
+// 			args.pop_front();
+// 		}
+// 	}
+// 	if (targets.size() && args.size()) {
+// 		while (targets.size()) {
+// 			cli_dest = nicks.find(targets.front());
+// 			if (cli_dest != nicks.end())
+// 				UsertoUser(clients[fd], cli_dest->second);
+// 			else if (targets.front()[0] == '#')
+// 				ServerMessage(ERR_NOSUCHCHANNEL, ":" + targets.front() + "no such channel\n");
+// 			targets.erase(targets.begin());
+// 		}
+// 	} else
+// 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
 	try {
 		args.at(0);
 		args.at(1);
@@ -170,19 +199,11 @@ void Functions::PASS( void ) {
 	if (!clients[fd].isRegistered()) {
 		try {
 			args.at(0);
-			if (args[0] == pass) {
-				// clients[fd].registration();
-				if (args.size() > 3) {
-					args.pop_front();
-					args.pop_front();
-					cmd = args.front();
-					args.pop_front();
-					if (cmd == "NICK")
-						this->NICK();
-				}
-			} else {
+			// if (args[0] == pass)
+			// 	// clients[fd].registration();
+			// else
+			if (args[0] != pass)
 				ServerMessage(ERR_PASSWDMISMATCH, ":password doesn't match\n");
-			}
 		} catch (std::exception &e) {
 			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n");
 		}

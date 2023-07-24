@@ -190,6 +190,7 @@ int	main(int ac, char **av)
 					}
 					else
 					{
+						std::cout << buf << std::endl;
                         parser.takeInput(buf, sender_fd, clients[sender_fd]);
 						memset(buf, 0, strlen(buf));
 					}
