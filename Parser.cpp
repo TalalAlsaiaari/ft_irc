@@ -7,7 +7,7 @@ Parser::Parser() {
 	func[std::string("USER")] = &Parser::USER;
 	func[std::string("MODE")] = &Parser::MODE;
 	func[std::string("PING")] = &Parser::PING;
-	func[std::string("PONG")] = &Parser::PART;
+	func[std::string("PART")] = &Parser::PART;
 	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
 	func[std::string("PASS")] = &Parser::PASS;
 	func[std::string("MOTD")] = &Parser::MOTD;
@@ -27,8 +27,9 @@ void Parser::takeInput( std::string Input, int fd, Client client ) {
 	origin = clients.find(fd);
 	if (origin == clients.end())
 		clients[fd] = client;
-	while (!multi_cmd.empty()) {
+	while (!multi_cmd.empty() && !multi_cmd.front().empty()) {
 		cmd = multi_cmd.front().front();
+		std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
 		multi_cmd.front().pop_front();
 		args = multi_cmd.front();
 		command = func.find(cmd);
@@ -63,7 +64,7 @@ void Parser::findCmdArgs( void ) {
 			tmp.push_front(args.back());
 			args.pop_back();
 		}
-		multi_cmd.push_back(tmp);
+		multi_cmd.push_front(tmp);
 	}
 	std::cout << multi_cmd.size() << std::endl;
 	for (size_t i = 0; i < multi_cmd.size(); i++) {

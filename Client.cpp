@@ -58,3 +58,11 @@ bool Client::isRegistered( void ) {
 void Client::registration( void ) {
 	registered = true;
 }
+
+bool Client::isPassGood( void ) {
+	return pass_registered;
+}
+
+void Client::passGood( void ) {
+	pass_registered = true;
+}

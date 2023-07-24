@@ -29,15 +29,7 @@ void Functions::UserMessage(std::string message) {
 
 // @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
-	// for (int i = 0; i < 2 && args.size(); i++)
-	// 	args.pop_front();
-	// if (args.size() > 0) {
-	// 	cmd = args.front();
-	// 	args.pop_front();
-	// 	if (cmd == "USER")
-	// 		this->USER();
-	// 	std::cout << cmd << std::endl;
-	// }
+
 	if (nick.empty()) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
 		return ;
@@ -52,7 +44,7 @@ void Functions::addNick( std::string nick ) {
 			if (clients[fd].getNick().empty()) {
 				clients[fd].setNick(nick);
 				nicks[nick] = clients[fd];
-				if (clients[fd].isRegistered()) {
+				if (clients[fd].isPassGood()) {
 					ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
 					this->MOTD();
 				}
@@ -155,40 +147,15 @@ void Functions::UsertoUser(Client origin, Client dest) {
 }
 
 void Functions::PRIVMSG( void ) {
-// 	std::vector<std::string> targets;
-// 	std::map<std::string, Client>::iterator cli_dest;
-// 	// std::map<std::string, Channel>::iterator chan_dest;
-// 	std::string::size_type pos;
-//
-// 	while (args.size() > 0 && !args.front().empty()) {
-// 		if ((pos = args.front().find_first_of(",")) != args.front().npos) {
-// 			targets.push_back(args.front().substr(0, pos));
-// 			args.front().erase(0, pos + 1);
-// 		} else {
-// 			targets.push_back(args.front());
-// 			args.pop_front();
-// 		}
-// 	}
-// 	if (targets.size() && args.size()) {
-// 		while (targets.size()) {
-// 			cli_dest = nicks.find(targets.front());
-// 			if (cli_dest != nicks.end())
-// 				UsertoUser(clients[fd], cli_dest->second);
-// 			else if (targets.front()[0] == '#')
-// 				ServerMessage(ERR_NOSUCHCHANNEL, ":" + targets.front() + "no such channel\n");
-// 			targets.erase(targets.begin());
-// 		}
-// 	} else
-// 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
 	try {
 		args.at(0);
 		args.at(1);
 		try {
-			//need to send to multiple users / channels
+			//need to send to channels
 			nicks.at(args[0]);
 			UsertoUser(clients[fd], nicks[args[0]]);
 		} catch (std::exception &e) {
-			ServerMessage(ERR_NOSUCHNICK, args[0] + "\n");
+			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n");
 		}
 	} catch ( std::exception &e ) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
@@ -196,20 +163,18 @@ void Functions::PRIVMSG( void ) {
 }
 
 void Functions::PASS( void ) {
-	if (!clients[fd].isRegistered()) {
+	if (!clients[fd].isPassGood()) {
 		try {
 			args.at(0);
-			// if (args[0] == pass)
-			// 	// clients[fd].registration();
-			// else
-			if (args[0] != pass)
+			if (args[0] == pass)
+				clients[fd].passGood();
+			else
 				ServerMessage(ERR_PASSWDMISMATCH, ":password doesn't match\n");
 		} catch (std::exception &e) {
 			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n");
 		}
-	} else {
+	} else
 		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n");
-	}
 }
 
 void Functions::MOTD( void ) {
