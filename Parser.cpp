@@ -1,17 +1,17 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
-	func[std::string("nick")] = &Parser::NICK;
-	func[std::string("cap")] = &Parser::CAP;
-	func[std::string("join")] = &Parser::JOIN;
-	func[std::string("user")] = &Parser::USER;
-	func[std::string("mode")] = &Parser::MODE;
-	func[std::string("ping")] = &Parser::PING;
-	func[std::string("part")] = &Parser::PART;
-	func[std::string("privmsg")] = &Parser::PRIVMSG;
-	func[std::string("pass")] = &Parser::PASS;
-	func[std::string("motd")] = &Parser::MOTD;
-	func[std::string("quit")] = &Parser::QUIT;
+	func[std::string("NICK")] = &Parser::NICK;
+	func[std::string("CAP")] = &Parser::CAP;
+	func[std::string("JOIN")] = &Parser::JOIN;
+	func[std::string("USER")] = &Parser::USER;
+	func[std::string("MODE")] = &Parser::MODE;
+	func[std::string("PING")] = &Parser::PING;
+	func[std::string("PONG")] = &Parser::PART;
+	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
+	func[std::string("PASS")] = &Parser::PASS;
+	func[std::string("MOTD")] = &Parser::MOTD;
+	func[std::string("QUIT")] = &Parser::QUIT;
 }
 
 Parser::~Parser() {}
@@ -61,7 +61,7 @@ void Parser::findCmd( void ) {
 		std::cout << args[x++] << std::endl;
 	}
 	cmd = args.front();
-	std::transform(cmd.begin(), cmd.end(), cmd.begin(), tolower);
+	std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
 	args.pop_front();
 	std::cout << "|" << cmd << "|" << std::endl;
 	for (size_t i = 0; i < args.size(); i++)
