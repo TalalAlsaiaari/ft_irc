@@ -22,7 +22,7 @@
 #include "devector.hpp"
 #include <fstream>
 // #include "Channel.hpp"
-// #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
 
 
@@ -35,7 +35,6 @@ class Functions {
 		std::map<std::string, Client> nicks;
 		// std::map<std::string, Channel> channels;
 		std::map<int, Client> clients;
-		std::string trailing;
 		std::string pass;
 	public:
 		Functions( );

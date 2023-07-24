@@ -2,8 +2,6 @@
 
 #include "Functions.hpp"
 
-// #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
-
 class Parser : public Functions {
 	public:
 		Parser( );

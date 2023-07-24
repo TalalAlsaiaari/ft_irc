@@ -37,26 +37,33 @@ void Functions::addNick( std::string nick ) {
 		if (cmd == "USER")
 			this->USER();
 		std::cout << cmd << std::endl;
-	} else if (nick.empty()) {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
 	}
-	try {
-		nicks.at(nick);
-		ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
-	} catch ( std::exception &e ) {
-		if (clients[fd].getNick().empty()) {
-			clients[fd].setNick(nick);
-			nicks[nick] = clients[fd];
-			if (clients[fd].isRegistered()) {
-				ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
-				this->MOTD();
+	if (nick.empty()) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
+		return ;
+	}
+	if (nick.find_first_of("#&\x03") != nick.npos)
+		ServerMessage(ERR_ERRONEUSNICKNAME, ":" + nick + " erroneus nick name\n");
+	else {
+		try {
+			nicks.at(nick);
+			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
+		} catch ( std::exception &e ) {
+			if (clients[fd].getNick().empty()) {
+				clients[fd].setNick(nick);
+				nicks[nick] = clients[fd];
+				if (clients[fd].isRegistered()) {
+					ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
+					this->MOTD();
+				}
+				else
+					ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
+			} else {
+				UserMessage(" " + nick + " :" + nick + "\n");
+				nicks.erase(clients[fd].getNick());
+				clients[fd].setNick(nick);
+				nicks[nick] = clients[fd];
 			}
-			else
-				ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
-		} else {
-			UserMessage(" " + nick + " :" + nick + "\n");
-			clients[fd].setNick(nick);
-			nicks[nick] = clients[fd];
 		}
 	}
 }
@@ -69,7 +76,6 @@ void Functions::NICK( void ) {
 	} catch (std::exception &e) {
 		std::cout << "no nick given\n";
 	}
-	// ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
 }
 
 void Functions::CAP( void ) {
@@ -82,10 +88,13 @@ void Functions::CAP( void ) {
 }
 
 void Functions::JOIN( void ) {
-	if (args[0] == ":")
-		ServerMessage(ERR_NEEDMOREPARAMS, cmd + " :Not enough parameters\n");
-	else
-		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
+	if (clients[fd].isRegistered()) {
+		if (args[0] == ":")
+			ServerMessage(ERR_NEEDMOREPARAMS, cmd + " :Not enough parameters\n");
+		else
+			ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
+	} else
+		ServerMessage(ERR_NOTREGISTERED, ":you must register first\n");
 }
 
 void Functions::USER( void ) {
@@ -123,7 +132,7 @@ void Functions::PART( void ) {
 		args.at(0);
 		//need to check user is in the channel / channel exists
 		UserMessage(args[0] + "\n");
-		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + "\n");
+		// ServerMessage(ERR_NOSUCHCHANNEL, args[0] + "\n");
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
 	}
@@ -133,11 +142,10 @@ void Functions::UsertoUser(Client origin, Client dest) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
 	args.pop_front();
-	for (size_t i = 0; i < args.size(); i++) {
-		message += args[i] + " ";
-	}
-	// might not need this line depending on parsing
-	message += "\n";
+	// for (size_t i = 0; i < args.size(); i++) {
+	// 	message += args[i] + " ";
+	// }
+	message += args[0];
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
 }

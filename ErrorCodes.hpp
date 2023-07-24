@@ -129,6 +129,7 @@
 //                 - Returned after receiving a NICK message which contains
 //                   characters which do not fall in the defined set.  See
 //                   section x.x.x for details on valid nicknames.
+#define ERR_ERRONEUSNICKNAME " 432 "
 
 //         433     ERR_NICKNAMEINUSE
 //                         "<nick> :Nickname is already in use"
@@ -528,7 +529,7 @@
 //                   RPL_ENDOFUSERS.
 
 //         200     RPL_TRACELINK
-//                         "Link <version & debug level> <destination> 
+//                         "Link <version & debug level> <destination>
 //                          <next server>"
 
 //         201     RPL_TRACECONNECTING
@@ -620,7 +621,7 @@
 //                           RPL_UMODEIS is sent back.
 
 //         251     RPL_LUSERCLIENT
-//                         ":There are <integer> users and <integer> 
+//                         ":There are <integer> users and <integer>
 //                          invisible on <integer> servers"
 
 //         252     RPL_LUSEROP
@@ -633,7 +634,7 @@
 //                         "<integer> :channels formed"
 
 //         255     RPL_LUSERME
-//                         ":I have <integer> clients and <integer> 
+//                         ":I have <integer> clients and <integer>
 //                           servers"
 //                         - In processing an LUSERS message, the server
 //                           sends a set of replies from RPL_LUSERCLIENT,
