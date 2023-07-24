@@ -31,6 +31,7 @@ class Functions {
 		int fd;
 		std::string input;
 		std::string cmd;
+		devector<devector<std::string> > multi_cmd;
 		devector<std::string> args;
 		std::map<std::string, Client> nicks;
 		// std::map<std::string, Channel> channels;
