@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main(void) {
-	std::cout << "\x01";
+	std::cout << "\a";
 	return 0;
 }
