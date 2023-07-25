@@ -29,11 +29,6 @@ void Functions::UserMessage(std::string message) {
 
 // @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
-
-	if (nick.empty()) {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
-		return ;
-	}
 	if (nick.find_first_of("#&\x03") != nick.npos)
 		ServerMessage(ERR_ERRONEUSNICKNAME, ":" + nick + " erroneus nick name\n");
 	else {
@@ -41,23 +36,10 @@ void Functions::addNick( std::string nick ) {
 			nicks.at(nick);
 			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
 		} catch ( std::exception &e ) {
-			if (clients[fd].getNick().empty()) {
-				clients[fd].setNick(nick);
-				nicks[nick] = clients[fd];
-				if (clients[fd].isPassGood()) {
-					ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(nick, clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
-					this->MOTD();
-				}
-				else {
-					ServerMessage(ERR_NOTREGISTERED, ":You have not registered\n");
-					std::cout << "not registered\n";
-				}
-			} else {
-				UserMessage(" " + nick + " :" + nick + "\n");
-				nicks.erase(clients[fd].getNick());
-				clients[fd].setNick(nick);
-				nicks[nick] = clients[fd];
-			}
+			UserMessage(" " + nick + " :" + nick + "\n");
+			nicks.erase(clients[fd].getNick());
+			clients[fd].setNick(nick);
+			nicks[nick] = clients[fd];
 		}
 	}
 }
@@ -65,11 +47,12 @@ void Functions::addNick( std::string nick ) {
 void Functions::NICK( void ) {
 	try {
 		args.at(0);
-		std::string nick = args[0];
-		this->addNick(args[0]);
+		if (args[0].empty())
+			ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
+		else
+			this->addNick(args[0]);
 	} catch (std::exception &e) {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need to give a nick name\n");
-		std::cout << "no nick given\n";
+		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
 	}
 }
 
@@ -93,25 +76,33 @@ void Functions::JOIN( void ) {
 		ServerMessage(ERR_NOTREGISTERED, ":you must register first\n");
 }
 
+void Functions::RegisterUser( void ) {
+	try {
+		args.at(0);
+		if (clients[fd].getUserName().empty())
+			clients[fd].setUserName("~" + args[0]);
+		args.pop_front();
+		args.at(0);
+		clients[fd].setHostName(args[0]);
+		args.pop_front();
+		args.at(0);
+		clients[fd].setServerName(args[0]);
+		args.pop_front();
+		clients[fd].registration();
+		ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
+		this->MOTD();
+		args.at(0);
+		clients[fd].setRealName(args[0]);
+		args.pop_front();
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
+	}
+}
+
 void Functions::USER( void ) {
 	if (!clients[fd].isRegistered()) {
-		try {
-			args.at(0);
-			clients[fd].setUserName(args[0]);
-			args.pop_front();
-			args.at(0);
-			clients[fd].setHostName(args[0]);
-			args.pop_front();
-			args.at(0);
-			clients[fd].setServerName(args[0]);
-			args.pop_front();
-			clients[fd].registration();
-			args.at(0);
-			clients[fd].setRealName(args[0]);
-			args.pop_front();
-		} catch (std::exception &e) {
-			std::cout << "user registration problem" << std::endl;
-		}
+		if (clients[fd].isPassGood())
+			this->RegisterUser();
 	} else
 		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n");
 }

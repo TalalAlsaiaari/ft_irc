@@ -46,27 +46,32 @@ void Parser::findCmdArgs( void ) {
 	devector<std::string> tmp;
 
 	args.clear();
+	multi_cmd.clear();
+	// split
 	while (!input.empty()) {
-		if (input[0] == ':') {
-			pos = input.find_first_of("\r\n");
-			args.push_back(input.substr(0, pos));
+		if (input[0] == ':' && (pos = input.find_first_of("\r\n")) != input.npos) {
+			args.push_back(input);
 			input.erase(0, pos + 1);
 		} else if ((pos = input.find_first_of(" \r\n")) != input.npos) {
 			args.push_back(input.substr(0, pos));
 			input.erase(0, pos + 1);
+		} else {
+			std::cout << "push clear\n";
+			args.push_back(input);
+			input.clear();
 		}
-		std::cout << args.back() << std::endl;
 	}
+	// group
 	while (!args.empty()) {
 		tmp.clear();
-		args.pop_back();
+		if (args.back().empty())
+			args.pop_back();
 		while (!args.empty() && !args.back().empty() ) {
 			tmp.push_front(args.back());
 			args.pop_back();
 		}
 		multi_cmd.push_front(tmp);
 	}
-	std::cout << multi_cmd.size() << std::endl;
 	for (size_t i = 0; i < multi_cmd.size(); i++) {
 		for (size_t j = 0; j < multi_cmd[i].size(); j++) {
 			std::cout << "|" << multi_cmd[i][j] << "|" << std::endl;
