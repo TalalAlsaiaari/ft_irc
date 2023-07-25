@@ -18,7 +18,7 @@ class Client {
 	public:
 		Client( );
 		Client( int fd );
-		Client( int fd , std::string user_name );
+		Client( int fd , std::string host_name );
 		~Client( );
 		void setNick( std::string nick );
 		void setRealName( std::string real_name );
