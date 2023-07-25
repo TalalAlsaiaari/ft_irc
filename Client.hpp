@@ -17,7 +17,8 @@ class Client {
 		bool pass_registered;
 	public:
 		Client( );
-		Client( int );
+		Client( int fd );
+		Client( int fd , std::string user_name );
 		~Client( );
 		void setNick( std::string nick );
 		void setRealName( std::string real_name );

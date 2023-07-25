@@ -47,6 +47,7 @@ class Functions {
 		void ServerMessage(std::string error, std::string message);
 		void UserMessage(std::string message);
 		void UsertoUser(Client orgin, Client dest);
+		void RegisterUser( void );
 		void NICK( void );
 		void CAP( void );
 		void JOIN( void );
