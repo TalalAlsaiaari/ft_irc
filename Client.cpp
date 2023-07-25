@@ -5,7 +5,7 @@ Client::Client() : registered(false) {}
 
 Client::Client( int fd ) : fd(fd), registered(false) {}
 
-Client::Client( int fd, std::string user_name ) : fd(fd), user_name(user_name), registered(false) {}
+Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name), registered(false) {}
 
 Client::~Client( ) {}
 

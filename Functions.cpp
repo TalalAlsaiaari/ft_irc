@@ -83,7 +83,8 @@ void Functions::RegisterUser( void ) {
 			clients[fd].setUserName("~" + args[0]);
 		args.pop_front();
 		args.at(0);
-		clients[fd].setHostName(args[0]);
+		if (clients[fd].getHostName().empty())
+			clients[fd].setHostName(args[0]);
 		args.pop_front();
 		args.at(0);
 		clients[fd].setServerName(args[0]);

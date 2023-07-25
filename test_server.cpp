@@ -81,15 +81,20 @@ void	ft_listen(int sockfd)
 	return ;
 }
 
-int	ft_new_client(int sockfd)
+int	ft_new_client(int sockfd, std::map<int, Client> &clients)
 {
 	struct sockaddr_storage	new_client_addr;
+	struct sockaddr_in		*new_client_ip;
 	socklen_t				new_client_addr_size;
 	int						new_client;
 
 	new_client_addr_size = sizeof(new_client_addr);
 	new_client = accept(sockfd, (struct sockaddr *)&new_client_addr,
 		&new_client_addr_size);
+	new_client_ip = (struct sockaddr_in *)&new_client_addr;
+	// printf("Client ip: %s\n", *new_client_ip);
+	printf("Client ip: %s\n", inet_ntoa(new_client_ip->sin_addr));
+	clients[new_client] = Client(new_client, inet_ntoa(new_client_ip->sin_addr));
 	if (new_client < 0)
 	{
 		printf("accept: %s. Exiting\n", strerror(errno));
@@ -171,8 +176,8 @@ int	main(int ac, char **av)
 			{
 				if (pfds[i].fd == sockfd)
 				{
-					new_client = ft_new_client(sockfd);
-                    clients[new_client] = Client(new_client);
+					new_client = ft_new_client(sockfd, clients);
+                    // clients[new_client] = Client(new_client);
 					add_to_pfds(&pfds, new_client, &fd_count, &fd_size);
 				}
 				else
