@@ -109,7 +109,24 @@ void Functions::USER( void ) {
 }
 
 void Functions::MODE( void ) {
-
+	// check for user modes, have to check same for channels
+	try {
+		std::map<std::string, Client>::iterator target = nicks.find(args.at(0));
+		if (target == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n");
+		else if (target->second.getFD() != fd)
+			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n");
+		else {
+			try {
+				args.at(1);
+				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args[1] + "\n");
+			} catch (std::exception &e) {
+				ServerMessage(RPL_UMODEIS, target->second.getNick() + " :\n");
+			}
+		}
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n");
+	}
 }
 
 void Functions::PING( void ) {
@@ -132,7 +149,6 @@ void Functions::PART( void ) {
 void Functions::UsertoUser(Client origin, Client dest) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
-	// args.pop_front();
 	message += args.front();
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
@@ -194,11 +210,11 @@ void Functions::QUIT( void ) {
 	if (cli_fd != clients.end())
 		clients.erase(cli_fd);
 	else
-		std::cerr << "no cli fd found\n";
+		std::cerr << "no fd found\n";
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
 	else
-		std::cerr << "no cli nick found\n";
+		std::cerr << "no nick found\n";
 }
 
 // PRIVMSG alexhmball :hey
