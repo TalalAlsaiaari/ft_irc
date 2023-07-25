@@ -1,11 +1,11 @@
 #include "Client.hpp"
 
 
-Client::Client() : registered(false) {}
+Client::Client() : registered(false), pass_registered(false) {}
 
-Client::Client( int fd ) : fd(fd), registered(false) {}
+Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false) {}
 
-Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name), registered(false) {}
+Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name), registered(false), pass_registered(false) {}
 
 Client::~Client( ) {}
 

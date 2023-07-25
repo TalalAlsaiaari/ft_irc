@@ -273,14 +273,16 @@
 //                         ":Unknown MODE flag"
 //                 - Returned by the server to indicate that a MODE
 //                   message was sent with a nickname parameter and that
-//                   the a mode flag sent was not recognized.
-
+//                   the a mode flag sent was not recognized.*/
+#define ERR_UMODEUNKOWNFLAG " 501 "
+/*
 //         502     ERR_USERSDONTMATCH
 //                         ":Cant change mode for other users"
 //                 - Error sent to any user trying to view or change the
-//                   user mode for a user other than themselves.
+//                   user mode for a user other than themselves.*/
+#define ERR_USERSDONTMATCH " 502 "
 
-
+/*
 //         300     RPL_NONE
 //                         Dummy reply number. Not used.
 
@@ -619,6 +621,7 @@
 //                         "<user mode string>"
 //                         - To answer a query about a client's own mode,
 //                           RPL_UMODEIS is sent back.
+#define RPL_UMODEIS " 221 "
 
 //         251     RPL_LUSERCLIENT
 //                         ":There are <integer> users and <integer>
