@@ -37,7 +37,8 @@ void Parser::takeInput( std::string Input, int fd, Client client ) {
 			(this->*command->second)();
 		else
 			ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
-		multi_cmd.pop_front();
+		if (!multi_cmd.empty())
+			multi_cmd.pop_front();
 	}
 }
 
@@ -47,7 +48,6 @@ void Parser::findCmdArgs( void ) {
 
 	args.clear();
 	multi_cmd.clear();
-	// split
 	while (!input.empty()) {
 		if (input[0] == ':' && (pos = input.find_first_of("\r\n")) != input.npos) {
 			args.push_back(input);
@@ -60,22 +60,12 @@ void Parser::findCmdArgs( void ) {
 			input.clear();
 		}
 		if (args.back().empty() || input.empty()) {
-			args.pop_back();
+			if (args.back().empty())
+				args.pop_back();
 			multi_cmd.push_back(args);
 			args.clear();
 		}
 	}
-	// group
-	// while (!args.empty()) {
-	// 	tmp.clear();
-	// 	if (args.back().empty())
-	// 		args.pop_back();
-	// 	while (!args.empty() && !args.back().empty() ) {
-	// 		tmp.push_front(args.back());
-	// 		args.pop_back();
-	// 	}
-	// 	multi_cmd.push_front(tmp);
-	// }
 	for (size_t i = 0; i < multi_cmd.size(); i++) {
 		for (size_t j = 0; j < multi_cmd[i].size(); j++) {
 			std::cout << "|" << multi_cmd[i][j] << "|" << std::endl;
