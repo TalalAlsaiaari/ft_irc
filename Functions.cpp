@@ -29,36 +29,32 @@ void Functions::UserMessage(std::string message) {
 
 // @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
+	std::map<std::string, Client>::iterator it;
+
+	it = nicks.find(nick);
 	if (nick.find_first_of("#&\x03") != nick.npos)
 		ServerMessage(ERR_ERRONEUSNICKNAME, ":" + nick + " erroneus nick name\n");
-	else {
-		try {
-			nicks.at(nick);
-			if (current_client->isRegistered())
-				ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
-			else {
-				ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n");
-				multi_cmd.clear();
-				this->QUIT();
-				throw IrcErrorException("user tried to register with nick already in use\n");
-			}
-		} catch ( std::exception &e ) {
-			UserMessage(" " + nick + " :" + nick + "\n");
-			nicks.erase(current_client->getNick());
-			current_client->setNick(nick);
+	else if (it != nicks.end()) {
+		if (current_client->isRegistered())
+			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
+		else {
+			ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n");
+			multi_cmd.clear();
+			this->QUIT();
+			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
+	} else {
+		UserMessage(" " + nick + " :" + nick + "\n");
+		nicks.erase(current_client->getNick());
+		current_client->setNick(nick);
 	}
 }
 
 void Functions::NICK( void ) {
-	try {
-		if (args.at(0).empty())
-			ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
-		else
-			this->addNick(args[0]);
-	} catch (std::exception &e) {
+	if (args.size() < 1)
 		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
-	}
+	else
+		this->addNick(args[0]);
 }
 
 void Functions::CAP( void ) {
@@ -230,6 +226,7 @@ void Functions::QUIT( void ) {
 		clients.erase(cli_fd);
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
+	throw IrcErrorException("Client has quit\n");
 }
 
 void Functions::WHOIS( void ) {
