@@ -6,7 +6,7 @@
 /*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/26 23:46:37 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/07/26 23:59:28 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Server::Server()
 {
 	this->sockfd = -1;
 	this->new_client = -1;
-	this->fd_size = 1;
+	this->fd_size = 5;
 	this->fd_count = 1;
 	this->nbytes = 0;
 	this->sender_fd = -1;
