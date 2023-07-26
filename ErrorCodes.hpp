@@ -317,22 +317,29 @@
 //                   sent by the server to which the client is connected.
 //                   Replies RPL_UNAWAY and RPL_NOWAWAY are sent when the
 //                   client removes and sets an AWAY message.
-
+*/
 //         311     RPL_WHOISUSER
 //                         "<nick> <user> <host> * :<real name>"
-
+#define RPL_WHOISUSER " 311 "
 //         312     RPL_WHOISSERVER
 //                         "<nick> <server> :<server info>"
-
+#define RPL_WHOISSERVER " 312 "
 //         313     RPL_WHOISOPERATOR
 //                         "<nick> :is an IRC operator"
-
+#define RPL_WHOISOPERATOR " 313 "
 //         317     RPL_WHOISIDLE
 //                         "<nick> <integer> :seconds idle"
 
 //         318     RPL_ENDOFWHOIS
 //                         "<nick> :End of /WHOIS list"
+#define RPL_ENDOFWHOIS " 318 "
 
+#define RPL_WHOISREGNICK " 307 "
+
+#define RPL_WHOISHOST " 378 "
+
+#define RPL_WHOISACTUALLY " 338 "
+/*RPL_WHOISREGNICK (307)
 //         319     RPL_WHOISCHANNELS
 //                         "<nick> :{[@|+]<channel><space>}"
 //                 - Replies 311 - 313, 317 - 319 are all replies

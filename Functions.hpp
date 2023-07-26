@@ -20,6 +20,7 @@
 #include "Client.hpp"
 #include "ErrorCodes.hpp"
 #include "devector.hpp"
+#include "IrcErrorException.hpp"
 #include <fstream>
 // #include "Channel.hpp"
 
@@ -34,9 +35,10 @@ class Functions {
 		devector<devector<std::string> > multi_cmd;
 		devector<std::string> args;
 		std::map<std::string, Client> nicks;
-		// std::map<std::string, Channel> channels;
 		std::map<int, Client> clients;
+		Client *current_client;
 		std::string pass;
+		// std::map<std::string, Channel> channels;
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -56,8 +58,10 @@ class Functions {
 		void PING( void );
 		void PART( void );
 		void PRIVMSG( void );
+		void NOTICE( void );
 		void PASS( void );
 		void MOTD( void );
 		void QUIT( void );
+		void WHOIS( void );
 };
 

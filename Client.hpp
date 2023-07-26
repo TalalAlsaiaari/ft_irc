@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <exception>
 
 
 class Client {
@@ -15,11 +17,14 @@ class Client {
 		std::string host_name;
 		bool registered;
 		bool pass_registered;
+		bool is_operator;
+		bool is_invisible;
 	public:
 		Client( );
 		Client( int fd );
 		Client( int fd , std::string host_name );
 		~Client( );
+		Client &operator=(const Client &other);
 		void setNick( std::string nick );
 		void setRealName( std::string real_name );
 		void setHostName( std::string host_name );
@@ -35,6 +40,10 @@ class Client {
 		void registration( void );
 		bool isPassGood( void );
 		void passGood( void );
+		bool isInvisibile( void );
+		void setInvisibility( bool invis );
+		bool isOperator( void );
+		void setOperator( bool oper );
 };
 
 #endif
