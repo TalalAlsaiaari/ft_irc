@@ -226,6 +226,7 @@ void Functions::QUIT( void ) {
 		clients.erase(cli_fd);
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
+	// close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 
