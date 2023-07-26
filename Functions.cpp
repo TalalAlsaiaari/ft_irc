@@ -34,7 +34,13 @@ void Functions::addNick( std::string nick ) {
 	else {
 		try {
 			nicks.at(nick);
-			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
+			if (clients[fd].isRegistered())
+				ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
+			else {
+				ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n");
+				multi_cmd.clear();
+				this->QUIT();
+			}
 		} catch ( std::exception &e ) {
 			UserMessage(" " + nick + " :" + nick + "\n");
 			nicks.erase(clients[fd].getNick());
@@ -77,24 +83,25 @@ void Functions::JOIN( void ) {
 }
 
 void Functions::RegisterUser( void ) {
+	Client user = clients[fd];
 	try {
 		args.at(0);
-		if (clients[fd].getUserName().empty())
-			clients[fd].setUserName("~" + args[0]);
-		args.pop_front();
-		args.at(0);
-		if (clients[fd].getHostName().empty())
-			clients[fd].setHostName(args[0]);
-		args.pop_front();
-		args.at(0);
-		clients[fd].setServerName(args[0]);
-		args.pop_front();
-		clients[fd].registration();
-		ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
-		this->MOTD();
-		args.at(0);
-		clients[fd].setRealName(args[0]);
-		args.pop_front();
+		if (user.getUserName().empty())
+			user.setUserName("~" + args[0]);
+		args.at(1);
+		if (user.getHostName().empty())
+			user.setHostName(args[0]);
+		args.at(2);
+		user.setServerName(args[0]);
+		user.registration();
+		args.at(3);
+		user.setRealName(args[0]);
+		if (user.getNick().empty())
+			ServerMessage(ERR_NONICKNAMEGIVEN, ":no nick name given\n");
+		else {
+			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(user.getNick(), user.getUserName(), user.getHostName()) + "\n" );
+			this->MOTD();
+		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
 	}
