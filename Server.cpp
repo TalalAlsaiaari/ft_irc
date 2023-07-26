@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/26 23:59:28 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/07/27 00:24:38 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	Server::setPort(char *port)
 void	Server::getAddrInfo(void)
 {
 	struct addrinfo	hints;
-	
+
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
@@ -63,7 +63,7 @@ void	Server::ftSocket(void)
 void	Server::ftSetSockOpt(void)
 {
 	int	yes = 1;
-	
+
 	if ((setsockopt(this->sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)))
 		< 0)
 	{

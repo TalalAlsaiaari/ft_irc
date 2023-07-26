@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/26 23:51:13 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/07/27 00:29:09 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class	Server
 		int				sender_fd;
 		std::string		port;
 		struct addrinfo	*res;
-	
+
 	public:
 		char					buf[256];
 		struct pollfd			*pfds;
@@ -63,7 +63,7 @@ class	Server
 		void					removeClient(int);
 		void					resizePfds(void);
 		void					ftIRC(void);
-		
+
 		Server();
 		~Server();
 };
