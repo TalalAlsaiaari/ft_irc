@@ -49,20 +49,26 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [x] Simple Server with one client _(Talal)_
 	- [x] Server accepting multiple clients _(Talal)_
 	- [x] DNS lookup _(Talal)_
-- [ ] Parse Client Input _(Alex)_
-	- [ ] error handling (wrong command/not enough parmas/etc.) _(Alex)_
+- [x] Parse Client Input _(Alex)_
+	- [x] error handling (wrong command/not enough parmas/etc.) _(Alex)_
 - [ ] Create server operators
-- [ ] Create server functions _(Alex)_
+	- [ ] Create operator functions
+		- [ ] KILL
+- [ ] Create server query / functions _(Alex)_
 	- [ ] CAP registration _(Alex)_
-	- [ ] MOTD (message of the day) _(Alex)_
-	- [ ] PASS
-	- [ ] NICK
-	- [ ] USER
-	- [ ] PING/PONG
-	- [ ] PRIVMSG
-	- [ ] MODE
-	- [ ] WHO/WHOIS
+	- [x] MOTD (message of the day) _(Alex)_
+	- [ ] PASS _(Alex)_
+	- [ ] NICK _(Alex)_
+	- [ ] USER  _(Alex)_
+	- [ ] PING/PONG  _(Alex)_
+	- [ ] PRIVMSG _(Alex)_
+	- [ ] MODE _(Alex)_
+		- [ ] +i {invisible}
+		- [ ] +o {operator}
+	- [ ] WHO/WHOIS _(Alex)_
 	- [ ] QUIT _(Alex)_
+	- [x] NOTICE  _(Alex)_
+	- [ ] OPER
 - [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel

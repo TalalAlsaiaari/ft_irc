@@ -12,6 +12,8 @@ Parser::Parser() {
 	func[std::string("PASS")] = &Parser::PASS;
 	func[std::string("MOTD")] = &Parser::MOTD;
 	func[std::string("QUIT")] = &Parser::QUIT;
+	func[std::string("NOTICE")] = &Parser::NOTICE;
+	func[std::string("WHOIS")] = &Parser::WHOIS;
 }
 
 Parser::~Parser() {}
@@ -20,25 +22,30 @@ void Parser::takeInput( std::string Input, int fd, Client client ) {
 	std::map<std::string, Funcs>::iterator command;
 	std::map<int, Client>::iterator origin;
 
-	this->input = Input;
-	this->fd = fd;
-	this->findCmdArgs();
-
-	origin = clients.find(fd);
-	if (origin == clients.end())
-		clients[fd] = client;
-	while (!multi_cmd.empty() && !multi_cmd.front().empty()) {
-		cmd = multi_cmd.front().front();
-		std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
-		multi_cmd.front().pop_front();
-		args = multi_cmd.front();
-		command = func.find(cmd);
-		if (command != func.end())
-			(this->*command->second)();
-		else
-			ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
-		if (!multi_cmd.empty())
-			multi_cmd.pop_front();
+	try {
+		this->input = Input;
+		this->fd = fd;
+		this->findCmdArgs();
+		origin = clients.find(fd);
+		if (origin == clients.end())
+			clients[fd] = client;
+		current_client = &clients[fd];
+		while (!multi_cmd.empty() && !multi_cmd.front().empty()) {
+			cmd = multi_cmd.front().front();
+			std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
+			multi_cmd.front().pop_front();
+			args = multi_cmd.front();
+			command = func.find(cmd);
+			if (command != func.end())
+				(this->*command->second)();
+			else
+				ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
+			if (!multi_cmd.empty())
+				multi_cmd.pop_front();
+		}
+		nicks[current_client->getNick()] = *current_client;
+	} catch (std::exception &e) {
+		std::cout << "Error: " << e.what();
 	}
 }
 
