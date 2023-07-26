@@ -197,7 +197,7 @@ int	main(int ac, char **av)
 					{
 						std::cout << buf << std::endl;
                         parser.takeInput(buf, sender_fd, clients[sender_fd]);
-						memset(buf, 0, strlen(buf));
+						memset(buf, 0, 256);
 					}
 				}
 			}

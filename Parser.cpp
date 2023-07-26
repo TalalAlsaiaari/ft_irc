@@ -56,22 +56,26 @@ void Parser::findCmdArgs( void ) {
 			args.push_back(input.substr(0, pos));
 			input.erase(0, pos + 1);
 		} else {
-			std::cout << "push clear\n";
 			args.push_back(input);
 			input.clear();
 		}
+		if (args.back().empty() || input.empty()) {
+			args.pop_back();
+			multi_cmd.push_back(args);
+			args.clear();
+		}
 	}
 	// group
-	while (!args.empty()) {
-		tmp.clear();
-		if (args.back().empty())
-			args.pop_back();
-		while (!args.empty() && !args.back().empty() ) {
-			tmp.push_front(args.back());
-			args.pop_back();
-		}
-		multi_cmd.push_front(tmp);
-	}
+	// while (!args.empty()) {
+	// 	tmp.clear();
+	// 	if (args.back().empty())
+	// 		args.pop_back();
+	// 	while (!args.empty() && !args.back().empty() ) {
+	// 		tmp.push_front(args.back());
+	// 		args.pop_back();
+	// 	}
+	// 	multi_cmd.push_front(tmp);
+	// }
 	for (size_t i = 0; i < multi_cmd.size(); i++) {
 		for (size_t j = 0; j < multi_cmd[i].size(); j++) {
 			std::cout << "|" << multi_cmd[i][j] << "|" << std::endl;
