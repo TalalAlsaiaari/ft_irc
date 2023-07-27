@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ballzball <ballzball@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/27 00:24:38 by aball            ###   ########.fr       */
+/*   Updated: 2023/07/27 17:36:12 by ballzball        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	Server::getAddrInfo(void)
 {
 	struct addrinfo	hints;
 
-	memset(&hints, 0, sizeof(hints));
+	std::memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
@@ -185,7 +185,7 @@ void	Server::ftSend(void)
 {
 	std::cout << this->buf << std::endl;
 	this->parser.takeInput(buf, this->sender_fd, this->clients[this->sender_fd]);
-	memset(this->buf, 0, 256);
+	std::memset(this->buf, 0, 256);
 	return ;
 }
 
