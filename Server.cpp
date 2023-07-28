@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ballzball <ballzball@student.42.fr>        +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/27 17:36:12 by ballzball        ###   ########.fr       */
+/*   Updated: 2023/07/28 09:59:01 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ Server::Server()
 	this->fd_size = 5;
 	this->fd_count = 1;
 	this->nbytes = 0;
-	this->sender_fd = -1;
+	this->sender_fd = 0;
 	this->port = "6667";
 	this->pfds = new struct pollfd[this->fd_size];
 }
@@ -40,10 +40,10 @@ void	Server::getAddrInfo(void)
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_protocol = IPPROTO_TCP;
-	if ((getaddrinfo(NULL, &this->port[0], &hints, &this->res)) < 0)
+	if ((getaddrinfo(NULL, &this->port[0], &hints, &this->res)) != 0)
 	{
 		std::cout << "Error with getaddrinfo" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -55,7 +55,7 @@ void	Server::ftSocket(void)
 	if (this->sockfd < 0)
 	{
 		std::cout << "Error with socket" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -68,7 +68,7 @@ void	Server::ftSetSockOpt(void)
 		< 0)
 	{
 		std::cout << "Error with setsockopt" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -78,7 +78,7 @@ void	Server::ftBind(void)
 	if ((bind(this->sockfd, this->res->ai_addr, this->res->ai_addrlen)) < 0)
 	{
 		std::cout << "Error with bind" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -88,7 +88,7 @@ void	Server::ftListen(void)
 	if ((listen(this->sockfd, 10)) < 0)
 	{
 		std::cout << "Error with listen" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -99,7 +99,7 @@ void	Server::ftPoll(void)
 	if (this->poll_count < 0)
 	{
 		std::cout << "Error with poll" << std::endl;
-		exit(1);
+		std::exit(EXIT_FAILURE);
 	}
 	return ;
 }
@@ -117,7 +117,7 @@ void	Server::addNewClient(int index)
 		if (this->new_client < 0)
 		{
 			std::cout << "Error with accept" << std::endl;
-			exit(1);
+			std::exit(EXIT_FAILURE);
 		}
 		std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
 		this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
@@ -172,16 +172,17 @@ void	Server::checkNBytes(int index)
 
 void	Server::removeClient(int index)
 {
-	if (this->nbytes <= 0 && index != 0)
+	if ((this->nbytes <= 0 && index != 0))
 	{
 		close(this->pfds[index].fd);
 		this->pfds[index] = this->pfds[this->fd_count - 1];
 		this->fd_count--;
+		std::cout << "Client is deleted" << std::endl;
 	}
 	return ;
 }
 
-void	Server::ftSend(void)
+void	Server::ftSend()
 {
 	std::cout << this->buf << std::endl;
 	this->parser.takeInput(buf, this->sender_fd, this->clients[this->sender_fd]);
