@@ -6,7 +6,7 @@
 /*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/28 09:59:01 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/07/28 10:55:19 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void	Server::removeClient(int index)
 		close(this->pfds[index].fd);
 		this->pfds[index] = this->pfds[this->fd_count - 1];
 		this->fd_count--;
-		std::cout << "Client is deleted" << std::endl;
+		std::cout << "Client " << this->sender_fd << " deleted" << std::endl;
 	}
 	return ;
 }
