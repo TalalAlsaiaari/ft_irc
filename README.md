@@ -51,9 +51,9 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [x] DNS lookup _(Talal)_
 - [x] Parse Client Input _(Alex)_
 	- [x] error handling (wrong command/not enough parmas/etc.) _(Alex)_
-- [ ] Create server operators
-	- [ ] Create operator functions
-		- [ ] KILL
+- [x] Create server operators _(Talal)_
+	- [x] Create operator functions _(Talal)_
+		- [x] KILL _(Talal)_
 - [ ] Create server query / functions _(Alex)_
 	- [ ] CAP registration _(Alex)_
 	- [x] MOTD (message of the day) _(Alex)_
