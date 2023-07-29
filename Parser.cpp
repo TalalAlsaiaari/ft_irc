@@ -33,6 +33,18 @@ void Parser::takeInput( std::string Input, int fd, Client &client ) {
 	}
 }
 
+void Parser::findPass( void ) {
+	std::string::size_type pos = input.find_first_of("\r\n");
+	if (pos != input.npos) {
+		std::cout << input.substr(0, pos) << std::endl;
+		args.push_back(input.substr(0, pos));
+		input.erase(0, pos + 2);
+		std::cout << input << std::endl;
+		multi_cmd.push_back(args);
+		args.clear();
+	}
+}
+
 void Parser::findCmdArgs( void ) {
 	std::string::size_type pos;
 	devector<std::string> tmp;
@@ -50,7 +62,9 @@ void Parser::findCmdArgs( void ) {
 			args.push_back(input);
 			input.clear();
 		}
-		if (args.back().empty() || input.empty()) {
+		if (makeUpper(args.front()) == "PASS")
+			this->findPass();
+		else if (args.back().empty() || input.empty()) {
 			if (args.back().empty())
 				args.pop_back();
 			multi_cmd.push_back(args);
@@ -65,12 +79,17 @@ void Parser::findCmdArgs( void ) {
 	}
 }
 
+std::string Parser::makeUpper( std::string str) {
+	std::string dest = str;
+	std::transform(str.begin(), str.end(), dest.begin(), toupper);
+	return dest;
+}
+
 void Parser::excecuteCommand( void ) {
 	std::map<std::string, Funcs>::iterator command;
 
 	while (!multi_cmd.empty() && !multi_cmd.front().empty()) {
-		cmd = multi_cmd.front().front();
-		std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
+		cmd = makeUpper(multi_cmd.front().front());
 		multi_cmd.front().pop_front();
 		args = multi_cmd.front();
 		multi_cmd.pop_front();
