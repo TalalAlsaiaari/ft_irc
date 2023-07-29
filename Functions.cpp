@@ -1,7 +1,7 @@
 #include "Functions.hpp"
 
 
-Functions::Functions( ) {
+Functions::Functions( ) : operPass("DamnSon"){
 
 }
 
@@ -245,4 +245,77 @@ void Functions::WHOIS( void ) {
 	} else {
 		ServerMessage(ERR_NONICKNAMEGIVEN, ":need nick name\n");
 	}
+}
+
+void Functions::OPER(void)
+{
+	try
+	{
+		args.at(0);
+		args.at(1);
+		if (args[1] == operPass)
+		{
+			current_client->setOperator(true);
+			ServerMessage(RPL_YOUREOPER, " : you did it\n");//something
+		}
+		else
+			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n");
+	}
+	catch (std::exception &e)
+	{
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+	return ;
+}
+
+void Functions::KILL(void)
+{
+	std::map<std::string, Client>::iterator user;
+	
+	try
+	{
+		args.at(0);
+		args.at(1);
+		user = nicks.find(args[0]);
+		if (!current_client->isOperator())
+			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n");
+		else if (user == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, " :Who dat?\n");
+		else
+		{
+			killMsg(*current_client, user->second);
+			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
+			errMsg(user, args[1]);
+		}
+	}
+	catch (std::exception &e)
+	{
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
+void Functions::killMsg(Client source, Client dest) {
+	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
+	message += " " + cmd + " " + dest.getNick() + " ";
+	args.pop_front();
+	message += args.front() + "\n";
+	std::cout << message << std::endl;
+	send(dest.getFD(), &message[0], message.length(), 0);
+}
+
+void Functions::quitMsg(Client source, std::string msg)
+{
+	std::string mes = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName())
+		+ "Quit :Quit: " + msg;
+	send(source.getFD(), &mes[0], mes.length(), 0);
+	//should be also sent to every user sharing a channel with source
+}
+
+void Functions::errMsg(std::map<std::string, Client>::iterator dest, std::string msg)
+{
+	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
+	send(dest->second.getFD(), &mes[0], mes.length(), 0);
+	close(dest->second.getFD());
+	nicks.erase(dest);
+	throw IrcErrorException(NULL);
 }

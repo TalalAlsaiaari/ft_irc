@@ -14,6 +14,7 @@
 #include "devector.hpp"
 #include "IrcErrorException.hpp"
 #include <fstream>
+#include <unistd.h>
 // #include "Channel.hpp"
 
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
@@ -29,6 +30,7 @@ class Functions {
 		std::map<std::string, Client> nicks;
 		Client *current_client;
 		std::string pass;
+		std::string const operPass;
 		// std::map<std::string, Channel> channels;
 	public:
 		Functions( );
@@ -54,5 +56,10 @@ class Functions {
 		void MOTD( void );
 		void QUIT( void );
 		void WHOIS( void );
+		void OPER(void);
+		void KILL (void);
+		void quitMsg(Client, std::string);
+		void killMsg(Client, Client);
+		void errMsg(std::map<std::string, Client>::iterator, std::string);
 };
 
