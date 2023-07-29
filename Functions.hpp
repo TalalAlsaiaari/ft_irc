@@ -35,14 +35,13 @@ class Functions {
 		devector<devector<std::string> > multi_cmd;
 		devector<std::string> args;
 		std::map<std::string, Client> nicks;
-		std::map<int, Client> clients;
 		Client *current_client;
 		std::string pass;
 		// std::map<std::string, Channel> channels;
 	public:
 		Functions( );
 		virtual ~Functions( );
-		virtual void takeInput( std::string input, int fd, Client client ) = 0;
+		virtual void takeInput( std::string input, int fd, Client &client ) = 0;
 		void setPass( std::string pass );
 		std::string getPass( void ) const;
 		void addNick( std::string nick );

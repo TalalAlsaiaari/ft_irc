@@ -78,21 +78,20 @@ void Functions::JOIN( void ) {
 }
 
 void Functions::RegisterUser( void ) {
-	Client *user = &clients[fd];
 	try {
-		if (user->getUserName().empty())
-			user->setUserName("~" + args.at(0));
-		if (user->getHostName().empty())
-			user->setHostName(args.at(1));
-		user->setServerName(args.at(2));
-		user->registration();
-		user->setRealName(args.at(3));
-		if (user->getNick().empty())
+		if (current_client->getUserName().empty())
+			current_client->setUserName("~" + args.at(0));
+		if (current_client->getHostName().empty())
+			current_client->setHostName(args.at(1));
+		current_client->setServerName(args.at(2));
+		current_client->registration();
+		current_client->setRealName(args.at(3));
+		if (current_client->getNick().empty())
 			ServerMessage(ERR_NONICKNAMEGIVEN, ":no nick name given\n");
 		else {
-			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(user->getNick(), user->getUserName(), user->getHostName()) + "\n" );
+			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + "\n" );
 			this->MOTD();
-			nicks[user->getNick()] = *user;
+			nicks[current_client->getNick()] = *current_client;
 		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
@@ -158,7 +157,7 @@ void Functions::PRIVMSG( void ) {
 		args.at(1);
 		try {
 			//need to send to channels
-			UsertoUser(clients[fd], nicks.at(args[0]));
+			UsertoUser(*current_client, nicks.at(args[0]));
 		} catch (std::exception &e) {
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n");
 		}
@@ -173,7 +172,7 @@ void Functions::NOTICE( void ) {
 		args.at(1);
 		try {
 			//need to send to channels
-			UsertoUser(clients[fd], nicks.at(args[0]));
+			UsertoUser(*current_client, nicks.at(args[0]));
 		} catch (std::exception &e) {
 			// Don't send error back to user
 			std::cout << "NOTICE to " + args[0] + " failed\n";
@@ -216,18 +215,12 @@ void Functions::MOTD( void ) {
 }
 
 void Functions::QUIT( void ) {
-	std::map<int, Client>::iterator cli_fd;
 	std::map<std::string, Client>::iterator cli_nick;
 	std::string nick = current_client->getNick();
-	cli_fd = clients.find(fd);
 	cli_nick = nicks.find(nick);
 
-	if (cli_fd != clients.end())
-		clients.erase(cli_fd);
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
-	// send(fd, "\x1A", 1, MSG_CMSG_CLOEXEC);
-	// close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 

@@ -18,11 +18,11 @@ Parser::Parser() {
 
 Parser::~Parser() {}
 
-void Parser::takeInput( std::string Input, int fd, Client client ) {
+void Parser::takeInput( std::string Input, int fd, Client &client ) {
 	this->input = Input;
 	this->fd = fd;
 	this->findCmdArgs();
-	this->findCurrentClient(client);
+	current_client = &client;
 	try {
 		this->excecuteCommand();
 		nicks[current_client->getNick()] = *current_client;
@@ -63,15 +63,6 @@ void Parser::findCmdArgs( void ) {
 	}
 }
 
-void Parser::findCurrentClient( Client client ) {
-	std::map<int, Client>::iterator origin;
-
-	origin = clients.find(fd);
-	if (origin == clients.end())
-		clients[fd] = client;
-	current_client = &clients[fd];
-}
-
 void Parser::excecuteCommand( void ) {
 	std::map<std::string, Funcs>::iterator command;
 
@@ -80,12 +71,11 @@ void Parser::excecuteCommand( void ) {
 		std::transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
 		multi_cmd.front().pop_front();
 		args = multi_cmd.front();
+		multi_cmd.pop_front();
 		command = func.find(cmd);
 		if (command != func.end())
 			(this->*command->second)();
 		else
 			ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
-		if (!multi_cmd.empty())
-			multi_cmd.pop_front();
 	}
 }
