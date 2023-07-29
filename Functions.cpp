@@ -256,7 +256,7 @@ void Functions::OPER(void)
 		if (args[1] == operPass)
 		{
 			current_client->setOperator(true);
-			ServerMessage(RPL_YOUREOPER, " : you did it\n");//something
+			ServerMessage(RPL_YOUREOPER, " : you did it\n");
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n");
@@ -317,5 +317,5 @@ void Functions::errMsg(std::map<std::string, Client>::iterator dest, std::string
 	send(dest->second.getFD(), &mes[0], mes.length(), 0);
 	close(dest->second.getFD());
 	nicks.erase(dest);
-	throw IrcErrorException(NULL);
+	// throw IrcErrorException(NULL);
 }
