@@ -36,4 +36,5 @@
 #define RPL_MOTD " 372 "
 #define RPL_ENDOFMOTD " 376 "
 #define RPL_UMODEIS " 221 "
-
+#define RPL_YOUREOPER " 381 "
+#define ERR_NOPRIVILEGES " 481 "

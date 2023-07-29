@@ -14,6 +14,8 @@ Parser::Parser() {
 	func[std::string("QUIT")] = &Parser::QUIT;
 	func[std::string("NOTICE")] = &Parser::NOTICE;
 	func[std::string("WHOIS")] = &Parser::WHOIS;
+	func[std::string("OPER")] = &Parser::OPER;
+	func[std::string("KILL")] = &Parser::KILL;
 }
 
 Parser::~Parser() {}
