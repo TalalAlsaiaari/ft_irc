@@ -27,7 +27,6 @@ void Functions::UserMessage(std::string message) {
 	send(fd, &mes[0], mes.length(), 0);
 }
 
-// @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
 	std::map<std::string, Client>::iterator it;
 
@@ -58,10 +57,11 @@ void Functions::NICK( void ) {
 }
 
 void Functions::CAP( void ) {
+	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
 	if (args[0] == "LS")
-		send(fd, "CAP * LS :multi-prefix userhost-in-names\n", strlen("CAP * LS :multi-prefix userhost-in-names\n"), 0);
+		send(fd, &mes[0], mes.length(), 0);
 	if (args[0] == "REQ") {
-		std::string mes = "CAP * ACK " + args[1] + "\n";
+		mes = "CAP * ACK " + args[1] + "\n";
 		send(fd, &mes[0], mes.length(), 0);
 	}
 		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
@@ -91,7 +91,6 @@ void Functions::RegisterUser( void ) {
 		else {
 			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + "\n" );
 			this->MOTD();
-			nicks[current_client->getNick()] = *current_client;
 		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
@@ -143,10 +142,10 @@ void Functions::PART( void ) {
 }
 
 void Functions::UsertoUser(Client origin, Client dest) {
-	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
+	std::string message = ":" + USER_FN(dest.getNick(), dest.getUserName(), dest.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
 	args.pop_front();
-	message += args.front();
+	message += args.front() + "\n";
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
 }

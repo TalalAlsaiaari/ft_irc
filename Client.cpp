@@ -25,6 +25,10 @@ void Client::setNick( std::string nick ) {
 	this->nick = nick;
 }
 
+void Client::setBuff( std::string buff ) {
+	this->buff = buff;
+}
+
 void Client::setRealName( std::string real_name ) {
 	if (!real_name.empty() && real_name[0] == ':')
 		real_name.erase(0, 1);
@@ -61,6 +65,10 @@ std::string Client::getUserName( void ) {
 
 std::string Client::getServerName( void ) {
 	return server_name;
+}
+
+std::string &Client::getBuff( void ) {
+	return buff;
 }
 
 int Client::getFD( void ) {

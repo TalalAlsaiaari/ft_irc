@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ballzball <ballzball@student.42.fr>        +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/28 23:09:58 by ballzball        ###   ########.fr       */
+/*   Updated: 2023/07/29 08:31:46 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,15 @@ void	Server::removeClient(int index)
 
 void	Server::ftSend()
 {
-	std::cout << this->buf << std::endl;
-	this->parser.takeInput(buf, this->sender_fd, this->clients[this->sender_fd]);
+	std::string input;
+
+	this->clients[this->sender_fd].getBuff() += buf;
+	input = this->clients[this->sender_fd].getBuff();
+	if (input.find("\n") != std::string::npos) {
+		std::cout << input << std::endl;
+		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
+		this->clients[this->sender_fd].getBuff().clear();
+	}
 	std::memset(this->buf, 0, 256);
 	return ;
 }
@@ -199,6 +206,7 @@ void	Server::ftIRC(void)
 	this->ftListen();
 	this->pfds[0].fd = this->sockfd;
 	this->pfds[0].events = POLLIN;
+	std::memset(this->buf, 0, 256);
 	while(true)
 	{
 		this->ftPoll();
