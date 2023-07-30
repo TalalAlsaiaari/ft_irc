@@ -55,7 +55,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [x] Create operator functions _(Talal)_
 		- [x] KILL _(Talal)_
 - [ ] Create server query / functions _(Alex)_
-	- [ ] CAP registration _(Alex)_
+	- [x] CAP registration _(Alex)_
 	- [x] MOTD (message of the day) _(Alex)_
 	- [x] PASS _(Alex)_
 	- [x] NICK _(Alex)_
