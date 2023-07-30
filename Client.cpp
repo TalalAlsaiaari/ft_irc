@@ -16,6 +16,8 @@ Client &Client::operator=(const Client &other) {
 	this->host_name = other.host_name;
 	this->registered = other.registered;
 	this->pass_registered = other.pass_registered;
+	this->is_invisible = other.is_invisible;
+	this->is_operator = other.is_operator;
 	return *this;
 }
 

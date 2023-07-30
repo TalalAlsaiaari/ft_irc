@@ -117,6 +117,7 @@ void Functions::USER( void ) {
 
 void Functions::MODE( void ) {
 	// check for user modes, have to check same for channels
+	std::string modes = "+";
 	try {
 		std::map<std::string, Client>::iterator target = nicks.find(args.at(0));
 		if (target == nicks.end())
@@ -128,7 +129,11 @@ void Functions::MODE( void ) {
 				args.at(1);
 				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args[1] + "\n");
 			} catch (std::exception &e) {
-				ServerMessage(RPL_UMODEIS, target->second.getNick() + " :\n");
+				if (target->second.isInvisibile())
+					modes += "i";
+				if (target->second.isOperator())
+					modes += "o";
+				ServerMessage(RPL_UMODEIS, modes + "\n");
 			}
 		}
 	} catch (std::exception &e) {
