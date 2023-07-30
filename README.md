@@ -68,7 +68,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [x] WHOIS _(Alex)_
 	- [x] QUIT _(Alex)_
 	- [x] NOTICE  _(Alex)_
-	- [x] OPER
+	- [x] OPER _(Talal)_
 - [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel
