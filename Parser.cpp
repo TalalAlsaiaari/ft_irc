@@ -53,7 +53,7 @@ void Parser::findCmdArgs( void ) {
 	multi_cmd.clear();
 	while (!input.empty()) {
 		if (input[0] == ':' && (pos = input.find_first_of("\r\n")) != input.npos) {
-			args.push_back(input);
+			args.push_back(input.substr(1, pos - 1));
 			input.erase(0, pos + 1);
 		} else if ((pos = input.find_first_of(" \r\n")) != input.npos) {
 			args.push_back(input.substr(0, pos));
