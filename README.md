@@ -1037,3 +1037,6 @@ more recent documentation for IRC protocol
 
 modern irc docs (very useful)
 [ 13 ] <https://modern.ircdocs.horse/>
+
+sasl registration
+[ 14 ] <https://libera.chat/guides/registration>
