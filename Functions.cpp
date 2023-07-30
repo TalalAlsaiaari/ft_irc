@@ -58,11 +58,15 @@ void Functions::NICK( void ) {
 
 void Functions::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
-	if (args[0] == "LS")
-		send(fd, &mes[0], mes.length(), 0);
-	if (args[0] == "REQ") {
-		mes = "CAP * ACK " + args[1] + "\n";
-		send(fd, &mes[0], mes.length(), 0);
+	try {
+		if (args.at(0) == "LS")
+			send(fd, &mes[0], mes.length(), 0);
+		if (args.at(0) == "REQ") {
+			mes = "CAP * ACK " + args.at(1) + "\n";
+			send(fd, &mes[0], mes.length(), 0);
+		}
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n");
 	}
 		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
 }
@@ -142,7 +146,7 @@ void Functions::PART( void ) {
 }
 
 void Functions::UsertoUser(Client origin, Client dest) {
-	std::string message = ":" + USER_FN(dest.getNick(), dest.getUserName(), dest.getHostName());
+	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
 	args.pop_front();
 	message += args.front() + "\n";
@@ -220,6 +224,7 @@ void Functions::QUIT( void ) {
 
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
+	close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 
@@ -271,7 +276,7 @@ void Functions::OPER(void)
 void Functions::KILL(void)
 {
 	std::map<std::string, Client>::iterator user;
-	
+
 	try
 	{
 		args.at(0);
