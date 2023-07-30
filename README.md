@@ -44,7 +44,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # TO DO
 
-- [x] Make awesome README
+- [x] Make awesome README _(Alex)_
 - [x] Create Server _(Talal)_
 	- [x] Simple Server with one client _(Talal)_
 	- [x] Server accepting multiple clients _(Talal)_
@@ -54,7 +54,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 - [x] Create server operators _(Talal)_
 	- [x] Create operator functions _(Talal)_
 		- [x] KILL _(Talal)_
-- [ ] Create server query / functions _(Alex)_
+- [x] Create server query / functions _(Alex)_
 	- [x] CAP registration _(Alex)_
 	- [x] MOTD (message of the day) _(Alex)_
 	- [x] PASS _(Alex)_
@@ -62,9 +62,9 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 	- [x] USER  _(Alex)_
 	- [x] PING/PONG  _(Alex)_
 	- [x] PRIVMSG _(Alex)_
-	- [ ] MODE _(Alex)_
-		- [ ] +i {invisible}
-		- [ ] +o {operator}
+	- [x] MODE _(Alex)_
+		- [x] +i {invisible}
+		- [x] +o {operator}
 	- [x] WHOIS _(Alex)_
 	- [x] QUIT _(Alex)_
 	- [x] NOTICE  _(Alex)_
