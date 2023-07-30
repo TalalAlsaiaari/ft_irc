@@ -57,18 +57,18 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 - [ ] Create server query / functions _(Alex)_
 	- [ ] CAP registration _(Alex)_
 	- [x] MOTD (message of the day) _(Alex)_
-	- [ ] PASS _(Alex)_
-	- [ ] NICK _(Alex)_
-	- [ ] USER  _(Alex)_
-	- [ ] PING/PONG  _(Alex)_
-	- [ ] PRIVMSG _(Alex)_
+	- [x] PASS _(Alex)_
+	- [x] NICK _(Alex)_
+	- [x] USER  _(Alex)_
+	- [x] PING/PONG  _(Alex)_
+	- [x] PRIVMSG _(Alex)_
 	- [ ] MODE _(Alex)_
 		- [ ] +i {invisible}
 		- [ ] +o {operator}
-	- [ ] WHO/WHOIS _(Alex)_
-	- [ ] QUIT _(Alex)_
+	- [x] WHOIS _(Alex)_
+	- [x] QUIT _(Alex)_
 	- [x] NOTICE  _(Alex)_
-	- [ ] OPER
+	- [x] OPER
 - [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel

@@ -43,6 +43,8 @@ void Functions::addNick( std::string nick ) {
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 	} else {
+		if (nick.length() > 16)
+			nick = nick.substr(0, 16);
 		UserMessage(" " + nick + " :" + nick + "\n");
 		nicks.erase(current_client->getNick());
 		current_client->setNick(nick);
@@ -68,15 +70,19 @@ void Functions::CAP( void ) {
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n");
 	}
-		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
+}
+
+void Functions::ConnectionMessage( void ) {
+	ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + "\n" );
+	ServerMessage(RPL_YOURHOST, " :Your host is " + current_client->getHostName() + "\n");
+	ServerMessage(RPL_CREATED, " :This server was created some time recently\n");
+	ServerMessage(RPL_MYINFO, current_client->getHostName() + "\n");
+	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n");
 }
 
 void Functions::JOIN( void ) {
 	if (current_client->isRegistered()) {
-		if (args[0] == ":")
-			ServerMessage(ERR_NEEDMOREPARAMS, cmd + " :Not enough parameters\n");
-		else
-			ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
+		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
 	} else
 		ServerMessage(ERR_NOTREGISTERED, ":you must register first\n");
 }
@@ -93,7 +99,7 @@ void Functions::RegisterUser( void ) {
 		if (current_client->getNick().empty())
 			ServerMessage(ERR_NONICKNAMEGIVEN, ":no nick name given\n");
 		else {
-			ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + "\n" );
+			this->ConnectionMessage();
 			this->MOTD();
 		}
 	} catch (std::exception &e) {
@@ -149,6 +155,7 @@ void Functions::UsertoUser(Client origin, Client dest) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
 	args.pop_front();
+	message += ":";
 	message += args.front() + "\n";
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
