@@ -29,17 +29,15 @@ void Parser::takeInput( std::string Input, int fd, Client &client ) {
 		this->excecuteCommand();
 		nicks[current_client->getNick()] = *current_client;
 	} catch (std::exception &e) {
-		std::cout << "Error: " << e.what();
+		std::cout << "Exception caught: " << e.what();
 	}
 }
 
 void Parser::findPass( void ) {
 	std::string::size_type pos = input.find_first_of("\r\n");
 	if (pos != input.npos) {
-		std::cout << input.substr(0, pos) << std::endl;
 		args.push_back(input.substr(0, pos));
 		input.erase(0, pos + 2);
-		std::cout << input << std::endl;
 		multi_cmd.push_back(args);
 		args.clear();
 	}
