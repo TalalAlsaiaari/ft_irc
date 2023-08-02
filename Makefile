@@ -1,12 +1,12 @@
 NAME=ircserv
 
-SRCS = test_server.cpp Client.cpp Parser.cpp Functions.cpp
+SRCS = main.cpp Client.cpp Parser.cpp Functions.cpp Server.cpp IrcErrorException.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
 CC = c++
 
-CXXFLAGS = -g -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CXXFLAGS = -g -Wall -Wextra -Werror -std=c++98
 
 RM = rm -fr
 
