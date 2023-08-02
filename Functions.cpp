@@ -1,7 +1,7 @@
 #include "Functions.hpp"
 
 
-Functions::Functions( ) {
+Functions::Functions( ) : operPass("DamnSon"){
 
 }
 
@@ -18,113 +18,138 @@ std::string Functions::getPass( void ) const {
 }
 
 void Functions::ServerMessage(std::string error, std::string message) {
-	std::string mes = ":" + clients[fd].getServerName() + error + clients[fd].getNick() + " " + message;
+	std::string mes = ":" + current_client->getServerName() + error + current_client->getNick() + " " + message;
 	send(fd, &mes[0], mes.length(), 0);
 }
 
 void Functions::UserMessage(std::string message) {
-	std::string mes = ":" + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + " " + cmd + " " + message;
+	std::string mes = ":" + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + " " + cmd + " " + message;
 	send(fd, &mes[0], mes.length(), 0);
 }
 
-// @time=2023-07-18T17:33:56.858Z :aballz!~user@5.195.225.158 NICK :ballers
 void Functions::addNick( std::string nick ) {
+	std::map<std::string, Client>::iterator it;
+
+	it = nicks.find(nick);
 	if (nick.find_first_of("#&\x03") != nick.npos)
 		ServerMessage(ERR_ERRONEUSNICKNAME, ":" + nick + " erroneus nick name\n");
-	else {
-		try {
-			nicks.at(nick);
+	else if (it != nicks.end()) {
+		if (current_client->isRegistered())
 			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n");
-		} catch ( std::exception &e ) {
-			UserMessage(" " + nick + " :" + nick + "\n");
-			nicks.erase(clients[fd].getNick());
-			clients[fd].setNick(nick);
-			nicks[nick] = clients[fd];
+		else {
+			ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n");
+			multi_cmd.clear();
+			this->QUIT();
+			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
+	} else {
+		if (nick.length() > 16)
+			nick = nick.substr(0, 16);
+		UserMessage(" " + nick + " :" + nick + "\n");
+		nicks.erase(current_client->getNick());
+		current_client->setNick(nick);
 	}
 }
 
 void Functions::NICK( void ) {
-	try {
-		args.at(0);
-		if (args[0].empty())
-			ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
-		else
-			this->addNick(args[0]);
-	} catch (std::exception &e) {
+	if (args.size() < 1)
 		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n");
-	}
+	else
+		this->addNick(args[0]);
 }
 
 void Functions::CAP( void ) {
-	if (args[0] == "LS")
-		send(fd, "CAP * LS :multi-prefix userhost-in-names\n", strlen("CAP * LS :multi-prefix userhost-in-names\n"), 0);
-	if (args[0] == "REQ") {
-		std::string mes = "CAP * ACK " + args[1] + "\n";
-		send(fd, &mes[0], mes.length(), 0);
+	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
+	try {
+		if (args.at(0) == "LS")
+			send(fd, &mes[0], mes.length(), 0);
+		if (args.at(0) == "REQ") {
+			mes = "CAP * ACK " + args.at(1) + "\n";
+			send(fd, &mes[0], mes.length(), 0);
+		}
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n");
 	}
-		// send(fd, "CAP * ACK multi-prefix\n", strlen("CAP * ACK multi-prefix\n"), 0);
+}
+
+void Functions::ConnectionMessage( void ) {
+	ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(current_client->getNick(), current_client->getUserName(), current_client->getHostName()) + "\n" );
+	ServerMessage(RPL_YOURHOST, " :Your host is " + current_client->getHostName() + "\n");
+	ServerMessage(RPL_CREATED, " :This server was created some time recently\n");
+	ServerMessage(RPL_MYINFO, current_client->getHostName() + "\n");
+	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n");
 }
 
 void Functions::JOIN( void ) {
-	if (clients[fd].isRegistered()) {
-		if (args[0] == ":")
-			ServerMessage(ERR_NEEDMOREPARAMS, cmd + " :Not enough parameters\n");
-		else
-			ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
+	if (current_client->isRegistered()) {
+		ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
 	} else
 		ServerMessage(ERR_NOTREGISTERED, ":you must register first\n");
-		
-	
 }
 
 void Functions::RegisterUser( void ) {
 	try {
-		args.at(0);
-		if (clients[fd].getUserName().empty())
-			clients[fd].setUserName("~" + args[0]);
-		args.pop_front();
-		args.at(0);
-		if (clients[fd].getHostName().empty())
-			clients[fd].setHostName(args[0]);
-		args.pop_front();
-		args.at(0);
-		clients[fd].setServerName(args[0]);
-		args.pop_front();
-		clients[fd].registration();
-		ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(clients[fd].getNick(), clients[fd].getUserName(), clients[fd].getHostName()) + "\n" );
-		this->MOTD();
-		args.at(0);
-		clients[fd].setRealName(args[0]);
-		args.pop_front();
+		if (current_client->getUserName().empty())
+			current_client->setUserName("~" + args.at(0));
+		if (current_client->getHostName().empty())
+			current_client->setHostName(args.at(1));
+		current_client->setServerName(args.at(2));
+		current_client->registration();
+		current_client->setRealName(args.at(3));
+		if (current_client->getNick().empty())
+			ServerMessage(ERR_NONICKNAMEGIVEN, ":no nick name given\n");
+		else {
+			this->ConnectionMessage();
+			this->MOTD();
+		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
 	}
 }
 
 void Functions::USER( void ) {
-	if (!clients[fd].isRegistered()) {
-		if (clients[fd].isPassGood())
+	if (!current_client->isRegistered()) {
+		if (current_client->isPassGood())
 			this->RegisterUser();
 	} else
 		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n");
 }
 
 void Functions::MODE( void ) {
-
+	// check for user modes, have to check same for channels
+	std::string modes = "+";
+	try {
+		std::map<std::string, Client>::iterator target = nicks.find(args.at(0));
+		if (target == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n");
+		else if (target->second.getFD() != fd)
+			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n");
+		else {
+			try {
+				args.at(1);
+				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args[1] + "\n");
+			} catch (std::exception &e) {
+				if (target->second.isInvisibile())
+					modes += "i";
+				if (target->second.isOperator())
+					modes += "o";
+				ServerMessage(RPL_UMODEIS, modes + "\n");
+			}
+		}
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n");
+	}
 }
 
 void Functions::PING( void ) {
-	std::string pong = ":" + clients[fd].getServerName() + " PONG " + clients[fd].getServerName() + " :" + clients[fd].getServerName() + "\n";
+	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
 	send(fd, &pong[0], pong.length(), 0);
 }
 
 void Functions::PART( void ) {
 	try {
-		//need to check for multiple channels in args
-		args.at(0);
 		//need to check user is in the channel / channel exists
-		UserMessage(args[0] + "\n");
+		UserMessage(args.at(0) + "\n");
 		// ServerMessage(ERR_NOSUCHCHANNEL, args[0] + "\n");
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
@@ -134,8 +159,9 @@ void Functions::PART( void ) {
 void Functions::UsertoUser(Client origin, Client dest) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
-	// args.pop_front();
-	message += args.front();
+	args.pop_front();
+	message += ":";
+	message += args.front() + "\n";
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
 }
@@ -146,8 +172,7 @@ void Functions::PRIVMSG( void ) {
 		args.at(1);
 		try {
 			//need to send to channels
-			nicks.at(args[0]);
-			UsertoUser(clients[fd], nicks[args[0]]);
+			UsertoUser(*current_client, nicks.at(args[0]));
 		} catch (std::exception &e) {
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n");
 		}
@@ -156,14 +181,32 @@ void Functions::PRIVMSG( void ) {
 	}
 }
 
+void Functions::NOTICE( void ) {
+	try {
+		args.at(0);
+		args.at(1);
+		try {
+			//need to send to channels
+			UsertoUser(*current_client, nicks.at(args[0]));
+		} catch (std::exception &e) {
+			// Don't send error back to user
+			std::cout << "NOTICE to " + args[0] + " failed\n";
+		}
+	} catch ( std::exception &e ) {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
 void Functions::PASS( void ) {
-	if (!clients[fd].isPassGood()) {
+	if (!current_client->isPassGood()) {
 		try {
 			args.at(0);
 			if (args[0] == pass)
-				clients[fd].passGood();
-			else
-				ServerMessage(ERR_PASSWDMISMATCH, ":password doesn't match\n");
+				current_client->passGood();
+			else {
+				ServerMessage(ERR_PASSWDMISMATCH, "04 :password doesn't match\n");
+				multi_cmd.clear();
+			}
 		} catch (std::exception &e) {
 			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n");
 		}
@@ -187,25 +230,109 @@ void Functions::MOTD( void ) {
 }
 
 void Functions::QUIT( void ) {
-	std::map<int, Client>::iterator cli_fd;
 	std::map<std::string, Client>::iterator cli_nick;
-	std::string nick = clients[fd].getNick();
-	cli_fd = clients.find(fd);
+	std::string nick = current_client->getNick();
 	cli_nick = nicks.find(nick);
 
-	if (cli_fd != clients.end())
-		clients.erase(cli_fd);
-	else
-		std::cerr << "no cli fd found\n";
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
-	else
-		std::cerr << "no cli nick found\n";
+	close(fd);
+	throw IrcErrorException("Client has quit\n");
 }
 
-// PRIVMSG alexhmball :hey
-// :alexandraballer!~user@5.195.225.158 PRIVMSG alexhmball :hey
+void Functions::WHOIS( void ) {
+	std::map<std::string, Client>::iterator user;
+	std::string who = args.front();
 
-// NICK aballer
-//      user_name   host_name        server_name      :real_name
-// USER    user      user        host.docker.internal :Unknown
+	if (!who.empty()) {
+		args.pop_front();
+		user = nicks.find(who);
+		if (user != nicks.end()) {
+			// send info, maybe restirct info if user invisible
+			who += " " + user->second.getUserName() + " " + user->second.getHostName() + " * :" + user->second.getRealName();
+			ServerMessage(RPL_WHOISUSER, who + "\n");
+			if (user->second.isOperator())
+				ServerMessage(RPL_WHOISOPERATOR, user->second.getNick() + " :is a local operator\n");
+			ServerMessage(RPL_WHOISSERVER, user->second.getNick() + " " + user->second.getServerName() + " :ft_ircserv\n");
+			ServerMessage(RPL_WHOISACTUALLY, user->second.getNick() + " " + user->second.getHostName() + " :actually using host\n");
+			ServerMessage(RPL_ENDOFWHOIS, ":end of WHOIS\n");
+		} else {
+			ServerMessage(ERR_NOSUCHNICK, ":nobody here by that name\n");
+		}
+	} else {
+		ServerMessage(ERR_NONICKNAMEGIVEN, ":need nick name\n");
+	}
+}
+
+void Functions::OPER(void)
+{
+	try
+	{
+		args.at(0);
+		args.at(1);
+		if (args[1] == operPass)
+		{
+			current_client->setOperator(true);
+			ServerMessage(RPL_YOUREOPER, " : you did it\n");
+		}
+		else
+			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n");
+	}
+	catch (std::exception &e)
+	{
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+	return ;
+}
+
+void Functions::KILL(void)
+{
+	std::map<std::string, Client>::iterator user;
+
+	try
+	{
+		args.at(0);
+		args.at(1);
+		user = nicks.find(args[0]);
+		if (!current_client->isOperator())
+			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n");
+		else if (user == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, " :Who dat?\n");
+		else
+		{
+			killMsg(*current_client, user->second);
+			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
+			errMsg(user, args[1]);
+		}
+	}
+	catch (std::exception &e)
+	{
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
+	}
+}
+
+void Functions::killMsg(Client source, Client dest) {
+	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
+	message += " " + cmd + " " + dest.getNick() + " ";
+	args.pop_front();
+	message += args.front() + "\n";
+	std::cout << message << std::endl;
+	send(dest.getFD(), &message[0], message.length(), 0);
+}
+
+void Functions::quitMsg(Client source, std::string msg)
+{
+	std::string mes = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName())
+		+ "Quit :Quit: " + msg;
+	send(source.getFD(), &mes[0], mes.length(), 0);
+	//should be also sent to every user sharing a channel with source
+}
+
+void Functions::errMsg(std::map<std::string, Client>::iterator dest, std::string msg)
+{
+	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
+	send(dest->second.getFD(), &mes[0], mes.length(), 0);
+	close(dest->second.getFD());
+	nicks.erase(dest);
+	// throw IrcErrorException(NULL);
+}

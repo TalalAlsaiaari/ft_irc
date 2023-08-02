@@ -44,25 +44,31 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # TO DO
 
-- [x] Make awesome README
+- [x] Make awesome README _(Alex)_
 - [x] Create Server _(Talal)_
 	- [x] Simple Server with one client _(Talal)_
 	- [x] Server accepting multiple clients _(Talal)_
 	- [x] DNS lookup _(Talal)_
-- [ ] Parse Client Input _(Alex)_
-	- [ ] error handling (wrong command/not enough parmas/etc.) _(Alex)_
-- [ ] Create server operators
-- [ ] Create server functions _(Alex)_
-	- [ ] CAP registration _(Alex)_
-	- [ ] MOTD (message of the day) _(Alex)_
-	- [ ] PASS
-	- [ ] NICK
-	- [ ] USER
-	- [ ] PING/PONG
-	- [ ] PRIVMSG
-	- [ ] MODE
-	- [ ] WHO/WHOIS
-	- [ ] QUIT _(Alex)_
+- [x] Parse Client Input _(Alex)_
+	- [x] error handling (wrong command/not enough parmas/etc.) _(Alex)_
+- [x] Create server operators _(Talal)_
+	- [x] Create operator functions _(Talal)_
+		- [x] KILL _(Talal)_
+- [x] Create server query / functions _(Alex)_
+	- [x] CAP registration _(Alex)_
+	- [x] MOTD (message of the day) _(Alex)_
+	- [x] PASS _(Alex)_
+	- [x] NICK _(Alex)_
+	- [x] USER  _(Alex)_
+	- [x] PING/PONG  _(Alex)_
+	- [x] PRIVMSG _(Alex)_
+	- [x] MODE _(Alex)_
+		- [x] +i {invisible}
+		- [x] +o {operator}
+	- [x] WHOIS _(Alex)_
+	- [x] QUIT _(Alex)_
+	- [x] NOTICE  _(Alex)_
+	- [x] OPER _(Talal)_
 - [ ] create channels _(Nour)_
 	- [ ] create channel operators
 	- [ ] forward channel messages to all clients in channel
@@ -1031,3 +1037,6 @@ more recent documentation for IRC protocol
 
 modern irc docs (very useful)
 [ 13 ] <https://modern.ircdocs.horse/>
+
+sasl registration
+[ 14 ] <https://libera.chat/guides/registration>
