@@ -74,6 +74,8 @@ void Functions::JOIN( void ) {
 			ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :No such channel\n");
 	} else
 		ServerMessage(ERR_NOTREGISTERED, ":you must register first\n");
+		
+	
 }
 
 void Functions::RegisterUser( void ) {
