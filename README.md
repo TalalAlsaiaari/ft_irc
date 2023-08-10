@@ -44,10 +44,10 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # Code Flow
 
-<p align="center">
+
 <img width="500" alt="general flow" src="general.png">
 <img width="500" alt="parsing flow" src="parsing.png">
-</p>
+
 
 # TO DO
 
