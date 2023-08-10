@@ -44,6 +44,9 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # Code Flow
 
+General                    |  Parsing
+:-------------------------:|:-------------------------:
+![general](general.png)    |  ![parsing](parsing.png)
 
 <img width="500" alt="general flow" src="general.png">
 <img width="500" alt="parsing flow" src="parsing.png">
