@@ -42,6 +42,11 @@ They are a way to speak to other programs using standard UNIX file descriptors. 
 I/O. File descriptors are an integer associated with an open file, but that file can be a network connection, a FIFO, a pipe, a terminal, a real on-the-disk file, or just about
 anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
+# Code Flow
+
+![server](server.png)
+![parsing](parsing.png)
+
 # TO DO
 
 - [x] Make awesome README
