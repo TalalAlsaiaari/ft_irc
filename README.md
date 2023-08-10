@@ -44,7 +44,7 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # Code Flow
 
-![server](server.png)
+![server](general.png)
 ![parsing](parsing.png)
 
 # TO DO
