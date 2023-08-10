@@ -44,8 +44,10 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # Code Flow
 
-![server](general.png)
-![parsing](parsing.png)
+<p align="center">
+<img width="500" alt="general flow" src="general.png">
+<img width="500" alt="parsing flow" src="parsing.png">
+</p>
 
 # TO DO
 
