@@ -48,10 +48,10 @@ public:
 
 	// Get a maps of all channel members, as well as a list of invited clients, 
 	// all operators and banned clients
-    const std::map<std::string, Client*>&	getMembers() const;
-	const std::map<std::string, Client*>&	getInvited() const;
-    const std::map<std::string, Client*>&	getOperators() const;
-	const std::map<std::string, Client*>&	getBanned() const;
+    const std::map<std::string, Client>&	getMembers() const;
+	const std::map<std::string, Client>&	getInvited() const;
+    const std::map<std::string, Client>&	getOperators() const;
+	const std::map<std::string, Client>&	getBanned() const;
 
 
 /* Setters */
