@@ -39,7 +39,8 @@ void Functions::addNick( std::string nick ) {
 		else {
 			ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n");
 			multi_cmd.clear();
-			this->QUIT();
+			// this->QUIT();
+			close(fd);
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 	} else {
@@ -664,8 +665,10 @@ void Functions::QUIT( void ) {
 
 void Functions::WHOIS( void ) {
 	std::map<std::string, Client>::iterator user;
-	std::string who = args.front();
+	std::string who;
 
+	if (args.size() >= 1)
+		who = args.front();
 	if (!who.empty()) {
 		args.pop_front();
 		user = nicks.find(who);
@@ -688,10 +691,8 @@ void Functions::WHOIS( void ) {
 
 void Functions::OPER(void)
 {
-	try
+	if (args.size() >= 2)
 	{
-		args.at(0);
-		args.at(1);
 		if (args[1] == operPass)
 		{
 			current_client->setOperator(true);
@@ -699,9 +700,7 @@ void Functions::OPER(void)
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n");
-	}
-	catch (std::exception &e)
-	{
+	} else {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
 	}
 	return ;
@@ -711,10 +710,7 @@ void Functions::KILL(void)
 {
 	std::map<std::string, Client>::iterator user;
 
-	try
-	{
-		args.at(0);
-		args.at(1);
+	if (args.size() >= 2) {
 		user = nicks.find(args[0]);
 		if (!current_client->isOperator())
 			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n");
@@ -726,9 +722,7 @@ void Functions::KILL(void)
 			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
 		}
-	}
-	catch (std::exception &e)
-	{
+	} else {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n");
 	}
 }
@@ -756,5 +750,5 @@ void Functions::errMsg(std::map<std::string, Client>::iterator dest, std::string
 	send(dest->second.getFD(), &mes[0], mes.length(), 0);
 	close(dest->second.getFD());
 	nicks.erase(dest);
-	// throw IrcErrorException(NULL);
+	throw IrcErrorException(NULL);
 }
