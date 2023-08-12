@@ -113,7 +113,7 @@ void Functions::removeChannel(const std::string& channelName) {
     }
 }
 
-void Functions::JOIN(Client* client, const std::string& channelName, const std::string& password = "")
+void Functions::JOIN(void)
 {
 	//current_client = person sending message
 	// cmd = command like NICK JOIN

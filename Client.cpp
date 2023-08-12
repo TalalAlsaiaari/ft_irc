@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Channel.hpp"
 
 
 Client::Client() : registered(false), pass_registered(false), is_operator(false), 

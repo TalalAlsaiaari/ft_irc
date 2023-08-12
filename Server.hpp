@@ -32,9 +32,7 @@
 class	Client;
 
 class	Server
-{
-	typedef std::vector<Channel *>::iterator    channel_iterator;
-	
+{	
 	private:
 		int				sockfd;
 		int				new_client;
@@ -69,8 +67,6 @@ class	Server
 		void					resizePfds(void);
 		void					ftIRC(void);
 		
-		// // Method to get the channel from this server
-		// const std::map<std::string, Channel*>&	getAllChannels();
 
 		Server();
 		~Server();

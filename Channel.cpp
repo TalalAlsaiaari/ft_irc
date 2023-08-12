@@ -1,4 +1,5 @@
-#include "Chsnnel.hpp"
+#include "Channel.hpp"
+#include "Client.hpp"
 
 
 /* Constructor and Destructor */
