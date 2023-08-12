@@ -1,6 +1,4 @@
 #include "Functions.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
 
 
 Functions::Functions( ) : operPass("DamnSon"){
@@ -83,8 +81,28 @@ void Functions::ConnectionMessage( void ) {
 	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n");
 }
 
-void Functions::JOIN( void )
-{
+void Functions::JOIN( void ) {
+	size_t hash_pos;
+	std::string chanName;
+	std::map<std::string, Channel *>::iterator chan;
+
+	if (args.size() >= 1) {
+		chanName = args[0];
+		hash_pos = chanName.find('#');
+		chan = channels.find(chanName);
+		if (hash_pos == 0) {
+			if (chan == channels.end()) {
+				Channel new_chan = Channel(chanName, *current_client);
+				channels[chanName] = &new_chan;
+			}
+			else
+				chan->second->addMember(*current_client);
+		} else {
+			ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n");
+		}
+	} else {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n");
+	}
 }
 
 // void Functions::PART( void ) {

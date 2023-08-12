@@ -17,8 +17,6 @@
 #include <unistd.h>
 #include "Channel.hpp"
 
-#define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
-
 class Functions {
 	protected:
 		int fd;
@@ -30,7 +28,7 @@ class Functions {
 		Client *current_client;
 		std::string pass;
 		std::string const operPass;
-		std::map<std::string, Channel &> channels;
+		std::map<std::string, Channel *> channels;
 	public:
 		Functions( );
 		virtual ~Functions( );

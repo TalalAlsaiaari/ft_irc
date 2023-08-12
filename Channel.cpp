@@ -3,74 +3,116 @@
 Channel::Channel() {
 }
 
-Channel::Channel( std::string name, std::string pass, Client &creator ) {
+Channel::Channel( std::string name, Client &creator ) {
     this->name = name;
-    this->pass = pass;
+    // this->pass = pass;
+    this->topic = "";
+    this->limit = 0;
+    this->inviteOnly = false;
+    this->hasLimit = false;
     operators[creator.getNick()] = &creator;
+    UserMessage("JOIN", name + " * :me\n", creator);
+    whoIsChan(creator);
+    // ServerMessage(RPL_TOPIC, ":no topic\n", creator);
+    // ServerMessage(RPL_NAMREPLY, "@ " + name + " :@" + creator.getNick() + "\n", creator);
+    // ServerMessage(RPL_ENDOFNAMES, name + " :END of /NAMES list\n", creator);
 }
 
 Channel::~Channel() {
 
 }
+//
+// std::string Channel::getName( void ) {
+//     return name;
+// }
+//
+// std::string Channel::getTopic( void ) {
+//     return topic;
+// }
 
-std::string Channel::getName( void ) {
-    return name;
-}
+// std::string Channel::getPass( void ) {
+//     return pass;
+// }
 
-std::string Channel::getTopic( void ) {
-    return topic;
-}
-
-std::string Channel::getPass( void ) {
-    return pass;
-}
-
-size_t Channel::getLimit( void ) {
-    return limit;
-}
+// size_t Channel::getLimit( void ) {
+//     return limit;
+// }
 
 void Channel::addMember( Client &add ) {
-
-    if (members.find(add.getNick()) == members.end())
+    // std::string message = "you're in bitch\n";
+    if (!isInChan(add.getNick())) {
         members[add.getNick()] = &add;
-    else if (operators.find(add.getNick()) == operators.end())
-        members[add.getNick()] = &add;
+        // send join message
+        // send(add.getFD(), &message[0], message.length(), 0);
+        whoIsChan(add);
+        echoToAll(add, "JOIN", "");
+    }
     else
         std::cout << "already in channel\n";
 }
 
-void Channel::makeChanOp( Client &, Client & ) {
+void Channel::echoToAll(Client &client, std::string cmd, std::string trailing) {
+    std::string client_info = USER_FN(client.getNick(), client.getUserName(), client.getHostName());
+    std::string message = ":" + client_info + " " + cmd + " " + name;
 
+    if (!trailing.empty())
+        message += " " + trailing;
+    message += "\n";
+    for (iter it = members.begin(); it != members.end(); it++) {
+        if (it->second->getNick() != client.getNick())
+            send(it->second->getFD(), &message[0], message.length(), 0);
+    }
+    for (iter it = operators.begin(); it != operators.end(); it++) {
+        if (it->second->getNick() != client.getNick())
+            send(it->second->getFD(), &message[0], message.length(), 0);
+    }
 }
 
-void Channel::invite( Client &, Client & ) {
-
-}
-
-void Channel::removeMember( Client & ) {
-
-}
-
-void Channel::setTopic( std::string, Client & ) {
-
-}
+// void Channel::makeChanOp( Client &, Client & ) {
+//
+// }
+//
+// void Channel::invite( Client &, Client & ) {
+//
+// }
+//
+// void Channel::removeMember( Client & ) {
+//
+// }
+//
+// void Channel::setTopic( std::string, Client & ) {
+//
+// }
 
 bool Channel::isInChan( std::string Nick ) {
-    std::map<std::string, Client *>::iterator member;
-    std::map<std::string, Client *>::iterator oper;
+    iter member;
+    iter oper;
 
-    member = members.find(Nick);
     oper = operators.find(Nick);
+    member = members.find(Nick);
     if (member == members.end() && oper == operators.end())
         return false;
     return true;
 }
 
 bool Channel::isInvited( std::string Nick ) {
-    std::map<std::string, Client *>::iterator invite;
+    iter invite;
 
     invite = invited.find(Nick);
     if (invite == invited.end())
         return false;
     return true;
+}
+
+void Channel::whoIsChan( Client &client ) {
+    std::string who = "@ " + name + " :";
+    for (iter it = operators.begin(); it != operators.end(); it++) {
+            who +=  "@" + it->second->getNick() + " ";
+    }
+    for (iter it = members.begin(); it != members.end(); it++) {
+            who += it->second->getNick() + " ";
+    }
+    who += "\n";
+    ServerMessage(RPL_NAMREPLY, who, client);
+    ServerMessage(RPL_ENDOFNAMES, name + " :END of /NAMES list\n", client);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ballzball <ballzball@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/28 09:59:09 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/13 00:05:16 by ballzball        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@
 #include <map>
 #include "Parser.hpp"
 
-class	Client;
-
 class	Server
-{	
+{
 	private:
 		int				sockfd;
 		int				new_client;
@@ -42,7 +40,7 @@ class	Server
 		int				sender_fd;
 		std::string		port;
 		struct addrinfo	*res;
-		
+
 		// // Channels that are created on the server
 		// std::map<std::string, Channel *>  channels;
 
@@ -66,7 +64,7 @@ class	Server
 		void					removeClient(int);
 		void					resizePfds(void);
 		void					ftIRC(void);
-		
+
 
 		Server();
 		~Server();
