@@ -15,7 +15,8 @@
 #include "IrcErrorException.hpp"
 #include <fstream>
 #include <unistd.h>
-// #include "Channel.hpp"
+
+#include "Channel.hpp"
 
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
 
@@ -31,7 +32,9 @@ class Functions {
 		Client *current_client;
 		std::string pass;
 		std::string const operPass;
-		// std::map<std::string, Channel> channels;
+		
+		std::map<std::string, Channel *> channels;
+		
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -62,5 +65,27 @@ class Functions {
 		void quitMsg(Client, std::string);
 		void killMsg(Client, Client);
 		void errMsg(std::map<std::string, Client>::iterator, std::string);
+		
+		Client* 	findClient(const std::string& nick);
+		const std::map<std::string, Channel*>&	getAllChannels();
+		void		addChannel(const std::string& channelName, Channel* channel);
+		Channel*	findChannel(const std::string& channelName);
+		void		removeChannel(const std::string& channelName);
 };
 
+static inline void log(const std::string& message) 
+{
+    time_t      rawtime;
+    struct tm   *timeinfo;
+    char        buffer[80];
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
+    std::string str(buffer);
+
+    (void)message;
+    std::cout << "\033[0;34m[" << str << "]\033[0m ";
+    std::cout << message << std::endl;
+}

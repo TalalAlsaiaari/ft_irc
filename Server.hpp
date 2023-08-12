@@ -33,6 +33,8 @@ class	Client;
 
 class	Server
 {
+	typedef std::vector<Channel *>::iterator    channel_iterator;
+	
 	private:
 		int				sockfd;
 		int				new_client;
@@ -42,6 +44,9 @@ class	Server
 		int				sender_fd;
 		std::string		port;
 		struct addrinfo	*res;
+		
+		// // Channels that are created on the server
+		// std::map<std::string, Channel *>  channels;
 
 	public:
 		char					buf[256];
@@ -63,6 +68,9 @@ class	Server
 		void					removeClient(int);
 		void					resizePfds(void);
 		void					ftIRC(void);
+		
+		// // Method to get the channel from this server
+		// const std::map<std::string, Channel*>&	getAllChannels();
 
 		Server();
 		~Server();
