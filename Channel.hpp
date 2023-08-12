@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Client.hpp"
 #include "Functions.hpp"
 #include <map>
+
+class Client;
 
 class Channel 
 {
@@ -19,7 +20,7 @@ private:
 	
 	std::string		name; //name of the channel
 	std::string 	pass; //password to join the channel
-	std::string		topic // topic of the channel
+	std::string		topic; // topic of the channel
 	Client*			owner; //A pointer to the client who is the owner of the channel
 	size_t 			limit; //The limit on the number of members allowed in the channel
 	bool 			inviteOnly; // A Boolean flag indicating whether the channel is by invitation or not
@@ -56,7 +57,7 @@ public:
 //if you want to change name, password, topic or limits
 	void		setName(std::string nameValue);
 	void		setPass(std::string passValue);
-	void		setTopic(std::string topicValue)
+	void		setTopic(std::string topicValue);
 	void		setLimit(size_t limitValue);
 
 

@@ -6,10 +6,12 @@
 #include <iostream>
 #include <exception>
 
-#include "Channel.hpp"
+// #include "Channel.hpp"
 #include "Server.hpp"
 #include <map>
 #include <stdexcept>
+
+class Channel;
 
 class Client {
 	private:
