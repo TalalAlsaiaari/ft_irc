@@ -2,6 +2,7 @@
 
 #include "Functions.hpp"
 #include <map>
+#include <string>
 
 class Client;
 
@@ -32,7 +33,7 @@ private:
 	Channel();
 
 public:
-	Channel( std::string name, Client* owner, std::string pass );
+	Channel( std::string, Client*, std::string, bool inviteOnlyValue = false );
 	~Channel();
 
 
@@ -41,16 +42,16 @@ public:
     std::string		getName() const;
     std::string		getPass() const;
 	std::string		getTopic() const;
-	std::string		getOwner() const;
+	Client*			getOwner() const;
     size_t			getLimit() const;
     size_t			getSize() const;
 
 	// Get a maps of all channel members, as well as a list of invited clients, 
 	// all operators and banned clients
-    const std::map<std::string, Client>&	getMembers() const;
-	const std::map<std::string, Client>&	getInvited() const;
-    const std::map<std::string, Client>&	getOperators() const;
-	const std::map<std::string, Client>&	getBanned() const;
+    const std::map<std::string, Client*>&	getMembers() const;
+	const std::map<std::string, Client*>&	getInvited() const;
+    const std::map<std::string, Client*>&	getOperators() const;
+	const std::map<std::string, Client*>&	getBanned() const;
 
 
 /* Setters */

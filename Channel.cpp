@@ -4,8 +4,9 @@
 
 /* Constructor and Destructor */
 
-Channel( std::string nameValue, Client *ownerValue, std::string passValue, bool inviteOnlyValue == false ) 
-    : name(nameValue), owner(ownerValue), pass(passValue), topic(""), limit(0), inviteOnly(inviteOnlyValue) {}
+Channel::Channel(std::string nameValue, Client *ownerValue, std::string passValue, bool inviteOnlyValue) : name(nameValue), pass(passValue), topic(""), owner(ownerValue),   limit(0), inviteOnly(inviteOnlyValue) {
+    
+}
 
 Channel::~Channel() {}
 
@@ -19,10 +20,10 @@ Client*         Channel::getOwner() const { return owner; }
 size_t          Channel::getLimit() const { return limit; }
 size_t          Channel::getSize()const { return members.size(); }
 
-const std::map<std::string, Client>&    Channel::getMembers() const { return members; }
-const std::map<std::string, Client>&    Channel::getInvited() const { return invited; }
-const std::map<std::string, Client>&    Channel::getOperators() const { return operators; }
-const std::map<std::string, Client>&    Channel::getBanned() const { return banned; }
+const std::map<std::string, Client* >&    Channel::getMembers() const { return members; }
+const std::map<std::string, Client* >&    Channel::getInvited() const { return invited; }
+const std::map<std::string, Client* >&    Channel::getOperators() const { return operators; }
+const std::map<std::string, Client* >&    Channel::getBanned() const { return banned; }
 
 
 /* Setters */
