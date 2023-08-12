@@ -15,7 +15,7 @@ class Channel
 		std::string		topic;
 		size_t			limit;
 		bool			inviteOnly;
-		bool			l;
+		bool			hasLimit;
 		bool			k;
 		bool			t;
 	public:
@@ -31,4 +31,6 @@ class Channel
 		void invite( Client &, Client & );
 		void removeMember( Client & );
 		void setTopic( std::string, Client & );
+		bool isInChan( std::string );
+		bool isInvited( std::string );
 };
