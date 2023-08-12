@@ -21,9 +21,9 @@ size_t          Channel::getLimit() const { return limit; }
 size_t          Channel::getSize()const { return members.size(); }
 
 const std::map<std::string, Client* >&    Channel::getMembers() const { return members; }
-const std::map<std::string, Client* >&    Channel::getInvited() const { return invited; }
-const std::map<std::string, Client* >&    Channel::getOperators() const { return operators; }
-const std::map<std::string, Client* >&    Channel::getBanned() const { return banned; }
+const std::map<std::string, Client*>&    Channel::getInvited() const { return invited; }
+const std::map<std::string, Client*>&    Channel::getOperators() const { return operators; }
+const std::map<std::string, Client*>&    Channel::getBanned() const { return banned; }
 
 
 /* Setters */

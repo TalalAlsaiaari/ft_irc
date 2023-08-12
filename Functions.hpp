@@ -68,7 +68,7 @@ class Functions {
 		void killMsg(Client, Client);
 		void errMsg(std::map<std::string, Client>::iterator, std::string);
 		
-		Client* 	findClient(const std::string& nick);
+		Client 	findClient(const std::string& nick);
 		void		addChannel(const std::string& channelName, Channel* channel);
 		Channel*	findChannel(const std::string& channelName);
 		void		removeChannel(const std::string& channelName);
