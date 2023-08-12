@@ -9,17 +9,19 @@
 #include <exception>
 #include <algorithm>
 #include <sstream>
-#include "Client.hpp"
+// #include "Client.hpp"
 #include "ErrorCodes.hpp"
 #include "devector.hpp"
 #include "IrcErrorException.hpp"
 #include <fstream>
 #include <unistd.h>
 
-#include "Channel.hpp"
+// #include "Channel.hpp"
 
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
 
+class Channel;
+class Client;
 
 class Functions {
 	protected:
@@ -32,9 +34,9 @@ class Functions {
 		Client *current_client;
 		std::string pass;
 		std::string const operPass;
-		
 		std::map<std::string, Channel *> channels;
-		
+		typedef std::map<std::string, Channel *>::iterator channel_iterator;
+		typedef std::map<std::string, Client>::iterator client_iterator;
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -53,7 +55,7 @@ class Functions {
 		void USER( void );
 		void MODE( void );
 		void PING( void );
-		void PART( void );
+		// void PART( void );
 		void PRIVMSG( void );
 		void NOTICE( void );
 		void PASS( void );
@@ -67,7 +69,6 @@ class Functions {
 		void errMsg(std::map<std::string, Client>::iterator, std::string);
 		
 		Client* 	findClient(const std::string& nick);
-		const std::map<std::string, Channel*>&	getAllChannels();
 		void		addChannel(const std::string& channelName, Channel* channel);
 		Channel*	findChannel(const std::string& channelName);
 		void		removeChannel(const std::string& channelName);

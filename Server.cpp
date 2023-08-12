@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/30 13:49:13 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/12 18:39:57 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,12 +220,6 @@ void	Server::ftIRC(void)
 			}
 		}
 	}
-}
-
-// Method to get the channel from this server
-const std::map<std::string, Channel*>&	getAllChannels()
-{
-	return channels;
 }
 
 Server::~Server()

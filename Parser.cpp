@@ -1,4 +1,6 @@
 #include "Parser.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
 Parser::Parser() {
 	func[std::string("NICK")] = &Parser::NICK;
@@ -7,7 +9,7 @@ Parser::Parser() {
 	func[std::string("USER")] = &Parser::USER;
 	func[std::string("MODE")] = &Parser::MODE;
 	func[std::string("PING")] = &Parser::PING;
-	func[std::string("PART")] = &Parser::PART;
+	// func[std::string("PART")] = &Parser::PART;
 	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
 	func[std::string("PASS")] = &Parser::PASS;
 	func[std::string("MOTD")] = &Parser::MOTD;
