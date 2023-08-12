@@ -222,6 +222,12 @@ void	Server::ftIRC(void)
 	}
 }
 
+// Method to get the channel from this server
+const std::map<std::string, Channel*>&	getAllChannels()
+{
+	return channels;
+}
+
 Server::~Server()
 {
 	delete this->pfds;
