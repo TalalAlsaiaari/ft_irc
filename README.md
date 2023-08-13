@@ -75,21 +75,21 @@ Main Loop                  |  Parsing loop
 	- [x] QUIT _(Alex)_
 	- [x] NOTICE  _(Alex)_
 	- [x] OPER _(Talal)_
-- [ ] create channels _(Nour)_
-	- [ ] create channel operators
-	- [ ] forward channel messages to all clients in channel
-	- [ ] create channel functions
-		- [ ] JOIN
-		- [ ] PART
-		- [ ] INVITE
-		- [ ] KICK
-		- [ ] TOPIC
-		- [ ] MODE
-			- [ ] i (Set/remove Invite-only channel)
-			- [ ] t (Set/remove the restrictions of the TOPIC command to channel operators)
-			- [ ] k (Set/remove the channel key (password))
-			- [ ] o (Give/take channel operator privilege)
-			- [ ] l (Set/remove the user limit to channel)
+- [ ] create channels _(Alex)_
+	- [ ] create channel operators _(Talal)_
+	- [ ] forward channel messages to all clients in channel _(Alex)_
+	- [ ] create channel functions _(Talal)_
+		- [ ] JOIN _(Alex)_
+		- [ ] PART _(Talal)_
+		- [ ] INVITE _(Talal)_
+		- [ ] KICK _(Talal)_
+		- [ ] TOPIC _(Talal)_
+		- [ ] MODE _(Talal)_
+			- [ ] i (Set/remove Invite-only channel) _(Talal)_
+			- [ ] t (Set/remove the restrictions of the TOPIC command to channel operators) _(Talal)_
+			- [ ] k (Set/remove the channel key (password)) _(Talal)_
+			- [ ] o (Give/take channel operator privilege) _(Talal)_
+			- [ ] l (Set/remove the user limit to channel) _(Talal)_
 
 ### Requirements
 
