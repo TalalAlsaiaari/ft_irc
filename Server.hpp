@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/07/28 09:59:09 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/12 19:05:47 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ class	Server
 		int				sender_fd;
 		std::string		port;
 		struct addrinfo	*res;
-		
-		// // Channels that are created on the server
-		// std::map<std::string, Channel *>  channels;
 
 	public:
 		char					buf[256];

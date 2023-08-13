@@ -113,28 +113,3 @@ void Client::setOperator( bool oper ) {
 	is_operator = oper;
 }
 
-// Method for adding a client to a channel
-void	Client::joinChannel(const std::string& channelName, Channel* channel)
-{
-	channelsOfClient[channelName] = channel;
-}
-		
-//Method for removing a client from a channel
-void	Client::removeChannelOfClient(const std::string& channelName)
-{
-	channelsOfClient.erase(channelName);
-}
-		
-// Method to get the list of channels the client is connected to
-const std::map<std::string, Channel*>&	Client::getChannelsOfClient() const
-{
-	return channelsOfClient;
-}
-
-// sends a message over an open socket
-void	Client::write(const std::string& message) const
-{
-    std::string buffer = message + "\r\n";
-    if (send(fd, buffer.c_str(), buffer.length(), 0) < 0)
-        throw std::runtime_error("Error while sending a message to a client!");
-}
