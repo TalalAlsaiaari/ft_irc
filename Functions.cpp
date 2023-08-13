@@ -64,16 +64,18 @@ void Functions::NICK( void ) {
 
 void Functions::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
-	try {
+	// try {
+	if (isEnoughParams(1)){
 		if (args.at(0) == "LS")
 			send(fd, &mes[0], mes.length(), 0);
 		if (args.at(0) == "REQ") {
 			mes = "CAP * ACK " + args.at(1) + "\n";
 			send(fd, &mes[0], mes.length(), 0);
 		}
-	} catch (std::exception &e) {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n", *current_client);
 	}
+	// } catch (std::exception &e) {
+	// 	ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n", *current_client);
+	// }
 }
 
 void Functions::JOIN( void ) {
@@ -81,7 +83,7 @@ void Functions::JOIN( void ) {
 	std::string chanName;
 	chan_it chan;
 
-	if (args.size() >= 1) {
+	if (isEnoughParams(1)) {
 		chanName = args[0];
 		hash_pos = chanName.find('#');
 		chan = channels.find(chanName);
@@ -93,8 +95,6 @@ void Functions::JOIN( void ) {
 		}
 		else
 			ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 	}
 }
 
@@ -109,7 +109,7 @@ void Functions::PART(void)
 	has been removed, in this case, source should be client being removed, and channel
 	will be the channel they left/removed from. Server should distribute these multi
 	channel part msg as a series of msgs with a single channel name with the reason*/
-	if (args.size() >= 1)
+	if (isEnoughParams(1))
 	{
 		chanName = args[0];
 		chan = channels.find(chanName);
@@ -127,26 +127,31 @@ void Functions::PART(void)
 			chan->second.removeMember(*current_client);
 			chan->second.echoToAll(*current_client, cmd, reason, true, sent);
 			sent.clear();
+			if (!chan->second.getCurrentCount())
+				channels.erase(chan);
 		}
 	}
-	else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 }
 
-// void Functions::INVITE( void ) {
+void Functions::INVITE(void)
+{
+	
+}
 
-// }
-//
 void Functions::TOPIC(void)
 {
 	std::string chanName;
 	chan_it chan;
 	
-	if (args.size() >= 1)
+	if (isEnoughParams(1))
 	{
 		chanName = args[0];
 		chan = channels.find(chanName);
-		if (args.size() == 2)
+		if (chan == channels.end())
+			ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
+		else if (!chan->second.isInChan(current_client->getNick()))
+			ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
+		else if (args.size() == 2)
 		{
 			if (!current_client->isOperator())
 				ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", *current_client);
@@ -159,18 +164,12 @@ void Functions::TOPIC(void)
 		}
 		else
 		{
-			if (chan == channels.end())
-				ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
-			else if (!chan->second.isInChan(current_client->getNick()))
-				ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
-			else if (chan->second.hasTopic())
+			if (chan->second.hasTopic())
 				ServerMessage(RPL_TOPIC, chanName + " :" + chan->second.getTopic() + "\n", *current_client);
-			else if (!chan->second.hasTopic())
+			else
 				ServerMessage(RPL_NOTOPIC, chanName + " :No topic set\n", *current_client);
 		}
 	}
-	else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 }
 //
 // void Functions::MODE( void ) {
@@ -215,7 +214,7 @@ void Functions::USER( void ) {
 void Functions::MODE( void ) {
 	// check for user modes, have to check same for channels
 	std::string modes = "+";
-	try {
+	if (isEnoughParams(2)){
 		client_it target = nicks.find(args.at(0));
 		if (target == nicks.end())
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
@@ -233,8 +232,6 @@ void Functions::MODE( void ) {
 				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
 			}
 		}
-	} catch (std::exception &e) {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n", *current_client);
 	}
 }
 
@@ -244,7 +241,7 @@ void Functions::PING( void ) {
 }
 
 void Functions::PRIVMSG( void ) {
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		size_t hash_pos = args[0].find('#');
 		if (hash_pos == 0) {
 			chan_it chan = channels.find(args[0]);
@@ -260,12 +257,11 @@ void Functions::PRIVMSG( void ) {
 				ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
 			}
 		}
-	} else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+	}
 }
 
 void Functions::NOTICE( void ) {
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		size_t hash_pos = args[0].find('#');
 		if (hash_pos == 0) {
 			chan_it chan = channels.find(args[0]);
@@ -279,22 +275,24 @@ void Functions::NOTICE( void ) {
 				std::cout << "Error: notice not sent\n";
 			}
 		}
-	} else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+	}
 }
 
+//not sure about this one after enough params func
 void Functions::PASS( void ) {
 	if (!current_client->isPassGood()) {
-		try {
+		// try {
+		if (isEnoughParams(1)) {
 			if (args.at(0) == pass)
 				current_client->passGood();
 			else {
 				ServerMessage(ERR_PASSWDMISMATCH, "04 :password doesn't match\n", *current_client);
 				multi_cmd.clear();
 			}
-		} catch (std::exception &e) {
-			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n", *current_client);
-		}
+		} 
+		// catch (std::exception &e) {
+		// 	ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n", *current_client);
+		// }
 	} else
 		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n", *current_client);
 }
@@ -365,7 +363,7 @@ void Functions::WHOIS( void ) {
 
 void Functions::OPER(void)
 {
-	if (args.size() >= 2)
+	if (isEnoughParams(2))
 	{
 		if (args[1] == operPass)
 		{
@@ -374,8 +372,6 @@ void Functions::OPER(void)
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 	}
 	return ;
 }
@@ -384,7 +380,7 @@ void Functions::KILL(void)
 {
 	client_it user;
 
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		user = nicks.find(args[0]);
 		if (!current_client->isOperator())
 			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n", *current_client);
@@ -396,8 +392,6 @@ void Functions::KILL(void)
 			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
 		}
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 	}
 }
 
@@ -429,4 +423,14 @@ void Functions::errMsg(client_it dest, std::string msg)
 	send(dest->second.getFD(), &mes[0], mes.length(), 0);
 	close(dest->second.getFD());
 	nicks.erase(dest);
+}
+
+bool Functions::isEnoughParams(unsigned int paramNum)
+{
+	if (args.size() < paramNum)
+	{
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+		return false;
+	}
+	return true;
 }

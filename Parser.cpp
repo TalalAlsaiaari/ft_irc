@@ -17,6 +17,7 @@ Parser::Parser() {
 	func["OPER"] = &Parser::OPER;
 	func["KILL"] = &Parser::KILL;
 	func["TOPIC"] = &Parser::TOPIC;
+	func["INVITE"] = &Parser::INVITE;
 }
 
 Parser::~Parser() {}

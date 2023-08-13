@@ -33,6 +33,7 @@ class Functions {
 		std::map<std::string, Client *> sent;
 		typedef std::map<std::string, Channel>::iterator chan_it;
 		typedef std::map<std::string, Client>::iterator client_it;
+		bool isEnoughParams(unsigned int);
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -58,6 +59,7 @@ class Functions {
 		void OPER(void);
 		void KILL (void);
 		void TOPIC(void);
+		void INVITE(void);
 		void quitMsg(Client, std::string);
 		void killMsg(Client, Client);
 		void errMsg(std::map<std::string, Client>::iterator, std::string);

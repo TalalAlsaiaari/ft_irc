@@ -10,6 +10,8 @@ Channel::Channel( std::string name, Client &creator ) {
     this->limit = 0;
     this->inviteOnly = false;
     this->hasLimit = false;
+    this->defKickMsg = "Bye, miss you";
+    this->currentCount = 0;
     operators[creator.getNick()] = &creator;
     UserMessage("JOIN", name + " * :me\n", creator);
     whoIsChan(creator);
@@ -26,9 +28,6 @@ Channel::~Channel() {
 //     return name;
 // }
 //
-// std::string Channel::getTopic( void ) {
-//     return topic;
-// }
 
 // std::string Channel::getPass( void ) {
 //     return pass;
@@ -45,9 +44,8 @@ void Channel::addMember( Client &add ) {
         UserMessage("JOIN", name + " * :welcome\n", add);
         whoIsChan(add);
         echoToAll(add, "JOIN", "", true, sent);
+        this->currentCount++;
     }
-    else
-        std::cout << "already in channel\n";
 }
 
 void Channel::echoToAll(Client &client, std::string cmd, std::string trailing, bool chan, std::map<std::string, Client *> &sent) {
@@ -88,9 +86,15 @@ void Channel::removeMember( Client & remove) {
     iter oper = operators.find(remove.getNick());
 
     if (member != members.end())
+    {
         members.erase(member);
+        this->currentCount--;
+    }
     if (oper != operators.end())
+    {
         operators.erase(oper);
+        this->currentCount--;
+    }
 }
 //
 void Channel::setTopic(std::string topic)
@@ -143,6 +147,7 @@ std::string const Channel::getTopic(void) const
 {
     return this->topic;
 }
+
 void Channel::updateMemberNick( Client &client, std::string old_nick, std::string new_nick ) {
     iter mems = members.find(old_nick);
     iter oper = operators.find(old_nick);
@@ -155,4 +160,9 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
         operators.erase(old_nick);
         operators[new_nick] = &client;
     }
+}
+
+unsigned int Channel::getCurrentCount(void) const
+{
+    return this->currentCount;
 }
