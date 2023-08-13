@@ -1,6 +1,4 @@
 #include "Parser.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
 
 Parser::Parser() {
 	func["NICK"] = &Parser::NICK;
