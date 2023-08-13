@@ -1,12 +1,13 @@
 NAME=ircserv
 
-SRCS = main.cpp Client.cpp Parser.cpp Functions.cpp Server.cpp IrcErrorException.cpp Channel.cpp
+SRCS = main.cpp Client.cpp Parser.cpp Functions.cpp Server.cpp IrcErrorException.cpp Channel.cpp \
+		Messages.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
 CC = c++
 
-CXXFLAGS = -g -Wall -Wextra -Werror -std=c++98
+CXXFLAGS = -g -Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 RM = rm -fr
 

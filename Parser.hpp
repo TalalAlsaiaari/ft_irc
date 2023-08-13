@@ -10,6 +10,7 @@ class Parser : public Functions {
 		void findCmdArgs( void );
 		void findPass( void );
 		void excecuteCommand( void );
+		bool checkRegistration( void );
 		std::string makeUpper( std::string str);
 	private:
 		typedef void (Parser::*Funcs)(void);

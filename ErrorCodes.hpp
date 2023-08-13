@@ -8,6 +8,7 @@
 #define ERR_NOSUCHNICK " 401 "
 #define ERR_NOSUCHSERVER " 402 "
 #define ERR_NOSUCHCHANNEL " 403 "
+#define ERR_BADCHANMASK " 476 "
 #define ERR_CANNOTSENDTOCHAN " 404 "
 #define ERR_TOOMANYCHANNELS " 405 "
 #define ERR_WASNOSUCHNICK " 406 "
@@ -25,6 +26,9 @@
 #define ERR_PASSWDMISMATCH " 464 "
 #define ERR_UMODEUNKOWNFLAG " 501 "
 #define ERR_USERSDONTMATCH " 502 "
+#define RPL_TOPIC " 332 "
+#define RPL_NAMREPLY " 353 "
+#define RPL_ENDOFNAMES " 366 "
 #define RPL_WHOISUSER " 311 "
 #define RPL_WHOISSERVER " 312 "
 #define RPL_WHOISOPERATOR " 313 "
@@ -38,3 +42,5 @@
 #define RPL_UMODEIS " 221 "
 #define RPL_YOUREOPER " 381 "
 #define ERR_NOPRIVILEGES " 481 "
+
+#define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)

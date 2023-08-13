@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/12 19:05:47 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/13 08:55:44 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@
 #include <map>
 #include "Parser.hpp"
 
-class	Client;
-
 class	Server
-{	
+{
 	private:
 		int				sockfd;
 		int				new_client;
@@ -42,6 +40,9 @@ class	Server
 		int				sender_fd;
 		std::string		port;
 		struct addrinfo	*res;
+
+		// // Channels that are created on the server
+		// std::map<std::string, Channel *>  channels;
 
 	public:
 		char					buf[256];
@@ -63,7 +64,7 @@ class	Server
 		void					removeClient(int);
 		void					resizePfds(void);
 		void					ftIRC(void);
-		
+
 
 		Server();
 		~Server();

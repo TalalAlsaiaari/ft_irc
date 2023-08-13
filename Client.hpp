@@ -5,28 +5,22 @@
 #include <string>
 #include <iostream>
 #include <exception>
-
-// #include "Channel.hpp"
-#include "Server.hpp"
 #include <map>
 #include <stdexcept>
 
-class Channel;
-
 class Client {
 	private:
-		int 		fd;
-		std::string nick;
-		std::string real_name;
-		std::string user_name;
-		std::string server_name;
-		std::string host_name;
-		std::string buff;
-		bool registered;
-		bool pass_registered;
-		bool is_operator;
-		bool is_invisible;
-		
+		int			fd;
+		std::string	nick;
+		std::string	real_name;
+		std::string	user_name;
+		std::string	server_name;
+		std::string	host_name;
+		std::string	buff;
+		bool		registered;
+		bool		pass_registered;
+		bool		is_operator;
+		bool		is_invisible;
 	public:
 		Client( );
 		Client( int fd );

@@ -16,8 +16,7 @@
 #include <fstream>
 #include <unistd.h>
 #include "Channel.hpp"
-
-#define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)
+#include "Messages.hpp"
 
 class Functions {
 	protected:
@@ -31,7 +30,8 @@ class Functions {
 		std::string pass;
 		std::string const operPass;
 		std::map<std::string, Channel> channels;
-		typedef std::map<std::string, Channel *>::iterator channel_iterator;
+		typedef std::map<std::string, Channel>::iterator chan_it;
+		typedef std::map<std::string, Client>::iterator client_it;
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -39,10 +39,6 @@ class Functions {
 		void setPass( std::string pass );
 		std::string getPass( void ) const;
 		void addNick( std::string nick );
-		void ServerMessage(std::string error, std::string message);
-		void UserMessage(std::string message);
-		void UsertoUser(Client orgin, Client dest);
-		void ConnectionMessage( void );
 		void RegisterUser( void );
 		void NICK( void );
 		void CAP( void );

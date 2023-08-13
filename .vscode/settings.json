@@ -65,7 +65,16 @@
 		"deque": "cpp",
 		"fstream": "cpp",
 		"iomanip": "cpp",
-		"stack": "cpp"
+		"stack": "cpp",
+		"*.tcc": "cpp",
+		"clocale": "cpp",
+		"compare": "cpp",
+		"concepts": "cpp",
+		"memory_resource": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"numbers": "cpp",
+		"cinttypes": "cpp"
 	},
 	"editor.trimAutoWhitespace": false,
 	"editor.comments.ignoreEmptyLines": false
