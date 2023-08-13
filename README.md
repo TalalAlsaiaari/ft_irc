@@ -79,11 +79,11 @@ Main Loop                  |  Parsing loop
 	- [ ] create channel operators _(Talal)_
 	- [ ] forward channel messages to all clients in channel _(Alex)_
 	- [ ] create channel functions _(Talal)_
-		- [ ] JOIN _(Alex)_
-		- [ ] PART _(Talal)_
+		- [x] JOIN _(Alex)_
+		- [x] PART _(Talal)_
 		- [ ] INVITE _(Talal)_
 		- [ ] KICK _(Talal)_
-		- [ ] TOPIC _(Talal)_
+		- [x] TOPIC _(Talal)_
 		- [ ] MODE _(Talal)_
 			- [ ] i (Set/remove Invite-only channel) _(Talal)_
 			- [ ] t (Set/remove the restrictions of the TOPIC command to channel operators) _(Talal)_
