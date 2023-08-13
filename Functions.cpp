@@ -101,6 +101,7 @@ void Functions::JOIN( void ) {
 void Functions::PART(void)
 {
 	std::string chanName;
+	std::string reason;
 	chan_it chan;
 	
 	if (args.size() >= 1)
@@ -113,8 +114,14 @@ void Functions::PART(void)
 			ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
 		else
 		{
+			if (args.size() >= 2)
+				reason = args[1];
+			else
+				reason = "";
 			UserMessage("PART", chanName + "\n", *current_client);
 			chan->second.removeMember(*current_client);
+			chan->second.echoToAll(*current_client, cmd, reason, true, sent);
+			sent.clear();
 		}
 	}
 	else
@@ -367,17 +374,16 @@ void Functions::killMsg(Client source, Client dest) {
 void Functions::quitMsg(Client source, std::string msg)
 {
 	std::string nick = source.getNick();
-	std::string mes = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName())
-		+ " QUIT :Quit: " + msg;
+	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
+	std::string mes = ":" + user_info + " QUIT :Quit: " + msg;
 	send(source.getFD(), &mes[0], mes.length(), 0);
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
-		if (it->second.isInChan(source.getNick())) {
-			it->second.echoToAll(source, "", msg, false, sent);
+		if (it->second.isInChan(nick)) {
+			it->second.echoToAll(source, "", mes, false, sent);
 			it->second.removeMember(source);
 		}
 	}
 	sent.clear();
-	//should be also sent to every user sharing a channel with source
 }
 
 void Functions::errMsg(client_it dest, std::string msg)
