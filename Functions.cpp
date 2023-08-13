@@ -33,7 +33,6 @@ void Functions::addNick( std::string nick ) {
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 	} else {
-		//need to update client channels
 		if (nick.length() > 16)
 			nick = nick.substr(0, 16);
 		updateChannel(*current_client, current_client->getNick(), nick);
