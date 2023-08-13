@@ -55,6 +55,7 @@ class Functions {
 		void WHOIS( void );
 		void OPER(void);
 		void KILL (void);
+		void TOPIC(void);
 		void quitMsg(Client, std::string);
 		void killMsg(Client, Client);
 		void errMsg(std::map<std::string, Client>::iterator, std::string);

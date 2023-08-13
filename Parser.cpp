@@ -16,6 +16,7 @@ Parser::Parser() {
 	func["WHOIS"] = &Parser::WHOIS;
 	func["OPER"] = &Parser::OPER;
 	func["KILL"] = &Parser::KILL;
+	func["TOPIC"] = &Parser::TOPIC;
 }
 
 Parser::~Parser() {}
