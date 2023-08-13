@@ -48,7 +48,7 @@ class Functions {
 		void USER( void );
 		void MODE( void );
 		void PING( void );
-		// void PART( void );
+		void PART( void );
 		void PRIVMSG( void );
 		void NOTICE( void );
 		void PASS( void );
