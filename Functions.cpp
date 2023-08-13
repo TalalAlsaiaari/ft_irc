@@ -460,3 +460,13 @@ bool Functions::userInChan(std::string chanName, chan_it channel)
 	}
 	return true;
 }
+
+bool Functions::isUserOp(std::string chanName)
+{
+	if (!current_client->isOperator())
+	{
+		ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", *current_client);
+		return false;
+	}
+	return true;
+}

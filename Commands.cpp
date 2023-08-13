@@ -84,39 +84,28 @@ void Commands::INVITE(void)
 }
 
 void Commands::TOPIC(void)
-{
-	std::string chanName;
-	chan_it chan;
-	
-	if (args.size() >= 1)
+{	
+	if (isEnoughParams(1))
 	{
-		chanName = args[0];
-		chan = channels.find(chanName);
-		if (args.size() == 2)
+		std::string chanName = args[0];
+		chan_it chan = channels.find(chanName);
+		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			if (!current_client->isOperator())
-				ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", *current_client);
-			else
+			if (args.size() == 2 && isUserOp(chanName))
 			{
 				//have to send to all in channel
 				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);	
 				chan->second.setTopic(args[1]);
 			}
-		}
-		else
-		{
-			if (chan == channels.end())
-				ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
-			else if (!chan->second.isInChan(current_client->getNick()))
-				ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
-			else if (chan->second.hasTopic())
-				ServerMessage(RPL_TOPIC, chanName + " :" + chan->second.getTopic() + "\n", *current_client);
-			else if (!chan->second.hasTopic())
-				ServerMessage(RPL_NOTOPIC, chanName + " :No topic set\n", *current_client);
+			else
+			{
+				if (chan->second.hasTopic())
+					ServerMessage(RPL_TOPIC, chanName + " :" + chan->second.getTopic() + "\n", *current_client);
+				else
+					ServerMessage(RPL_NOTOPIC, chanName + " :No topic set\n", *current_client);
+			}
 		}
 	}
-	else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 }
 //
 // void Commands::MODE( void ) {

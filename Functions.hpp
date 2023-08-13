@@ -61,7 +61,9 @@ class Functions {
 		void quitMsg(Client, std::string);
 		void killMsg(Client, Client);
 		void errMsg(std::map<std::string, Client>::iterator, std::string);
+		
 		bool isEnoughParams(unsigned int);
 		bool channelExist(std::string, chan_it);
 		bool userInChan(std::string, chan_it);
+		bool isUserOp(std::string);
 };
