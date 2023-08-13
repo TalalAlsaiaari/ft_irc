@@ -42,5 +42,7 @@
 #define RPL_UMODEIS " 221 "
 #define RPL_YOUREOPER " 381 "
 #define ERR_NOPRIVILEGES " 481 "
+#define RPL_NOTOPIC " 331 "
+#define ERR_CHANOPRIVSNEEDED " 482 "
 
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)

@@ -103,6 +103,11 @@ void Functions::PART(void)
 	std::string reason;
 	chan_it chan;
 	
+	//have to handle multiple channel parts
+	/*this msg may be sent from a server to a client to notify the client that someone
+	has been removed, in this case, source should be client being removed, and channel
+	will be the channel they left/removed from. Server should distribute these multi
+	channel part msg as a series of msgs with a single channel name with the reason*/
 	if (args.size() >= 1)
 	{
 		chanName = args[0];
@@ -131,9 +136,41 @@ void Functions::PART(void)
 
 // }
 //
-// void Functions::TOPIC( void ) {
-
-// }
+void Functions::TOPIC(void)
+{
+	std::string chanName;
+	chan_it chan;
+	
+	if (args.size() >= 1)
+	{
+		chanName = args[0];
+		chan = channels.find(chanName);
+		if (args.size() == 2)
+		{
+			if (!current_client->isOperator())
+				ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", *current_client);
+			else
+			{
+				//have to send to all in channel
+				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);	
+				chan->second.setTopic(args[1]);
+			}
+		}
+		else
+		{
+			if (chan == channels.end())
+				ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
+			else if (!chan->second.isInChan(current_client->getNick()))
+				ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
+			else if (chan->second.hasTopic())
+				ServerMessage(RPL_TOPIC, chanName + " :" + chan->second.getTopic() + "\n", *current_client);
+			else if (!chan->second.hasTopic())
+				ServerMessage(RPL_NOTOPIC, chanName + " :No topic set\n", *current_client);
+		}
+	}
+	else
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+}
 //
 // void Functions::MODE( void ) {
 
