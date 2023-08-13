@@ -31,7 +31,7 @@ class Channel
 		void echoToAll(Client &, std::string, std::string);
 		// void makeChanOp( Client &, Client & );
 		// void invite( Client &, Client & );
-		// void removeMember( Client & );
+		void removeMember( Client & );
 		// void setTopic( std::string, Client & );
 		void whoIsChan( Client & );
 		bool isInChan( std::string );

@@ -39,11 +39,9 @@ Channel::~Channel() {
 // }
 
 void Channel::addMember( Client &add ) {
-    // std::string message = "you're in bitch\n";
     if (!isInChan(add.getNick())) {
         members[add.getNick()] = &add;
-        // send join message
-        // send(add.getFD(), &message[0], message.length(), 0);
+        UserMessage("JOIN", name + " * :welcome\n", add);
         whoIsChan(add);
         echoToAll(add, "JOIN", "");
     }
@@ -76,9 +74,15 @@ void Channel::echoToAll(Client &client, std::string cmd, std::string trailing) {
 //
 // }
 //
-// void Channel::removeMember( Client & ) {
-//
-// }
+void Channel::removeMember( Client & remove) {
+    iter member = members.find(remove.getNick());
+    iter oper = operators.find(remove.getNick());
+
+    if (member != members.end())
+        members.erase(member);
+    if (oper != operators.end())
+        operators.erase(oper);
+}
 //
 // void Channel::setTopic( std::string, Client & ) {
 //
@@ -106,11 +110,11 @@ bool Channel::isInvited( std::string Nick ) {
 
 void Channel::whoIsChan( Client &client ) {
     std::string who = "@ " + name + " :";
-    for (iter it = operators.begin(); it != operators.end(); it++) {
-            who +=  "@" + it->second->getNick() + " ";
-    }
     for (iter it = members.begin(); it != members.end(); it++) {
             who += it->second->getNick() + " ";
+    }
+    for (iter it = operators.begin(); it != operators.end(); it++) {
+            who +=  "@" + it->second->getNick() + " ";
     }
     who += "\n";
     ServerMessage(RPL_NAMREPLY, who, client);
