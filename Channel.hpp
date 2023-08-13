@@ -19,12 +19,13 @@ class Channel
 		size_t			limit;
 		bool			inviteOnly;
 		bool			hasLimit;
+		std::string		defKickMsg;
+		unsigned int	currentCount;
 	public:
 		Channel();
 		Channel( std::string, Client & );
 		~Channel();
 		// std::string getName( void );
-		// std::string getTopic( void );
 		// std::string getPass( void );
 		// size_t getLimit( void );
 		void addMember( Client & );
@@ -32,7 +33,6 @@ class Channel
 		// void makeChanOp( Client &, Client & );
 		// void invite( Client &, Client & );
 		void removeMember( Client & );
-		// void setTopic( std::string, Client & );
 		void updateMemberNick( Client &, std::string, std::string );
 		void whoIsChan( Client & );
 		bool isInChan( std::string );
@@ -40,4 +40,5 @@ class Channel
 		void setTopic(std::string);
 		bool hasTopic(void);
 		std::string const getTopic(void) const;
+		unsigned int getCurrentCount(void) const;
 };
