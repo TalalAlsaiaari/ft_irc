@@ -104,7 +104,7 @@ void Parser::excecuteCommand( void ) {
 }
 
 bool Parser::checkRegistration( void ) {
-	if (cmd != "PASS" && cmd != "CAP" && cmd !="USER" && cmd != "NICK") {
+	if (cmd != "PASS" && cmd != "CAP" && cmd !="USER" && cmd != "NICK" && cmd != "QUIT") {
 		if (current_client->isPassGood() && current_client->isRegistered())
 			return true;
 		return false;

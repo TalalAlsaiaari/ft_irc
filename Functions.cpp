@@ -65,10 +65,10 @@ void Functions::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
 	try {
 		if (args.at(0) == "LS")
-			send(fd, &mes[0], mes.length(), 0);
+			send(fd, mes.data(), mes.length(), 0);
 		if (args.at(0) == "REQ") {
 			mes = "CAP * ACK " + args.at(1) + "\n";
-			send(fd, &mes[0], mes.length(), 0);
+			send(fd, mes.data(), mes.length(), 0);
 		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n", *current_client);
@@ -92,9 +92,9 @@ void Functions::JOIN( void ) {
 		}
 		else
 			ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
-	}
+	// } else {
+	// 	ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
+	// }
 }
 
 void Functions::PART(void)
@@ -239,7 +239,7 @@ void Functions::MODE( void ) {
 
 void Functions::PING( void ) {
 	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
-	send(fd, &pong[0], pong.length(), 0);
+	send(fd, pong.data(), pong.length(), 0);
 }
 
 void Functions::PRIVMSG( void ) {
@@ -404,7 +404,7 @@ void Functions::killMsg(Client source, Client dest) {
 	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	message += " " + cmd + " " + dest.getNick() + " " + args[1] + "\n";
 	std::cout << message << std::endl;
-	send(dest.getFD(), &message[0], message.length(), 0);
+	send(dest.getFD(), message.data(), message.length(), 0);
 }
 
 void Functions::quitMsg(Client source, std::string msg)
@@ -412,7 +412,7 @@ void Functions::quitMsg(Client source, std::string msg)
 	std::string nick = source.getNick();
 	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	std::string mes = ":" + user_info + " QUIT :Quit: " + msg;
-	send(source.getFD(), &mes[0], mes.length(), 0);
+	send(source.getFD(), mes.data(), mes.length(), 0);
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
 		if (it->second.isInChan(nick)) {
 			it->second.echoToAll(source, "", mes, false, sent);
@@ -425,7 +425,7 @@ void Functions::quitMsg(Client source, std::string msg)
 void Functions::errMsg(client_it dest, std::string msg)
 {
 	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
-	send(dest->second.getFD(), &mes[0], mes.length(), 0);
+	send(dest->second.getFD(), mes.data(), mes.length(), 0);
 	close(dest->second.getFD());
 	nicks.erase(dest);
 }
