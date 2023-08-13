@@ -93,9 +93,11 @@ void Channel::removeMember( Client & remove) {
         operators.erase(oper);
 }
 //
-// void Channel::setTopic( std::string, Client & ) {
-//
-// }
+void Channel::setTopic(std::string topic)
+{
+    this->topic = topic;
+    return ;
+}
 
 bool Channel::isInChan( std::string Nick ) {
     iter member;
@@ -130,6 +132,17 @@ void Channel::whoIsChan( Client &client ) {
     ServerMessage(RPL_ENDOFNAMES, name + " :END of /NAMES list\n", client);
 }
 
+bool Channel::hasTopic(void)
+{
+    if (!this->topic.empty())
+        return true;
+    return false;
+}
+
+std::string const Channel::getTopic(void) const
+{
+    return this->topic;
+}
 void Channel::updateMemberNick( Client &client, std::string old_nick, std::string new_nick ) {
     iter mems = members.find(old_nick);
     iter oper = operators.find(old_nick);
