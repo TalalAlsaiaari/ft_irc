@@ -1,13 +1,13 @@
 #include "Messages.hpp"
 #include "ErrorCodes.hpp"
 
-// void ConnectionMessage( Client &client) {
-// 	ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(client.getNick(), client.getUserName(), client.getHostName()) + "\n" );
-// 	ServerMessage(RPL_YOURHOST, " :Your host is " + client.getHostName() + "\n");
-// 	ServerMessage(RPL_CREATED, " :This server was created some time recently\n");
-// 	ServerMessage(RPL_MYINFO, client.getHostName() + "\n");
-// 	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n");
-// }
+void ConnectionMessage( Client &client) {
+	ServerMessage(RPL_WELCOME, " :Welcome You are now known as " + USER_FN(client.getNick(), client.getUserName(), client.getHostName()) + "\n", client);
+	ServerMessage(RPL_YOURHOST, " :Your host is " + client.getHostName() + "\n", client);
+	ServerMessage(RPL_CREATED, " :This server was created some time recently\n", client);
+	ServerMessage(RPL_MYINFO, client.getHostName() + "\n", client);
+	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n",client);
+}
 
 void ServerMessage(std::string error, std::string message, Client &client) {
 	std::string mes = ":" + client.getServerName() + error + client.getNick() + " " + message;
