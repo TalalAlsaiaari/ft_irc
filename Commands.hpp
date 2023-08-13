@@ -20,4 +20,5 @@ class Commands : public Functions {
 		void OPER(void);
 		void KILL (void);
 		void TOPIC(void);
+		void INVITE(void);
 };

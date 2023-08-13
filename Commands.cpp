@@ -47,24 +47,18 @@ void Commands::JOIN( void ) {
 
 void Commands::PART(void)
 {
-	std::string chanName;
 	std::string reason;
-	chan_it chan;
 	
 	//have to handle multiple channel parts
 	/*this msg may be sent from a server to a client to notify the client that someone
 	has been removed, in this case, source should be client being removed, and channel
 	will be the channel they left/removed from. Server should distribute these multi
 	channel part msg as a series of msgs with a single channel name with the reason*/
-	if (args.size() >= 1)
+	if (isEnoughParams(1))
 	{
-		chanName = args[0];
-		chan = channels.find(chanName);
-		if (chan == channels.end())
-			ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
-		else if (!chan->second.isInChan(current_client->getNick()))
-			ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
-		else
+		std::string chanName = args[0];
+		chan_it chan = channels.find(chanName);
+		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
 			if (args.size() >= 2)
 				reason = args[1];
@@ -76,14 +70,19 @@ void Commands::PART(void)
 			sent.clear();
 		}
 	}
-	else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 }
 
-// void Commands::INVITE( void ) {
+void Commands::INVITE(void)
+{
+	std::string chanName;
+	chan_it chan;
+	if (isEnoughParams(2))
+	{
+		chanName = args[1];
+		chan = channels.find(chanName);
+	}
+}
 
-// }
-//
 void Commands::TOPIC(void)
 {
 	std::string chanName;

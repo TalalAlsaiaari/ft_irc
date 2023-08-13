@@ -440,3 +440,23 @@ bool Functions::isEnoughParams(unsigned int paramNum)
 	}
 	return true;
 }
+
+bool Functions::channelExist(std::string chanName, chan_it channel)
+{
+	if (channel == channels.end())
+	{
+		ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
+		return false;
+	}
+	return true;
+}
+
+bool Functions::userInChan(std::string chanName, chan_it channel)
+{
+	if (!channel->second.isInChan(current_client->getNick()))
+	{
+		ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
+		return false;
+	}
+	return true;
+}
