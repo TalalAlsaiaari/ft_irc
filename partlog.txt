@@ -1,0 +1,9 @@
+<< TOPIC #help
+>> @time=2023-08-13T06:06:40.241Z :silver.libera.chat 332 talal #help :Please join #libera for help with the IRC network
+>> @time=2023-08-13T06:06:40.241Z :silver.libera.chat 333 talal #help glguy!x@libera/staff/glguy 1620790002
+
+<< TOPIC #bye
+>> @time=2023-08-13T06:11:43.157Z :silver.libera.chat 403 talal #bye :No such channel
+
+<< TOPIC #hi :nice things
+>> @time=2023-08-13T06:13:15.152Z :silver.libera.chat 482 talal #hi :You're not a channel operator
