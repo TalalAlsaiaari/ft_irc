@@ -28,11 +28,12 @@ class Channel
 		// std::string getPass( void );
 		// size_t getLimit( void );
 		void addMember( Client & );
-		void echoToAll(Client &, std::string, std::string);
+		void echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
 		// void makeChanOp( Client &, Client & );
 		// void invite( Client &, Client & );
 		void removeMember( Client & );
 		// void setTopic( std::string, Client & );
+		void updateMemberNick( Client &, std::string, std::string );
 		void whoIsChan( Client & );
 		bool isInChan( std::string );
 		bool isInvited( std::string );

@@ -33,12 +33,24 @@ void Functions::addNick( std::string nick ) {
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 	} else {
+		//need to update client channels
 		if (nick.length() > 16)
 			nick = nick.substr(0, 16);
+		updateChannel(*current_client, current_client->getNick(), nick);
 		UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
 		nicks.erase(current_client->getNick());
 		current_client->setNick(nick);
 	}
+}
+
+void Functions::updateChannel( Client &client, std::string old_nick, std::string new_nick ) {
+	for(chan_it it = channels.begin(); it != channels.end(); it++) {
+		if (it->second.isInChan(old_nick)) {
+			it->second.updateMemberNick(client, old_nick, new_nick);
+			it->second.echoToAll(*current_client, cmd, ":" + new_nick, false, sent);
+		}
+	}
+	sent.clear();
 }
 
 void Functions::NICK( void ) {
@@ -89,6 +101,7 @@ void Functions::JOIN( void ) {
 void Functions::PART(void)
 {
 	std::string chanName;
+	std::string reason;
 	chan_it chan;
 	
 	//have to handle multiple channel parts
@@ -106,8 +119,14 @@ void Functions::PART(void)
 			ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
 		else
 		{
+			if (args.size() >= 2)
+				reason = args[1];
+			else
+				reason = "";
 			UserMessage("PART", chanName + "\n", *current_client);
 			chan->second.removeMember(*current_client);
+			chan->second.echoToAll(*current_client, cmd, reason, true, sent);
+			sent.clear();
 		}
 	}
 	else
@@ -230,9 +249,10 @@ void Functions::PRIVMSG( void ) {
 		if (hash_pos == 0) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
-				chan->second.echoToAll(*current_client, cmd, args[1]);
+				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
 			else
 				ServerMessage(ERR_NOSUCHCHANNEL, " :no such channel\n", *current_client);
+			sent.clear();
 		} else {
 			try {
 				UsertoUser(*current_client, nicks.at(args[0]), cmd, args[1] + "\n");
@@ -250,7 +270,8 @@ void Functions::NOTICE( void ) {
 		if (hash_pos == 0) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
-				chan->second.echoToAll(*current_client, cmd, args[1]);
+				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
+			sent.clear();
 		} else {
 			try {
 				UsertoUser(*current_client, nicks.at(args[0]), cmd, args[1] + "\n");
@@ -305,10 +326,11 @@ void Functions::QUIT( void ) {
 		reason = "";
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
 		if (it->second.isInChan(nick)) {
-			it->second.echoToAll(*current_client, cmd, reason);
+			it->second.echoToAll(*current_client, cmd, reason, true, sent);
 			it->second.removeMember(*current_client);
 		}
 	}
+	sent.clear();
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
 	close(fd);
@@ -381,9 +403,7 @@ void Functions::KILL(void)
 
 void Functions::killMsg(Client source, Client dest) {
 	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
-	message += " " + cmd + " " + dest.getNick() + " ";
-	args.pop_front();
-	message += args.front() + "\n";
+	message += " " + cmd + " " + dest.getNick() + " " + args[1] + "\n";
 	std::cout << message << std::endl;
 	send(dest.getFD(), &message[0], message.length(), 0);
 }
@@ -391,17 +411,16 @@ void Functions::killMsg(Client source, Client dest) {
 void Functions::quitMsg(Client source, std::string msg)
 {
 	std::string nick = source.getNick();
-	std::string mes = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName())
-		+ "Quit :Quit: " + msg;
+	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
+	std::string mes = ":" + user_info + " QUIT :Quit: " + msg;
 	send(source.getFD(), &mes[0], mes.length(), 0);
-	//should be also sent to every user sharing a channel with source
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
-		// need to remove from chan aswell
 		if (it->second.isInChan(nick)) {
-			it->second.echoToAll(source, cmd, msg);
+			it->second.echoToAll(source, "", mes, false, sent);
 			it->second.removeMember(source);
 		}
 	}
+	sent.clear();
 }
 
 void Functions::errMsg(client_it dest, std::string msg)
@@ -410,5 +429,4 @@ void Functions::errMsg(client_it dest, std::string msg)
 	send(dest->second.getFD(), &mes[0], mes.length(), 0);
 	close(dest->second.getFD());
 	nicks.erase(dest);
-	throw IrcErrorException(NULL);
 }
