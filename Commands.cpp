@@ -1,14 +1,6 @@
 #include "Commands.hpp"
 
-void Commands::NICK( void ) {
-	if (args.size() < 1)
-		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n", *current_client);
-	else if (current_client->isPassGood())
-		this->addNick(args[0]);
-	else
-		ServerMessage(ERR_PASSWDMISMATCH, " :need to give a password\n", *current_client);
-}
-
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONNECTION MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void Commands::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
 	try {
@@ -22,6 +14,89 @@ void Commands::CAP( void ) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n", *current_client);
 	}
 }
+
+void Commands::PASS( void ) {
+	if (!current_client->isPassGood()) {
+		try {
+			if (args.at(0) == pass)
+				current_client->passGood();
+			else {
+				ServerMessage(ERR_PASSWDMISMATCH, "04 :password doesn't match\n", *current_client);
+				multi_cmd.clear();
+			}
+		} catch (std::exception &e) {
+			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n", *current_client);
+		}
+	} else
+		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n", *current_client);
+}
+
+void Commands::NICK( void ) {
+	if (args.size() < 1)
+		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n", *current_client);
+	else if (current_client->isPassGood())
+		this->addNick(args[0]);
+	else
+		ServerMessage(ERR_PASSWDMISMATCH, " :need to give a password\n", *current_client);
+}
+
+void Commands::USER( void ) {
+	if (!current_client->isRegistered()) {
+		if (current_client->isPassGood()) {
+			this->RegisterUser();
+		}
+		else
+			ServerMessage(ERR_PASSWDMISMATCH, " :need to give password\n", *current_client);
+	} else
+		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n", *current_client);
+}
+
+void Commands::PING( void ) {
+	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
+	send(fd, pong.data(), pong.length(), 0);
+}
+
+void Commands::OPER(void)
+{
+	if (args.size() >= 2)
+	{
+		if (args[1] == operPass)
+		{
+			current_client->setOperator(true);
+			ServerMessage(RPL_YOUREOPER, " : you did it\n", *current_client);
+		}
+		else
+			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n", *current_client);
+	} else {
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+	}
+	return ;
+}
+
+void Commands::QUIT( void ) {
+	client_it cli_nick;
+	std::string nick = current_client->getNick();
+	std::string reason;
+
+	cli_nick = nicks.find(nick);
+	if (args.size() > 0)
+		reason = args[0];
+	else
+		reason = "";
+	for (chan_it it = channels.begin(); it != channels.end(); it++) {
+		if (it->second.isInChan(nick)) {
+			it->second.echoToAll(*current_client, cmd, reason, true, sent);
+			it->second.removeMember(*current_client);
+		}
+	}
+	sent.clear();
+	if (cli_nick != nicks.end())
+		nicks.erase(cli_nick);
+	close(fd);
+	throw IrcErrorException("Client has quit\n");
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::JOIN( void ) {
 	size_t hash_pos;
@@ -72,16 +147,6 @@ void Commands::PART(void)
 	}
 }
 
-void Commands::INVITE(void)
-{
-	std::string chanName;
-	chan_it chan;
-	if (isEnoughParams(2))
-	{
-		chanName = args[1];
-		chan = channels.find(chanName);
-	}
-}
 
 void Commands::TOPIC(void)
 {	
@@ -107,22 +172,43 @@ void Commands::TOPIC(void)
 		}
 	}
 }
-//
+
+// void Commands::INVITE(void)
+// {
+// 	std::string chanName;
+// 	chan_it chan;
+// 	if (isEnoughParams(2))
+// 	{
+// 		chanName = args[1];
+// 		chan = channels.find(chanName);
+// 	}
+// }
+
+// void Commands::KICK(void)
+// {
+// 	
+// }
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SERVER QUERIES / COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+void Commands::MOTD( void ) {
+	std::fstream file;
+	std::string tmp;
+
+	file.open("ft_irc.motd");
+	if (!file.is_open()) {
+		ServerMessage(ERR_NOMOTD, ":no MOTD\n", *current_client);
+	} else {
+		ServerMessage(RPL_MOTDSTART, ":Message of the Day\n", *current_client);
+		while (std::getline(file, tmp))
+			ServerMessage(RPL_MOTD, tmp + "\n", *current_client);
+		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\a\n", *current_client);
+	}
+}
+
 // void Commands::MODE( void ) {
 
 // }
-
-void Commands::USER( void ) {
-	if (!current_client->isRegistered()) {
-		if (current_client->isPassGood()) {
-			this->RegisterUser();
-		}
-		else
-			ServerMessage(ERR_PASSWDMISMATCH, " :need to give password\n", *current_client);
-	} else
-		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n", *current_client);
-}
-
 void Commands::MODE( void ) {
 	// check for user modes, have to check same for channels
 	std::string modes = "+";
@@ -149,10 +235,7 @@ void Commands::MODE( void ) {
 	}
 }
 
-void Commands::PING( void ) {
-	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
-	send(fd, pong.data(), pong.length(), 0);
-}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::PRIVMSG( void ) {
 	if (args.size() >= 2) {
@@ -194,59 +277,7 @@ void Commands::NOTICE( void ) {
 		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 }
 
-void Commands::PASS( void ) {
-	if (!current_client->isPassGood()) {
-		try {
-			if (args.at(0) == pass)
-				current_client->passGood();
-			else {
-				ServerMessage(ERR_PASSWDMISMATCH, "04 :password doesn't match\n", *current_client);
-				multi_cmd.clear();
-			}
-		} catch (std::exception &e) {
-			ServerMessage(ERR_NEEDMOREPARAMS, "PASS :need more params\n", *current_client);
-		}
-	} else
-		ServerMessage(ERR_ALREADYREGISTERED, ":you're already registered\n", *current_client);
-}
-
-void Commands::MOTD( void ) {
-	std::fstream file;
-	std::string tmp;
-
-	file.open("ft_irc.motd");
-	if (!file.is_open()) {
-		ServerMessage(ERR_NOMOTD, ":no MOTD\n", *current_client);
-	} else {
-		ServerMessage(RPL_MOTDSTART, ":Message of the Day\n", *current_client);
-		while (std::getline(file, tmp))
-			ServerMessage(RPL_MOTD, tmp + "\n", *current_client);
-		ServerMessage(RPL_ENDOFMOTD, ":End of /MOTD command.\a\n", *current_client);
-	}
-}
-
-void Commands::QUIT( void ) {
-	client_it cli_nick;
-	std::string nick = current_client->getNick();
-	std::string reason;
-
-	cli_nick = nicks.find(nick);
-	if (args.size() > 0)
-		reason = args[0];
-	else
-		reason = "";
-	for (chan_it it = channels.begin(); it != channels.end(); it++) {
-		if (it->second.isInChan(nick)) {
-			it->second.echoToAll(*current_client, cmd, reason, true, sent);
-			it->second.removeMember(*current_client);
-		}
-	}
-	sent.clear();
-	if (cli_nick != nicks.end())
-		nicks.erase(cli_nick);
-	close(fd);
-	throw IrcErrorException("Client has quit\n");
-}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USER-BASED QUERIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::WHOIS( void ) {
 	client_it user;
@@ -274,22 +305,7 @@ void Commands::WHOIS( void ) {
 	}
 }
 
-void Commands::OPER(void)
-{
-	if (args.size() >= 2)
-	{
-		if (args[1] == operPass)
-		{
-			current_client->setOperator(true);
-			ServerMessage(RPL_YOUREOPER, " : you did it\n", *current_client);
-		}
-		else
-			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
-	}
-	return ;
-}
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ OPERATOR MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::KILL(void)
 {
