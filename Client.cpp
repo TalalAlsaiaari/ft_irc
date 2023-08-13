@@ -1,14 +1,13 @@
 #include "Client.hpp"
-#include "Channel.hpp"
 
 
-Client::Client() : registered(false), pass_registered(false), is_operator(false), 
+Client::Client() : registered(false), pass_registered(false), is_operator(false),
 	is_invisible(false) {}
 
-Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false), 
+Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false),
 	is_operator(false), is_invisible(false) {}
 
-Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name), 
+Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name),
 	registered(false), pass_registered(false), is_operator(false), is_invisible(false) {}
 
 Client &Client::operator=(const Client &other) {

@@ -1,21 +1,21 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
-	func[std::string("NICK")] = &Parser::NICK;
-	func[std::string("CAP")] = &Parser::CAP;
-	func[std::string("JOIN")] = &Parser::JOIN;
-	func[std::string("USER")] = &Parser::USER;
-	func[std::string("MODE")] = &Parser::MODE;
-	func[std::string("PING")] = &Parser::PING;
-	// func[std::string("PART")] = &Parser::PART;
-	func[std::string("PRIVMSG")] = &Parser::PRIVMSG;
-	func[std::string("PASS")] = &Parser::PASS;
-	func[std::string("MOTD")] = &Parser::MOTD;
-	func[std::string("QUIT")] = &Parser::QUIT;
-	func[std::string("NOTICE")] = &Parser::NOTICE;
-	func[std::string("WHOIS")] = &Parser::WHOIS;
-	func[std::string("OPER")] = &Parser::OPER;
-	func[std::string("KILL")] = &Parser::KILL;
+	func["NICK"] = &Parser::NICK;
+	func["CAP"] = &Parser::CAP;
+	func["JOIN"] = &Parser::JOIN;
+	func["USER"] = &Parser::USER;
+	func["MODE"] = &Parser::MODE;
+	func["PING"] = &Parser::PING;
+	// func["PART"] = &Parser::PART;
+	func["PRIVMSG"] = &Parser::PRIVMSG;
+	func["PASS"] = &Parser::PASS;
+	func["MOTD"] = &Parser::MOTD;
+	func["QUIT"] = &Parser::QUIT;
+	func["NOTICE"] = &Parser::NOTICE;
+	func["WHOIS"] = &Parser::WHOIS;
+	func["OPER"] = &Parser::OPER;
+	func["KILL"] = &Parser::KILL;
 }
 
 Parser::~Parser() {}
@@ -45,7 +45,6 @@ void Parser::findPass( void ) {
 
 void Parser::findCmdArgs( void ) {
 	std::string::size_type pos;
-	devector<std::string> tmp;
 
 	args.clear();
 	multi_cmd.clear();
@@ -92,9 +91,22 @@ void Parser::excecuteCommand( void ) {
 		args = multi_cmd.front();
 		multi_cmd.pop_front();
 		command = func.find(cmd);
-		if (command != func.end())
-			(this->*command->second)();
+		if (command != func.end()) {
+			if (checkRegistration())
+				(this->*command->second)();
+			else
+				ServerMessage(ERR_NOTREGISTERED, " :need to register first\n", *current_client);
+		}
 		else
-			ServerMessage(ERR_UNKNOWNCOMMAND, ":command not found\n");
+			ServerMessage(ERR_UNKNOWNCOMMAND, " :command not found\n", *current_client);
 	}
+}
+
+bool Parser::checkRegistration( void ) {
+	if (cmd != "PASS" && cmd != "CAP" && cmd !="USER" && cmd != "NICK") {
+		if (current_client->isPassGood() && current_client->isRegistered())
+			return true;
+		return false;
+	}
+	return true;
 }
