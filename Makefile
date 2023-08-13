@@ -1,7 +1,7 @@
 NAME=ircserv
 
 SRCS = main.cpp Client.cpp Parser.cpp Functions.cpp Server.cpp IrcErrorException.cpp Channel.cpp \
-		Messages.cpp
+		Messages.cpp Commands.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

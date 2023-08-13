@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Functions.hpp"
+#include "Commands.hpp"
 
-class Parser : public Functions {
+class Parser : public Commands {
 	public:
 		Parser( );
 		~Parser( );
