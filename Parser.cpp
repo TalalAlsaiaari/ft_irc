@@ -9,7 +9,7 @@ Parser::Parser() {
 	func["USER"] = &Parser::USER;
 	func["MODE"] = &Parser::MODE;
 	func["PING"] = &Parser::PING;
-	// func["PART"] = &Parser::PART;
+	func["PART"] = &Parser::PART;
 	func["PRIVMSG"] = &Parser::PRIVMSG;
 	func["PASS"] = &Parser::PASS;
 	func["MOTD"] = &Parser::MOTD;

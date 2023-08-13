@@ -86,9 +86,28 @@ void Functions::JOIN( void ) {
 	}
 }
 
-// void Functions::PART( void ) {
-
-// }
+void Functions::PART(void)
+{
+	std::string chanName;
+	chan_it chan;
+	
+	if (args.size() >= 1)
+	{
+		chanName = args[0];
+		chan = channels.find(chanName);
+		if (chan == channels.end())
+			ServerMessage(ERR_NOSUCHCHANNEL, chanName + " :No such channel\n", *current_client);
+		else if (!chan->second.isInChan(current_client->getNick()))
+			ServerMessage(ERR_NOTONCHANNEL, chanName + " :You're not on that channel\n", *current_client);
+		else
+		{
+			UserMessage("PART", chanName + "\n", *current_client);
+			chan->second.removeMember(*current_client);
+		}
+	}
+	else
+		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+}
 
 // void Functions::INVITE( void ) {
 
