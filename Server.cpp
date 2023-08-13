@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/12 18:39:57 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/13 16:09:27 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,8 @@ void	Server::removeClient(int index)
 		close(this->pfds[index].fd);
 		this->pfds[index] = this->pfds[this->fd_count - 1];
 		this->fd_count--;
+		parser.removeClient(this->clients[this->sender_fd].getNick());
+		clients.erase(this->sender_fd);
 		std::cout << "Client " << this->sender_fd << " deleted" << std::endl;
 	}
 	return ;

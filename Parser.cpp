@@ -111,3 +111,10 @@ bool Parser::checkRegistration( void ) {
 	}
 	return true;
 }
+
+void Parser::removeClient( std::string remove ) {
+	client_it client = nicks.find(remove);
+	
+	if (client != nicks.end())
+		nicks.erase(client);
+}

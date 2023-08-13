@@ -143,6 +143,7 @@ std::string const Channel::getTopic(void) const
 {
     return this->topic;
 }
+
 void Channel::updateMemberNick( Client &client, std::string old_nick, std::string new_nick ) {
     iter mems = members.find(old_nick);
     iter oper = operators.find(old_nick);
