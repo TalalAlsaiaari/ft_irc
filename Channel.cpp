@@ -40,29 +40,36 @@ Channel::~Channel() {
 
 void Channel::addMember( Client &add ) {
     if (!isInChan(add.getNick())) {
+        std::map<std::string, Client *> sent;
         members[add.getNick()] = &add;
         UserMessage("JOIN", name + " * :welcome\n", add);
         whoIsChan(add);
-        echoToAll(add, "JOIN", "");
+        echoToAll(add, "JOIN", "", true, sent);
     }
     else
         std::cout << "already in channel\n";
 }
 
-void Channel::echoToAll(Client &client, std::string cmd, std::string trailing) {
+void Channel::echoToAll(Client &client, std::string cmd, std::string trailing, bool chan, std::map<std::string, Client *> &sent) {
     std::string client_info = USER_FN(client.getNick(), client.getUserName(), client.getHostName());
-    std::string message = ":" + client_info + " " + cmd + " " + name;
+    std::string message = ":" + client_info + " " + cmd;
 
+    if (chan)
+        message += " " + name;
     if (!trailing.empty())
         message += " " + trailing;
     message += "\n";
     for (iter it = members.begin(); it != members.end(); it++) {
-        if (it->second->getNick() != client.getNick())
+        if (it->second->getNick() != client.getNick() && sent.find(it->second->getNick()) == sent.end()) {
             send(it->second->getFD(), &message[0], message.length(), 0);
+            sent[it->second->getNick()] = it->second;
+        }
     }
     for (iter it = operators.begin(); it != operators.end(); it++) {
-        if (it->second->getNick() != client.getNick())
+        if (it->second->getNick() != client.getNick() && sent.find(it->second->getNick()) == sent.end()) {
             send(it->second->getFD(), &message[0], message.length(), 0);
+            sent[it->second->getNick()] = it->second;
+        }
     }
 }
 
@@ -70,10 +77,12 @@ void Channel::echoToAll(Client &client, std::string cmd, std::string trailing) {
 //
 // }
 //
+
 // void Channel::invite( Client &, Client & ) {
 //
 // }
 //
+
 void Channel::removeMember( Client & remove) {
     iter member = members.find(remove.getNick());
     iter oper = operators.find(remove.getNick());
@@ -119,4 +128,18 @@ void Channel::whoIsChan( Client &client ) {
     who += "\n";
     ServerMessage(RPL_NAMREPLY, who, client);
     ServerMessage(RPL_ENDOFNAMES, name + " :END of /NAMES list\n", client);
+}
+
+void Channel::updateMemberNick( Client &client, std::string old_nick, std::string new_nick ) {
+    iter mems = members.find(old_nick);
+    iter oper = operators.find(old_nick);
+    
+    if (mems != members.end()) {
+        members.erase(old_nick);
+        members[new_nick] = &client;
+    }
+    if (oper != operators.end()) {
+        operators.erase(old_nick);
+        operators[new_nick] = &client;
+    }
 }
