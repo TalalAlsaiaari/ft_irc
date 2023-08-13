@@ -12,6 +12,7 @@ class Parser : public Functions {
 		void excecuteCommand( void );
 		bool checkRegistration( void );
 		std::string makeUpper( std::string str);
+		void removeClient(std::string remove);
 	private:
 		typedef void (Parser::*Funcs)(void);
 		std::map<std::string, Funcs> func;
