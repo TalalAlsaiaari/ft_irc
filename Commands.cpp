@@ -187,10 +187,10 @@ void Commands::INVITE(void)
 		{
 			//reject when channel is invite only and current user is not op
 			if (chan->second.isInChan(dest->second.getNick()))
-				ServerMessage(ERR_USERONCHANNEL, chanName + " :User already on channel\n", *current_client);
+				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
 			else
 			{
-				ServerMessage(RPL_INVITING, args[0] + " : " + chanName + "\n", *current_client);
+				ServerMessage(RPL_INVITING, args[0] + " " + chanName + "\n", *current_client);
 				killMsg(*current_client, dest->second);
 			}
 		}
