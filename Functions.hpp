@@ -40,8 +40,8 @@ class Functions {
 		void setPass( std::string pass );
 		void updateChannel(Client &client, std::string old_nick, std::string new_nick);
 		std::string getPass( void ) const;
-		void addNick( std::string nick );
-		void RegisterUser( void );
+		bool checkNick( std::string nick );
+		bool RegisterUser( void );
 
 		void quitMsg(Client, std::string);
 		void killMsg(Client, Client);
