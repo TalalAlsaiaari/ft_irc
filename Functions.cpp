@@ -102,6 +102,12 @@ void Functions::errMsg(client_it dest, std::string msg)
 	nicks.erase(dest);
 }
 
+/**
+ * @brief Splits string by delimiter excluding delim from the returned vector
+ * @param {std::string} str 
+ * @param {std::string} delim
+ * @return {std::vector< std::string >}
+ */
 std::vector<std::string> Functions::split(std::string str, std::string delim) {
 	std::vector<std::string> ret;
 	size_t pos;
@@ -155,7 +161,8 @@ bool Functions::isUserOp(std::string chanName)
 	return true;
 }
 
-bool Functions::isChanName( std::string name ) {
+bool Functions::isChanName( std::string name )
+{
 	if (name.find('#') == 0)
 		return true;
 	return false;
