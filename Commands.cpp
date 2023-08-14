@@ -297,7 +297,7 @@ void Commands::PRIVMSG( void ) {
 			if (chan != channels.end())
 				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
 			else
-				ServerMessage(ERR_NOSUCHCHANNEL, " :no such channel\n", *current_client);
+				ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :no such channel\n", *current_client);
 			sent.clear();
 		} else {
 			try {
