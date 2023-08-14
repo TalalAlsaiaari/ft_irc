@@ -153,6 +153,8 @@ void Commands::PART(void)
 			chan->second.removeMember(*current_client);
 			chan->second.echoToAll(*current_client, cmd, reason, true, sent);
 			sent.clear();
+			if (!chan->second.getCurrentCount())
+				channels.erase(chan);
 		}
 	}
 }
@@ -192,11 +194,11 @@ void Commands::INVITE(void)
 	{
 		chanName = args[1];
 		dest = nicks.find(args[0]);
-		if (dest == nicks.end())
-			return ;
 		chan = channels.find(chanName);
 		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
+			if (dest == nicks.end())
+				return ;
 			//reject when channel is invite only and current user is not op
 			if (chan->second.isInChan(dest->second.getNick()))
 				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
@@ -238,6 +240,8 @@ void Commands::KICK(void)
 				chan->second.echoToAll(*current_client, cmd, args[1] + " " + reason, true, sent);
 				chan->second.removeMember(dest->second);
 				sent.clear();
+				if (!chan->second.getCurrentCount())
+					channels.erase(chan);
 			}
 		}
 	}

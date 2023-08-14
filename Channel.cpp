@@ -11,7 +11,7 @@ Channel::Channel( std::string name, Client &creator ) {
     this->inviteOnly = false;
     this->hasLimit = false;
     this->defKickMsg = "Bye, miss you";
-    this->currentCount = 0;
+    this->currentCount = 1;
     operators[creator.getNick()] = &creator;
     UserMessage("JOIN", name + " * :me\n", creator);
     whoIsChan(creator);
