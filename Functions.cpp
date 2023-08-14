@@ -470,3 +470,9 @@ bool Functions::isUserOp(std::string chanName)
 	}
 	return true;
 }
+
+bool Functions::isChanName( std::string name ) {
+	if (name.find('#') == 0)
+		return true;
+	return false;
+}
