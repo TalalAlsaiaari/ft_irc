@@ -233,7 +233,6 @@ void Commands::KICK(void)
 				ServerMessage(ERR_USERNOTINCHANNEL, args[1] + " " + chanName + " :User is not on channel\n", *current_client);
 			else
 			{
-				//send msg to everyone in channel in form srcinfo, cmd, channame, kicked nick, comment
 				UserMessage(cmd, chanName + " " + args[1] + " " + reason + "\n", *current_client);
 				chan->second.echoToAll(*current_client, cmd, args[1] + " " + reason, true, sent);
 				chan->second.removeMember(dest->second);
