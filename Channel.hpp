@@ -21,6 +21,8 @@ class Channel
 		bool			hasLimit;
 		std::string		defKickMsg;
 		unsigned int	currentCount;
+		std::string		modes;
+		
 	public:
 		Channel();
 		Channel( std::string, Client & );
@@ -42,4 +44,6 @@ class Channel
 		std::string const getTopic(void) const;
 		unsigned int getCurrentCount(void) const;
 		std::string const getDefKickMsg(void) const;
+		std::string const getModes(void) const;
+		void setModes(std::string modestring);
 };

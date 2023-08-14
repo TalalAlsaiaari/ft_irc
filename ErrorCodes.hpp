@@ -47,5 +47,6 @@
 #define ERR_USERONCHANNEL " 443 "
 #define RPL_INVITING " 341 "
 #define ERR_USERNOTINCHANNEL " 441 "
+#define RPL_CHANNELMODEIS " 324 "
 
 #define USER_FN(nick,user,host) (nick + "!" + user + "@" + host)

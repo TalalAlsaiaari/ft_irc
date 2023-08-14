@@ -12,6 +12,7 @@ Channel::Channel( std::string name, Client &creator ) {
     this->hasLimit = false;
     this->defKickMsg = "Bye, miss you";
     this->currentCount = 1;
+    this->modes = "";
     operators[creator.getNick()] = &creator;
     UserMessage("JOIN", name + " * :me\n", creator);
     whoIsChan(creator);
@@ -170,4 +171,15 @@ unsigned int Channel::getCurrentCount(void) const
 std::string const Channel::getDefKickMsg(void) const
 {
     return this->defKickMsg;
+}
+
+std::string const Channel::getModes(void) const
+{
+    return this->modes;
+}
+
+void Channel::setModes(std::string modestring)
+{
+    //have to parse a little for assigning multiple modes in multiple mode commands
+    this->modes = modestring;
 }
