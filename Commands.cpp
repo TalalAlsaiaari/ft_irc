@@ -99,15 +99,13 @@ void Commands::QUIT( void ) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::JOIN( void ) {
-	size_t hash_pos;
 	std::string chanName;
 	chan_it chan;
 
 	if (args.size() >= 1) {
 		chanName = args[0];
-		hash_pos = chanName.find('#');
 		chan = channels.find(chanName);
-		if (hash_pos == 0) {
+		if (isChanName(chanName)) {
 			if (chan == channels.end())
 				channels[chanName] = Channel(chanName, *current_client);
 			else
