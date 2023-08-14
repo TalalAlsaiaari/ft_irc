@@ -81,8 +81,8 @@ Main Loop                  |  Parsing loop
 	- [ ] create channel functions _(Talal)_
 		- [x] JOIN _(Alex)_
 		- [x] PART _(Talal)_
-		- [ ] INVITE _(Talal)_
-		- [ ] KICK _(Talal)_
+		- [x] INVITE _(Talal)_
+		- [x] KICK _(Talal)_
 		- [x] TOPIC _(Talal)_
 		- [ ] MODE _(Talal)_
 			- [ ] i (Set/remove Invite-only channel) _(Talal)_
