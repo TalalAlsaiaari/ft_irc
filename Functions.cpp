@@ -18,7 +18,7 @@ std::string Functions::getPass( void ) const {
 	return this->pass;
 }
 
-void Functions::addNick( std::string nick ) {
+bool Functions::checkNick( std::string nick ) {
 	client_it it;
 
 	it = nicks.find(nick);
@@ -33,14 +33,17 @@ void Functions::addNick( std::string nick ) {
 			close(fd);
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
-	} else {
-		if (nick.length() > 16)
-			nick = nick.substr(0, 16);
-		updateChannel(*current_client, current_client->getNick(), nick);
-		UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
-		nicks.erase(current_client->getNick());
-		current_client->setNick(nick);
+		return false;
 	}
+	return true;
+	// else {
+	// 	if (nick.length() > 16)
+	// 		nick = nick.substr(0, 16);
+	// 	updateChannel(*current_client, current_client->getNick(), nick);
+	// 	UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
+	// 	nicks.erase(current_client->getNick());
+	// 	current_client->setNick(nick);
+	// }
 }
 
 void Functions::updateChannel( Client &client, std::string old_nick, std::string new_nick ) {
@@ -53,7 +56,7 @@ void Functions::updateChannel( Client &client, std::string old_nick, std::string
 	sent.clear();
 }
 
-void Functions::RegisterUser( void ) {
+bool Functions::RegisterUser( void ) {
 	try {
 		if (current_client->getUserName().empty())
 			current_client->setUserName("~" + args.at(0));
@@ -66,7 +69,7 @@ void Functions::RegisterUser( void ) {
 		else {
 			current_client->registration();
 			ConnectionMessage(*current_client);
-			// this->MOTD();
+			return true;
 		}
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
@@ -74,6 +77,7 @@ void Functions::RegisterUser( void ) {
 		close(fd);
 		throw IrcErrorException("user not registered\n");
 	}
+	return false;
 }
 
 void Functions::killMsg(Client source, Client dest) {
