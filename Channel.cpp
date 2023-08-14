@@ -166,3 +166,8 @@ unsigned int Channel::getCurrentCount(void) const
 {
     return this->currentCount;
 }
+
+std::string const Channel::getDefKickMsg(void) const
+{
+    return this->defKickMsg;
+}

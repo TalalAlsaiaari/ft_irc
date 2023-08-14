@@ -197,10 +197,39 @@ void Commands::INVITE(void)
 	}
 }
 
-// void Commands::KICK(void)
-// {
-// 	
-// }
+void Commands::KICK(void)
+{
+	std::string chanName;
+	client_it dest;
+	chan_it chan;
+	std::string reason;
+	
+	if (isEnoughParams(2))
+	{
+		chanName = args[0];
+		dest = nicks.find(args[1]);
+		if (dest == nicks.end())
+			return ;
+		chan = channels.find(chanName);
+		reason = chan->second.getDefKickMsg();
+		if (args.size() == 3)
+			reason = args[2];
+		if (channelExist(chanName, chan) && userInChan(chanName, chan))
+		{
+			//check for op privs
+			if (!chan->second.isInChan(dest->second.getNick()))
+				ServerMessage(ERR_USERNOTINCHANNEL, args[1] + " " + chanName + " :User is not on channel\n", *current_client);
+			else
+			{
+				//send msg to everyone in channel in form srcinfo, cmd, channame, kicked nick, comment
+				UserMessage(cmd, chanName + " " + args[1] + " " + reason + "\n", *current_client);
+				chan->second.echoToAll(*current_client, cmd, args[1] + " " + reason, true, sent);
+				chan->second.removeMember(dest->second);
+				sent.clear();
+			}
+		}
+	}
+}
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SERVER QUERIES / COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

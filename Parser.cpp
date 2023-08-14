@@ -1,23 +1,24 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
-	func["NICK"] = &Parser::NICK;
 	func["CAP"] = &Parser::CAP;
-	func["JOIN"] = &Parser::JOIN;
-	func["USER"] = &Parser::USER;
-	func["MODE"] = &Parser::MODE;
-	func["PING"] = &Parser::PING;
-	func["PART"] = &Parser::PART;
-	func["PRIVMSG"] = &Parser::PRIVMSG;
 	func["PASS"] = &Parser::PASS;
-	func["MOTD"] = &Parser::MOTD;
-	func["QUIT"] = &Parser::QUIT;
-	func["NOTICE"] = &Parser::NOTICE;
-	func["WHOIS"] = &Parser::WHOIS;
+	func["NICK"] = &Parser::NICK;
+	func["USER"] = &Parser::USER;
+	func["PING"] = &Parser::PING;
 	func["OPER"] = &Parser::OPER;
-	func["KILL"] = &Parser::KILL;
+	func["QUIT"] = &Parser::QUIT;
+	func["JOIN"] = &Parser::JOIN;
+	func["PART"] = &Parser::PART;
 	func["TOPIC"] = &Parser::TOPIC;
 	func["INVITE"] = &Parser::INVITE;
+	func["KICK"] = &Parser::KICK;
+	func["MODE"] = &Parser::MODE;
+	func["PRIVMSG"] = &Parser::PRIVMSG;
+	func["NOTICE"] = &Parser::NOTICE;
+	func["WHOIS"] = &Parser::WHOIS;
+	func["KILL"] = &Parser::KILL;
+	func["MOTD"] = &Parser::MOTD;
 }
 
 Parser::~Parser() {}

@@ -41,4 +41,5 @@ class Channel
 		bool hasTopic(void);
 		std::string const getTopic(void) const;
 		unsigned int getCurrentCount(void) const;
+		std::string const getDefKickMsg(void) const;
 };
