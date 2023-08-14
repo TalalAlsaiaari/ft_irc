@@ -69,7 +69,7 @@ void Commands::PING( void ) {
 
 void Commands::OPER(void)
 {
-	if (args.size() >= 2)
+	if (isEnoughParams(2))
 	{
 		if (args[1] == operPass)
 		{
@@ -78,8 +78,6 @@ void Commands::OPER(void)
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :das no good b\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
 	}
 	return ;
 }
@@ -182,16 +180,31 @@ void Commands::TOPIC(void)
 	}
 }
 
-// void Commands::INVITE(void)
-// {
-// 	std::string chanName;
-// 	chan_it chan;
-// 	if (isEnoughParams(2))
-// 	{
-// 		chanName = args[1];
-// 		chan = channels.find(chanName);
-// 	}
-// }
+void Commands::INVITE(void)
+{
+	std::string chanName;
+	client_it dest;
+	chan_it chan;
+	if (isEnoughParams(2))
+	{
+		chanName = args[1];
+		dest = nicks.find(args[0]);
+		if (dest == nicks.end())
+			return ;
+		chan = channels.find(chanName);
+		if (channelExist(chanName, chan) && userInChan(chanName, chan))
+		{
+			//reject when channel is invite only and current user is not op
+			if (chan->second.isInChan(dest->second.getNick()))
+				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
+			else
+			{
+				ServerMessage(RPL_INVITING, args[0] + " " + chanName + "\n", *current_client);
+				killMsg(*current_client, dest->second);
+			}
+		}
+	}
+}
 
 // void Commands::KICK(void)
 // {
