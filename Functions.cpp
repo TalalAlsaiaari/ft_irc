@@ -160,3 +160,27 @@ bool Functions::isChanName( std::string name ) {
 		return true;
 	return false;
 }
+
+void Functions::userMode(std::string modes)
+{
+	try {
+		client_it target = nicks.find(args.at(0));
+		if (target == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
+		else if (target->second.getFD() != fd)
+			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n", *current_client);
+		else {
+			try {
+				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
+			} catch (std::exception &e) {
+				if (target->second.isInvisibile())
+					modes += "i";
+				if (target->second.isOperator())
+					modes += "o";
+				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
+			}
+		}
+	} catch (std::exception &e) {
+		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n", *current_client);
+	}
+}
