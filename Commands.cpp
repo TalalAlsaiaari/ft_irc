@@ -278,8 +278,6 @@ void Commands::MODE( void ) {
 			try {
 				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
 			} catch (std::exception &e) {
-				if (target->second.isInvisibile())
-					modes += "i";
 				if (target->second.isOperator())
 					modes += "o";
 				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
@@ -312,6 +310,8 @@ void Commands::PRIVMSG( void ) {
 }
 
 void Commands::NOTICE( void ) {
+	client_it notice_him;
+	
 	if (isEnoughParams(2)) {
 		if (isChanName(args[0])) {
 			chan_it chan = channels.find(args[0]);
@@ -319,11 +319,9 @@ void Commands::NOTICE( void ) {
 				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
 			sent.clear();
 		} else {
-			try {
-				UsertoUser(*current_client, nicks.at(args[0]), cmd, args[1] + "\n");
-			} catch (std::exception &e) {
-				std::cout << "Error: notice not sent\n";
-			}
+			notice_him = nicks.find(args[0]);
+			if (notice_him != nicks.end())
+				UsertoUser(*current_client, notice_him->second, cmd, args[1] + "\n");
 		}
 	}
 }
@@ -347,12 +345,12 @@ void Commands::WHOIS( void ) {
 				ServerMessage(RPL_WHOISOPERATOR, user->second.getNick() + " :is a local operator\n", *current_client);
 			ServerMessage(RPL_WHOISSERVER, user->second.getNick() + " " + user->second.getServerName() + " :ft_ircserv\n", *current_client);
 			ServerMessage(RPL_WHOISACTUALLY, user->second.getNick() + " " + user->second.getHostName() + " :actually using host\n", *current_client);
-			ServerMessage(RPL_ENDOFWHOIS, ":end of WHOIS\n",*current_client);
+			ServerMessage(RPL_ENDOFWHOIS, " :end of WHOIS\n",*current_client);
 		} else {
-			ServerMessage(ERR_NOSUCHNICK, ":nobody here by that name\n", *current_client);
+			ServerMessage(ERR_NOSUCHNICK, " :nobody here by that name\n", *current_client);
 		}
 	} else {
-		ServerMessage(ERR_NONICKNAMEGIVEN, ":need nick name\n",  *current_client);
+		ServerMessage(ERR_NONICKNAMEGIVEN, " :need nick name\n",  *current_client);
 	}
 }
 

@@ -5,6 +5,8 @@ Channel::Channel() {
 
 Channel::Channel( std::string name, Client &creator ) {
     this->name = name;
+    if (name.length() > 50)
+        this->name = name.substr(0, 50);
     // this->pass = pass;
     this->topic = "";
     this->limit = 0;
