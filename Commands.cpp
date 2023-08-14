@@ -3,15 +3,13 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONNECTION MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void Commands::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
-	try {
-		if (args.at(0) == "LS")
+	if (isEnoughParams(2)) {
+		if (args[0] == "LS")
 			send(fd, mes.data(), mes.length(), 0);
-		if (args.at(0) == "REQ") {
-			mes = "CAP * ACK " + args.at(1) + "\n";
+		if (args[0] == "REQ") {
+			mes = "CAP * ACK " + args[1] + "\n";
 			send(fd, mes.data(), mes.length(), 0);
 		}
-	} catch (std::exception &e) {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :Need more params\n", *current_client);
 	}
 }
 
@@ -295,13 +293,13 @@ void Commands::MODE( void ) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::PRIVMSG( void ) {
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		if (isChanName(args[0])) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
 				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
 			else
-				ServerMessage(ERR_NOSUCHCHANNEL, args[0] + " :no such channel\n", *current_client);
+				ServerMessage(ERR_NOSUCHNICK, args[0] + " :no such nick/channel\n", *current_client);
 			sent.clear();
 		} else {
 			try {
@@ -310,12 +308,11 @@ void Commands::PRIVMSG( void ) {
 				ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
 			}
 		}
-	} else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+	} 
 }
 
 void Commands::NOTICE( void ) {
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		if (isChanName(args[0])) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
@@ -328,8 +325,7 @@ void Commands::NOTICE( void ) {
 				std::cout << "Error: notice not sent\n";
 			}
 		}
-	} else
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
+	}
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USER-BASED QUERIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -366,7 +362,7 @@ void Commands::KILL(void)
 {
 	client_it user;
 
-	if (args.size() >= 2) {
+	if (isEnoughParams(2)) {
 		user = nicks.find(args[0]);
 		if (!current_client->isOperator())
 			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n", *current_client);
@@ -378,7 +374,5 @@ void Commands::KILL(void)
 			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
 		}
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, " :need more params\n", *current_client);
-	}
+	} 
 }
