@@ -37,7 +37,7 @@ class Channel
 		void whoIsChan( Client & );
 		bool isInChan( std::string );
 		bool isInvited( std::string );
-		void setTopic(std::string);
+		void setTopic(std::string topic);
 		bool hasTopic(void);
 		std::string const getTopic(void) const;
 		unsigned int getCurrentCount(void) const;

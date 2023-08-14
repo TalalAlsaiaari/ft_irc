@@ -32,17 +32,18 @@ void Commands::PASS( void ) {
 }
 
 void Commands::NICK( void ) {
+	std:: string nick;
 	if (args.size() < 1)
 		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n", *current_client);
 	else if (current_client->isPassGood()) {
-		if (checkNick(args[0])) {
+		nick = args[0];
+		if (checkNick(nick)) {
 			if (nick.length() > 16)
 				nick = nick.substr(0, 16);
 			updateChannel(*current_client, current_client->getNick(), nick);
 			UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
 			nicks.erase(current_client->getNick());
 			current_client->setNick(nick);
-		}
 		}
 	}
 	else

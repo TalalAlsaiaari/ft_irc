@@ -36,14 +36,6 @@ bool Functions::checkNick( std::string nick ) {
 		return false;
 	}
 	return true;
-	// else {
-	// 	if (nick.length() > 16)
-	// 		nick = nick.substr(0, 16);
-	// 	updateChannel(*current_client, current_client->getNick(), nick);
-	// 	UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
-	// 	nicks.erase(current_client->getNick());
-	// 	current_client->setNick(nick);
-	// }
 }
 
 void Functions::updateChannel( Client &client, std::string old_nick, std::string new_nick ) {
