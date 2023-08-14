@@ -32,10 +32,20 @@ void Commands::PASS( void ) {
 }
 
 void Commands::NICK( void ) {
+	std:: string nick;
 	if (args.size() < 1)
 		ServerMessage(ERR_NONICKNAMEGIVEN, ":need to give a nick name\n", *current_client);
-	else if (current_client->isPassGood())
-		this->addNick(args[0]);
+	else if (current_client->isPassGood()) {
+		nick = args[0];
+		if (checkNick(nick)) {
+			if (nick.length() > 16)
+				nick = nick.substr(0, 16);
+			updateChannel(*current_client, current_client->getNick(), nick);
+			UserMessage(cmd, " " + nick + " :" + nick + "\n", *current_client);
+			nicks.erase(current_client->getNick());
+			current_client->setNick(nick);
+		}
+	}
 	else
 		ServerMessage(ERR_PASSWDMISMATCH, " :need to give a password\n", *current_client);
 }
@@ -43,12 +53,13 @@ void Commands::NICK( void ) {
 void Commands::USER( void ) {
 	if (!current_client->isRegistered()) {
 		if (current_client->isPassGood()) {
-			this->RegisterUser();
+			if (RegisterUser())
+				MOTD();
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :need to give password\n", *current_client);
 	} else
-		ServerMessage(ERR_ALREADYREGISTERED, ":you're already reistered\n", *current_client);
+		ServerMessage(ERR_ALREADYREGISTERED, " :you're already reistered\n", *current_client);
 }
 
 void Commands::PING( void ) {
@@ -97,24 +108,25 @@ void Commands::QUIT( void ) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::JOIN( void ) {
-	size_t hash_pos;
+	std::vector<std::string> multi_Chan;
 	std::string chanName;
 	chan_it chan;
 
-	if (args.size() >= 1) {
-		chanName = args[0];
-		hash_pos = chanName.find('#');
-		chan = channels.find(chanName);
-		if (hash_pos == 0) {
-			if (chan == channels.end())
-				channels[chanName] = Channel(chanName, *current_client);
+	if (isEnoughParams(1)) {
+		multi_Chan = split(args[0], ",");
+		while (!multi_Chan.empty()) {
+			chanName = multi_Chan.back();
+			multi_Chan.pop_back();
+			chan = channels.find(chanName);
+			if (isChanName(chanName)) {
+				if (chan == channels.end())
+					channels[chanName] = Channel(chanName, *current_client);
+				else
+					chan->second.addMember(*current_client);
+			}
 			else
-				chan->second.addMember(*current_client);
+				ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
 		}
-		else
-			ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 	}
 }
 
@@ -262,8 +274,7 @@ void Commands::MODE( void ) {
 			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n", *current_client);
 		else {
 			try {
-				args.at(1);
-				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args[1] + "\n", *current_client);
+				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
 			} catch (std::exception &e) {
 				if (target->second.isInvisibile())
 					modes += "i";
@@ -281,8 +292,7 @@ void Commands::MODE( void ) {
 
 void Commands::PRIVMSG( void ) {
 	if (args.size() >= 2) {
-		size_t hash_pos = args[0].find('#');
-		if (hash_pos == 0) {
+		if (isChanName(args[0])) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
 				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
@@ -302,8 +312,7 @@ void Commands::PRIVMSG( void ) {
 
 void Commands::NOTICE( void ) {
 	if (args.size() >= 2) {
-		size_t hash_pos = args[0].find('#');
-		if (hash_pos == 0) {
+		if (isChanName(args[0])) {
 			chan_it chan = channels.find(args[0]);
 			if (chan != channels.end())
 				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);

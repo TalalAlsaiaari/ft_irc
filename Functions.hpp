@@ -40,14 +40,16 @@ class Functions {
 		void setPass( std::string pass );
 		void updateChannel(Client &client, std::string old_nick, std::string new_nick);
 		std::string getPass( void ) const;
-		void addNick( std::string nick );
-		void RegisterUser( void );
+		bool checkNick( std::string nick );
+		bool RegisterUser( void );
 		void quitMsg(Client source, std::string msg);
 		void killMsg(Client source, Client dest);
 		void errMsg(std::map<std::string, Client>::iterator dest, std::string msg);
+		std::vector<std::string> split(std::string str, std::string delim);
 		
 		bool isEnoughParams(unsigned int paramNum);
 		bool channelExist(std::string chanName, chan_it channel);
 		bool userInChan(std::string chanName, chan_it channel);
 		bool isUserOp(std::string chanName);
+		bool isChanName( std::string name );
 };
