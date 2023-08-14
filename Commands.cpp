@@ -108,22 +108,25 @@ void Commands::QUIT( void ) {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CHANNEL OPERATIONS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 void Commands::JOIN( void ) {
+	std::vector<std::string> multi_Chan;
 	std::string chanName;
 	chan_it chan;
 
-	if (args.size() >= 1) {
-		chanName = args[0];
-		chan = channels.find(chanName);
-		if (isChanName(chanName)) {
-			if (chan == channels.end())
-				channels[chanName] = Channel(chanName, *current_client);
+	if (isEnoughParams(1)) {
+		multi_Chan = split(args[0], ",");
+		while (!multi_Chan.empty()) {
+			chanName = multi_Chan.back();
+			multi_Chan.pop_back();
+			chan = channels.find(chanName);
+			if (isChanName(chanName)) {
+				if (chan == channels.end())
+					channels[chanName] = Channel(chanName, *current_client);
+				else
+					chan->second.addMember(*current_client);
+			}
 			else
-				chan->second.addMember(*current_client);
+				ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
 		}
-		else
-			ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
-	} else {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 	}
 }
 

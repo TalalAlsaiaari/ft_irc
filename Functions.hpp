@@ -45,6 +45,7 @@ class Functions {
 		void quitMsg(Client source, std::string msg);
 		void killMsg(Client source, Client dest);
 		void errMsg(std::map<std::string, Client>::iterator dest, std::string msg);
+		std::vector<std::string> split(std::string str, std::string delim);
 		
 		bool isEnoughParams(unsigned int paramNum);
 		bool channelExist(std::string chanName, chan_it channel);

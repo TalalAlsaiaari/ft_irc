@@ -102,6 +102,19 @@ void Functions::errMsg(client_it dest, std::string msg)
 	nicks.erase(dest);
 }
 
+std::vector<std::string> Functions::split(std::string str, std::string delim) {
+	std::vector<std::string> ret;
+	size_t pos;
+	while (!str.empty()) {
+		pos = str.find_first_of(delim);
+		ret.push_back(str.substr(0, pos));
+		if (pos != str.npos)
+			pos += delim.length();
+		str.erase(0, pos);
+	}
+	return ret;
+}
+
 bool Functions::isEnoughParams(unsigned int paramNum)
 {
 	if (args.size() < paramNum)
