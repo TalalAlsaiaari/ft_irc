@@ -113,11 +113,12 @@ Main Loop                  |  Parsing loop
 
 ## Run irssi in Docker
 ``` bash
-	docker run -it --name irssi --network host irssi
+	docker run -it --rm --name irssi --network host irssi
 	/set nick <name>
-	/connect host.docker.internal <port>
+	/connect host.docker.internal <port> <password>
 	/join #<channel_name>
 	/msg <nick> <message>
+	...
 ```
 ## Run Executable
 ``` bash
