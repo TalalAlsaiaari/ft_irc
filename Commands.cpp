@@ -212,8 +212,10 @@ void Commands::INVITE(void)
 	}
 }
 
+// can have user names separated by commas --> DONE
 void Commands::KICK(void)
 {
+	std::vector<std::string> multi_nick;
 	std::string chanName;
 	client_it dest;
 	chan_it chan;
@@ -222,25 +224,29 @@ void Commands::KICK(void)
 	if (isEnoughParams(2))
 	{
 		chanName = args[0];
-		dest = nicks.find(args[1]);
-		if (dest == nicks.end())
-			return ;
-		chan = channels.find(chanName);
-		reason = chan->second.getDefKickMsg();
-		if (args.size() == 3)
-			reason = args[2];
-		if (channelExist(chanName, chan) && userInChan(chanName, chan))
-		{
-			if (!chan->second.isInChan(dest->second.getNick()))
-				ServerMessage(ERR_USERNOTINCHANNEL, args[1] + " " + chanName + " :User is not on channel\n", *current_client);
-			else if (chan->second.isUserOp(chanName, *current_client))
+		multi_nick = split(args[1], ",");
+		while (!multi_nick.empty()) {
+			dest = nicks.find(multi_nick.back());
+			multi_nick.pop_back();
+			if (dest == nicks.end())
+				return ;
+			chan = channels.find(chanName);
+			reason = chan->second.getDefKickMsg();
+			if (args.size() == 3)
+				reason = args[2];
+			if (channelExist(chanName, chan) && userInChan(chanName, chan))
 			{
-				UserMessage(cmd, chanName + " " + args[1] + " " + reason + "\n", *current_client);
-				chan->second.echoToAll(*current_client, cmd, args[1] + " " + reason, true, sent);
-				chan->second.removeMember(dest->second);
-				sent.clear();
-				if (!chan->second.getCurrentCount())
-					channels.erase(chan);
+				if (!chan->second.isInChan(dest->second.getNick()))
+					ServerMessage(ERR_USERNOTINCHANNEL, dest->second.getNick() + " " + chanName + " :User is not on channel\n", *current_client);
+				else if (chan->second.isUserOp(chanName, *current_client))
+				{
+					UserMessage(cmd, chanName + " " + dest->second.getNick() + " " + reason + "\n", *current_client);
+					chan->second.echoToAll(*current_client, cmd, dest->second.getNick() + " " + reason, true, sent);
+					chan->second.removeMember(dest->second);
+					sent.clear();
+					if (!chan->second.getCurrentCount())
+						channels.erase(chan);
+				}
 			}
 		}
 	}
@@ -285,40 +291,60 @@ void Commands::MODE( void ) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// maybe check for comma list for nc -->DONE
 void Commands::PRIVMSG( void ) {
+	std::vector<std::string> multi_dest;
+	std::string dest;
+	chan_it chan;
+	client_it client;
+	
 	if (isEnoughParams(2)) {
-		if (isChanName(args[0])) {
-			chan_it chan = channels.find(args[0]);
-			if (chan != channels.end())
-				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
-			else
-				ServerMessage(ERR_NOSUCHNICK, args[0] + " :no such nick/channel\n", *current_client);
-			sent.clear();
-		} else {
-			try {
-				UsertoUser(*current_client, nicks.at(args[0]), cmd, args[1] + "\n");
-			} catch (std::exception &e) {
-				ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
+		multi_dest = split(args[0], ",");
+		while (!multi_dest.empty()) {
+			dest = multi_dest.back();
+			multi_dest.pop_back();
+			if (isChanName(dest)) {
+				chan = channels.find(dest);
+				if (chan != channels.end())
+					chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
+				else
+					ServerMessage(ERR_NOSUCHNICK, args[0] + " :no such nick/channel\n", *current_client);
+				sent.clear();
+			} else {
+				client = nicks.find(dest);
+				if (client != nicks.end())
+					UsertoUser(*current_client, client->second, cmd, args[1] + "\n");
+				else
+					ServerMessage(ERR_NOSUCHNICK, ":" + dest + "\n", *current_client);
 			}
 		}
 	} 
 }
 
+// can have them in comma list -->DONE
 void Commands::NOTICE( void ) {
-	client_it notice_him;
+	std::vector<std::string> multi_dest;
+	std::string dest;
+	chan_it chan;
+	client_it client;
 	
 	if (isEnoughParams(2)) {
-		if (isChanName(args[0])) {
-			chan_it chan = channels.find(args[0]);
-			if (chan != channels.end())
-				chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
-			sent.clear();
-		} else {
-			notice_him = nicks.find(args[0]);
-			if (notice_him != nicks.end())
-				UsertoUser(*current_client, notice_him->second, cmd, args[1] + "\n");
+		multi_dest = split(args[0], ",");
+		while (!multi_dest.empty()) {
+			dest = multi_dest.back();
+			multi_dest.pop_back();
+			if (isChanName(dest)) {
+				chan = channels.find(dest);
+				if (chan != channels.end())
+					chan->second.echoToAll(*current_client, cmd, args[1], true, sent);
+				sent.clear();
+			} else {
+				client = nicks.find(dest);
+				if (client != nicks.end())
+					UsertoUser(*current_client, client->second, cmd, args[1] + "\n");
+			}
 		}
-	}
+	} 
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USER-BASED QUERIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
