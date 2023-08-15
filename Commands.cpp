@@ -268,30 +268,24 @@ void Commands::MOTD( void ) {
 	}
 }
 
-// void Commands::MODE( void ) {
-
-// }
 void Commands::MODE( void ) {
 	// check for user modes, have to check same for channels
-	std::string modes = "+";
-	try {
-		client_it target = nicks.find(args.at(0));
-		if (target == nicks.end())
-			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
-		else if (target->second.getFD() != fd)
-			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n", *current_client);
-		else {
-			try {
-				ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
-			} catch (std::exception &e) {
-				if (target->second.isOperator())
-					modes += "o";
-				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
+	if (!isChanName(args[0]))
+		userMode("+");
+	else
+	{
+		std::string chanName = args[0];
+		chan_it chan = channels.find(chanName);
+		if (isEnoughParams(1))
+		{
+			if (channelExist(chanName, chan))
+			{
+				if (args.size() == 1)
+					ServerMessage(RPL_CHANNELMODEIS, chanName + " " + chan->second.getModes() + "\n", *current_client);
 			}
 		}
-	} catch (std::exception &e) {
-		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n", *current_client);
 	}
+
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
