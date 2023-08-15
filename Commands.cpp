@@ -216,6 +216,7 @@ void Commands::INVITE(void)
 	}
 }
 
+// can have user names separated by commas
 void Commands::KICK(void)
 {
 	std::string chanName;
@@ -290,6 +291,7 @@ void Commands::MODE( void ) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// maybe check for comma list for nc
 void Commands::PRIVMSG( void ) {
 	if (isEnoughParams(2)) {
 		if (isChanName(args[0])) {
@@ -309,6 +311,7 @@ void Commands::PRIVMSG( void ) {
 	} 
 }
 
+// can have them in comma list
 void Commands::NOTICE( void ) {
 	client_it notice_him;
 	
