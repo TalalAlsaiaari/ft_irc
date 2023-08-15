@@ -185,3 +185,18 @@ void Channel::setModes(std::string modestring)
     //have to parse a little for assigning multiple modes in multiple mode commands
     this->modes = modestring;
 }
+
+void Channel::setChannelOp(Client &target)
+{
+    operators[target.getNick()] = &target;
+}
+
+bool Channel::isUserOp(std::string chanName, Client& user)
+{
+	if (operators.find(user.getNick()) == operators.end()) //should check for channel op
+	{
+		ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", user);
+		return false;
+	}
+	return true;
+}
