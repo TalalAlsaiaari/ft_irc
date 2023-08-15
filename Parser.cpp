@@ -57,7 +57,9 @@ void Parser::findCmdArgs( void ) {
 		pos_nl = input.find_first_of("\n\r");
 		if (input[0] == ':' && pos_nl != input.npos) {
 			args.push_back(input.substr(1, pos_nl - 1));
-			input.erase(0, pos_nl + 1);
+			input.erase(0, pos_nl + 2);
+			multi_cmd.push_back(args);
+			args.clear();
 		} else if (pos_ws < pos_nl) {
 			args.push_back(input.substr(0, pos_ws));
 			pos_ws = input.find_first_not_of(" ", pos_ws);
