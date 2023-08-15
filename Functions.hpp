@@ -52,5 +52,5 @@ class Functions {
 		bool userInChan(std::string chanName, chan_it channel);
 		bool isUserOp(std::string chanName);
 		bool isChanName( std::string name );
-		void Functions::userMode(std::string modes);
+		void userMode(std::string modes);
 };
