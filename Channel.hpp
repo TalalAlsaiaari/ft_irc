@@ -46,4 +46,7 @@ class Channel
 		std::string const getDefKickMsg(void) const;
 		std::string const getModes(void) const;
 		void setModes(std::string modestring);
+		
+		void setChannelOp(Client& target);
+		bool isUserOp(std::string chanName, Client &user);
 };
