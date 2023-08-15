@@ -19,7 +19,7 @@ class Client {
 		std::string	buff;
 		bool		registered;
 		bool		pass_registered;
-		bool		is_operator;
+		bool		is_serverOp;
 		bool		is_invisible;
 	public:
 		Client( );
@@ -46,8 +46,8 @@ class Client {
 		void passGood( void );
 		bool isInvisibile( void );
 		void setInvisibility( bool invis );
-		bool isOperator( void );
-		void setOperator( bool oper );
+		bool isServerOp( void );
+		void setServerOp( bool oper );
 };
 
 #endif

@@ -28,7 +28,7 @@ class Functions {
 		std::map<std::string, Client> nicks;
 		Client *current_client;
 		std::string pass;
-		std::string const operPass;
+		std::string const serverOpPass;
 		std::map<std::string, Channel> channels;
 		std::map<std::string, Client *> sent;
 		typedef std::map<std::string, Channel>::iterator chan_it;
@@ -50,7 +50,6 @@ class Functions {
 		bool isEnoughParams(unsigned int paramNum);
 		bool channelExist(std::string chanName, chan_it channel);
 		bool userInChan(std::string chanName, chan_it channel);
-		bool isUserOp(std::string chanName);
 		bool isChanName( std::string name );
-		void Functions::userMode(std::string modes);
+		void userMode(std::string modes);
 };

@@ -2,7 +2,7 @@
 #include "Commands.hpp"
 
 
-Functions::Functions( ) : operPass("DamnSon"){
+Functions::Functions( ) : serverOpPass("DamnSon"){
 
 }
 
@@ -151,16 +151,6 @@ bool Functions::userInChan(std::string chanName, chan_it channel)
 	return true;
 }
 
-bool Functions::isUserOp(std::string chanName)
-{
-	if (!current_client->isOperator())
-	{
-		ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", *current_client);
-		return false;
-	}
-	return true;
-}
-
 bool Functions::isChanName( std::string name )
 {
 	if (name.find('#') == 0)
@@ -182,7 +172,7 @@ void Functions::userMode(std::string modes)
 			} catch (std::exception &e) {
 				if (target->second.isInvisibile())
 					modes += "i";
-				if (target->second.isOperator())
+				if (target->second.isServerOp())
 					modes += "o";
 				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
 			}
