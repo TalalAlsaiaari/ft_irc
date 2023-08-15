@@ -47,29 +47,30 @@ void Parser::findPass( void ) {
 }
 
 void Parser::findCmdArgs( void ) {
-	std::string::size_type pos;
+	std::string::size_type pos_nl;
+	std::string::size_type pos_ws;
 
 	args.clear();
 	multi_cmd.clear();
 	while (!input.empty()) {
-		if (input[0] == ':' && (pos = input.find_first_of("\r\n")) != input.npos) {
-			args.push_back(input.substr(1, pos - 1));
-			input.erase(0, pos + 1);
-		} else if ((pos = input.find_first_of(" \r\n")) != input.npos) {
-			args.push_back(input.substr(0, pos));
-			input.erase(0, pos + 1);
-		} else {
-			args.push_back(input);
-			input.clear();
-		}
-		if (makeUpper(args.front()) == "PASS")
-			this->findPass();
-		else if (args.back().empty() || input.empty()) {
-			if (args.back().empty())
-				args.pop_back();
+		pos_ws = input.find_first_of(" ");
+		pos_nl = input.find_first_of("\n\r");
+		if (input[0] == ':' && pos_nl != input.npos) {
+			args.push_back(input.substr(1, pos_nl - 1));
+			input.erase(0, pos_nl + 1);
+		} else if (pos_ws < pos_nl) {
+			args.push_back(input.substr(0, pos_ws));
+			pos_ws = input.find_first_not_of(" ", pos_ws);
+			input.erase(0, pos_ws);
+		} else if (pos_nl < pos_ws) {
+			args.push_back(input.substr(0, pos_nl));
+			pos_nl = input.find_first_not_of("\n\r", pos_nl);
+			input.erase(0, pos_nl);
 			multi_cmd.push_back(args);
 			args.clear();
 		}
+		if (makeUpper(args.front()) == "PASS")
+			this->findPass();
 	}
 	for (size_t i = 0; i < multi_cmd.size(); i++) {
 		for (size_t j = 0; j < multi_cmd[i].size(); j++) {
