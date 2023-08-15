@@ -3,7 +3,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONNECTION MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 void Commands::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
-	if (isEnoughParams(2)) {
+	if (isEnoughParams(1)) {
 		if (args[0] == "LS")
 			send(fd, mes.data(), mes.length(), 0);
 		if (args[0] == "REQ") {
@@ -131,6 +131,9 @@ void Commands::JOIN( void ) {
 void Commands::PART(void)
 {
 	std::string reason;
+	std::vector<std::string> multi_Chan;
+	std::string chanName;
+	chan_it chan;
 	
 	//have to handle multiple channel parts
 	/*this msg may be sent from a server to a client to notify the client that someone
@@ -139,20 +142,24 @@ void Commands::PART(void)
 	channel part msg as a series of msgs with a single channel name with the reason*/
 	if (isEnoughParams(1))
 	{
-		std::string chanName = args[0];
-		chan_it chan = channels.find(chanName);
-		if (channelExist(chanName, chan) && userInChan(chanName, chan))
-		{
-			if (args.size() >= 2)
-				reason = args[1];
-			else
-				reason = "";
-			UserMessage("PART", chanName + "\n", *current_client);
-			chan->second.removeMember(*current_client);
-			chan->second.echoToAll(*current_client, cmd, reason, true, sent);
-			sent.clear();
-			if (!chan->second.getCurrentCount())
-				channels.erase(chan);
+		multi_Chan = split(args[0], ",");
+		while (!multi_Chan.empty()) {
+			chanName = multi_Chan.back();
+			multi_Chan.pop_back();
+			chan = channels.find(chanName);
+			if (channelExist(chanName, chan) && userInChan(chanName, chan))
+			{
+				if (args.size() >= 2)
+					reason = args[1];
+				else
+					reason = "";
+				UserMessage("PART", chanName + "\n", *current_client);
+				chan->second.removeMember(*current_client);
+				chan->second.echoToAll(*current_client, cmd, reason, true, sent);
+				sent.clear();
+				if (!chan->second.getCurrentCount())
+					channels.erase(chan);
+			}
 		}
 	}
 }
