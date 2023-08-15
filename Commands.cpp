@@ -134,12 +134,7 @@ void Commands::PART(void)
 	std::vector<std::string> multi_Chan;
 	std::string chanName;
 	chan_it chan;
-	
-	//have to handle multiple channel parts
-	/*this msg may be sent from a server to a client to notify the client that someone
-	has been removed, in this case, source should be client being removed, and channel
-	will be the channel they left/removed from. Server should distribute these multi
-	channel part msg as a series of msgs with a single channel name with the reason*/
+
 	if (isEnoughParams(1))
 	{
 		multi_Chan = split(args[0], ",");
@@ -175,7 +170,6 @@ void Commands::TOPIC(void)
 		{
 			if (args.size() == 2 && chan->second.isUserOp(chanName, *current_client))
 			{
-				//have to send to all in channel
 				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);
 				chan->second.echoToAll(*current_client, cmd, ":" + args[1], true, sent);
 				chan->second.setTopic(args[1]);
@@ -237,10 +231,9 @@ void Commands::KICK(void)
 			reason = args[2];
 		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			//check for op privs
 			if (!chan->second.isInChan(dest->second.getNick()))
 				ServerMessage(ERR_USERNOTINCHANNEL, args[1] + " " + chanName + " :User is not on channel\n", *current_client);
-			else
+			else if (chan->second.isUserOp(chanName, *current_client))
 			{
 				UserMessage(cmd, chanName + " " + args[1] + " " + reason + "\n", *current_client);
 				chan->second.echoToAll(*current_client, cmd, args[1] + " " + reason, true, sent);
