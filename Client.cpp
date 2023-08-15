@@ -1,14 +1,14 @@
 #include "Client.hpp"
 
 
-Client::Client() : registered(false), pass_registered(false), is_operator(false),
+Client::Client() : registered(false), pass_registered(false), is_serverOp(false),
 	is_invisible(false) {}
 
 Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false),
-	is_operator(false), is_invisible(false) {}
+	is_serverOp(false), is_invisible(false) {}
 
 Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name),
-	registered(false), pass_registered(false), is_operator(false), is_invisible(false) {}
+	registered(false), pass_registered(false), is_serverOp(false), is_invisible(false) {}
 
 Client &Client::operator=(const Client &other) {
 	this->fd = other.fd;
@@ -20,7 +20,7 @@ Client &Client::operator=(const Client &other) {
 	this->registered = other.registered;
 	this->pass_registered = other.pass_registered;
 	this->is_invisible = other.is_invisible;
-	this->is_operator = other.is_operator;
+	this->is_serverOp = other.is_serverOp;
 	return *this;
 }
 
@@ -104,11 +104,11 @@ void Client::setInvisibility( bool invis ) {
 	is_invisible = invis;
 }
 
-bool Client::isOperator( void ) {
-	return is_operator;
+bool Client::isServerOp( void ) {
+	return is_serverOp;
 }
 
-void Client::setOperator( bool oper ) {
-	is_operator = oper;
+void Client::setServerOp( bool oper ) {
+	is_serverOp = oper;
 }
 

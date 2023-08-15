@@ -69,9 +69,9 @@ void Commands::OPER(void)
 {
 	if (isEnoughParams(2))
 	{
-		if (args[1] == operPass)
+		if (args[1] == serverOpPass)
 		{
-			current_client->setOperator(true);
+			current_client->setServerOp(true);
 			ServerMessage(RPL_YOUREOPER, " : you did it\n", *current_client);
 		}
 		else
@@ -166,11 +166,13 @@ void Commands::TOPIC(void)
 		chan_it chan = channels.find(chanName);
 		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			if (args.size() == 2 && isUserOp(chanName))
+			if (args.size() == 2 && chan->second.isUserOp(chanName, *current_client))
 			{
 				//have to send to all in channel
-				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);	
+				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);
+				chan->second.echoToAll(*current_client, cmd, ":" + args[1], true, sent);
 				chan->second.setTopic(args[1]);
+				sent.clear();
 			}
 			else
 			{
@@ -334,7 +336,7 @@ void Commands::WHOIS( void ) {
 			// send info, maybe restirct info if user invisible
 			who += " " + user->second.getUserName() + " " + user->second.getHostName() + " * :" + user->second.getRealName();
 			ServerMessage(RPL_WHOISUSER, who + "\n", *current_client);
-			if (user->second.isOperator())
+			if (user->second.isServerOp())
 				ServerMessage(RPL_WHOISOPERATOR, user->second.getNick() + " :is a local operator\n", *current_client);
 			ServerMessage(RPL_WHOISSERVER, user->second.getNick() + " " + user->second.getServerName() + " :ft_ircserv\n", *current_client);
 			ServerMessage(RPL_WHOISACTUALLY, user->second.getNick() + " " + user->second.getHostName() + " :actually using host\n", *current_client);
@@ -355,7 +357,7 @@ void Commands::KILL(void)
 
 	if (isEnoughParams(2)) {
 		user = nicks.find(args[0]);
-		if (!current_client->isOperator())
+		if (!current_client->isServerOp())
 			ServerMessage(ERR_NOPRIVILEGES, " :Permission Denied- You're not an IRC operator\n", *current_client);
 		else if (user == nicks.end())
 			ServerMessage(ERR_NOSUCHNICK, " :Who dat?\n", *current_client);
