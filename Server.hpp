@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/13 08:55:44 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 13:05:25 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include <iostream>
 #include <map>
 #include "Parser.hpp"
+#include "devector.hpp"
 
 class	Server
 {
@@ -61,6 +62,7 @@ class	Server
 		void					ftRecv(int);
 		void					checkNBytes(int);
 		void					ftSend(void);
+		void					sendToClient(Client &);
 		void					removeClient(int);
 		void					resizePfds(void);
 		void					ftIRC(void);

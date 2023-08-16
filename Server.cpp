@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/13 16:09:27 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 13:12:02 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,10 +193,23 @@ void	Server::ftSend()
 	if (input.find("\n") != std::string::npos) {
 		std::cout << input << std::endl;
 		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
+		// put this function somewhere when we figure out POLLOUT
+		this->sendToClient(this->clients[this->sender_fd]);
 		this->clients[this->sender_fd].getBuff().clear();
 	}
 	std::memset(this->buf, 0, 256);
 	return ;
+}
+
+void	Server::sendToClient(Client &client) {
+	devector<std::string> messages = client.getSendBuff();
+	std::string sending;
+	
+	while (!messages.empty()) {
+		sending = messages.front();
+		messages.pop_front();
+		send(client.getFD(), sending.data(), sending.length(), 0);	
+	}
 }
 
 void	Server::ftIRC(void)
