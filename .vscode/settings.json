@@ -77,5 +77,12 @@
 		"cinttypes": "cpp"
 	},
 	"editor.trimAutoWhitespace": false,
-	"editor.comments.ignoreEmptyLines": false
+	"editor.comments.ignoreEmptyLines": false,
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "/Users/aball/Desktop/Cursus/irc_real",
+			"binaryPath": "/Users/aball/Desktop/Cursus/irc_real/ircserv",
+			"binaryArgs": ["6969", "123"]
+		}
+	]
 }
