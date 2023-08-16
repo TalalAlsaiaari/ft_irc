@@ -30,7 +30,7 @@ bool Functions::checkNick( std::string nick ) {
 		else {
 			ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n", *current_client);
 			multi_cmd.clear();
-			close(fd);
+			// close(fd);
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 		return false;
@@ -66,7 +66,7 @@ bool Functions::RegisterUser( void ) {
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 		nicks.erase(current_client->getNick());
-		close(fd);
+		// close(fd);
 		throw IrcErrorException("user not registered\n");
 	}
 	return false;
