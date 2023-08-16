@@ -34,13 +34,11 @@ void Client::setBuff( std::string buff ) {
 	this->recv_buff = buff;
 }
 
-void pushSendBuff( std::string send ) {
+void Client::pushSendBuff( std::string send ) {
 	send_buff.push_back(send);
 }
 
 void Client::setRealName( std::string real_name ) {
-	if (!real_name.empty() && real_name[0] == ':')
-		real_name.erase(0, 1);
 	this->real_name = real_name;
 }
 

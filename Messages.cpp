@@ -11,12 +11,14 @@ void ConnectionMessage( Client &client) {
 
 void ServerMessage(std::string error, std::string message, Client &client) {
 	std::string mes = ":" + client.getServerName() + error + client.getNick() + " " + message;
-	send(client.getFD(), mes.data(), mes.length(), 0);
+	client.pushSendBuff(mes);
+	// send(client.getFD(), mes.data(), mes.length(), 0);
 }
 
 void UserMessage(std::string cmd, std::string message, Client &client) {
 	std::string mes = ":" + USER_FN(client.getNick(), client.getUserName(), client.getHostName()) + " " + cmd + " " + message;
-	send(client.getFD(), mes.data(), mes.length(), 0);
+	client.pushSendBuff(mes);
+	// send(client.getFD(), mes.data(), mes.length(), 0);
 }
 
 void UsertoUser(Client origin, Client dest, std::string cmd, std::string mess) {
@@ -25,5 +27,6 @@ void UsertoUser(Client origin, Client dest, std::string cmd, std::string mess) {
 	message += ":";
 	message += mess + "\n";
 	std::cout << message << std::endl;
-	send(dest.getFD(), message.data(), message.length(), 0);
+	dest.pushSendBuff(message);
+	// send(dest.getFD(), message.data(), message.length(), 0);
 }

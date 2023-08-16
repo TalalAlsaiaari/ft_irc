@@ -62,13 +62,15 @@ void Channel::echoToAll(Client &client, std::string cmd, std::string trailing, b
     message += "\n";
     for (iter it = members.begin(); it != members.end(); it++) {
         if (it->second->getNick() != client.getNick() && sent.find(it->second->getNick()) == sent.end()) {
-            send(it->second->getFD(), message.data(), message.length(), 0);
+            it->second->pushSendBuff(message);
+            // send(it->second->getFD(), message.data(), message.length(), 0);
             sent[it->second->getNick()] = it->second;
         }
     }
     for (iter it = operators.begin(); it != operators.end(); it++) {
         if (it->second->getNick() != client.getNick() && sent.find(it->second->getNick()) == sent.end()) {
-            send(it->second->getFD(), message.data(), message.length(), 0);
+            it->second->pushSendBuff(message);
+            // send(it->second->getFD(), message.data(), message.length(), 0);
             sent[it->second->getNick()] = it->second;
         }
     }

@@ -76,7 +76,8 @@ void Functions::killMsg(Client source, Client dest) {
 	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	message += " " + cmd + " " + dest.getNick() + " " + args[1] + "\n";
 	std::cout << message << std::endl;
-	send(dest.getFD(), message.data(), message.length(), 0);
+	// send(dest.getFD(), message.data(), message.length(), 0);
+	dest.pushSendBuff(message);
 }
 
 void Functions::quitMsg(Client source, std::string msg)
@@ -84,7 +85,8 @@ void Functions::quitMsg(Client source, std::string msg)
 	std::string nick = source.getNick();
 	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	std::string mes = ":" + user_info + " QUIT :Quit: " + msg;
-	send(source.getFD(), mes.data(), mes.length(), 0);
+	// send(source.getFD(), mes.data(), mes.length(), 0);
+	source.pushSendBuff(mes);
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
 		if (it->second.isInChan(nick)) {
 			it->second.echoToAll(source, "", mes, false, sent);
@@ -97,8 +99,9 @@ void Functions::quitMsg(Client source, std::string msg)
 void Functions::errMsg(client_it dest, std::string msg)
 {
 	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
-	send(dest->second.getFD(), mes.data(), mes.length(), 0);
-	close(dest->second.getFD());
+	dest->second.pushSendBuff(mes);
+	// send(dest->second.getFD(), mes.data(), mes.length(), 0);
+	// close(dest->second.getFD());
 	nicks.erase(dest);
 }
 
