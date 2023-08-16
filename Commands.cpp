@@ -104,7 +104,7 @@ void Commands::QUIT( void ) {
 	sent.clear();
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
-	close(fd);
+	// close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 

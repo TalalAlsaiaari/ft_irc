@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 14:23:28 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 14:33:45 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void	Server::checkNBytes(int index)
 
 void	Server::removeClient(int index)
 {
-	if ((this->nbytes <= 0 && index != 0))
+	if ((index != 0))
 	{
 		close(this->pfds[index].fd);
 		this->pfds[index] = this->pfds[this->fd_count - 1];
@@ -193,8 +193,6 @@ void	Server::ftSend()
 	if (input.find("\n") != std::string::npos) {
 		std::cout << input << std::endl;
 		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
-		// put this function somewhere when we figure out POLLOUT
-		// this->sendToClient(this->clients[this->sender_fd]);
 		this->clients[this->sender_fd].getBuff().clear();
 	}
 	std::memset(this->buf, 0, 256);
@@ -202,16 +200,14 @@ void	Server::ftSend()
 }
 
 void	Server::sendToClient(Client &client) {
-	devector<std::string> messages = client.getSendBuff();
+	devector<std::string> &messages = client.getSendBuff();
 	std::string sending;
 	
-	sleep(1);
 	while (!messages.empty()) {
 		sending = messages.front();
 		messages.pop_front();
 		send(client.getFD(), sending.data(), sending.length(), 0);	
 	}
-	client.getSendBuff().clear();
 }
 
 void	Server::ftIRC(void)
