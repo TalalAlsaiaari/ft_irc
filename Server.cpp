@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 14:33:45 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 15:38:06 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ void	Server::addNewClient(int index)
 		}
 		std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
 		this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
+		fcntl(new_client, F_SETFL, O_NONBLOCK);
 		this->resizePfds();
 	}
 	return ;
@@ -235,7 +236,7 @@ void	Server::ftIRC(void)
 				this->sendToClient(this->clients[this->pfds[i].fd]);
 			else if (this->pfds[i].revents & POLLHUP)
 			{
-				if (!this->nbytes && i != 0)
+				// if (!this->nbytes && i != 0) 
 					std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
 				this->removeClient(i);
 			}

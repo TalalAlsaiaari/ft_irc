@@ -6,11 +6,9 @@ void Commands::CAP( void ) {
 	if (isEnoughParams(1)) {
 		if (args[0] == "LS")
 			current_client->pushSendBuff(mes);
-			// send(fd, mes.data(), mes.length(), 0);
 		if (args[0] == "REQ") {
 			mes = "CAP * ACK " + args[1] + "\n";
 			current_client->pushSendBuff(mes);
-			// send(fd, mes.data(), mes.length(), 0);
 		}
 	}
 }
@@ -55,7 +53,8 @@ void Commands::USER( void ) {
 		if (current_client->isPassGood()) {
 			if (RegisterUser()) {
 				MOTD();
-				UserMessage("MODE", current_client->getNick() + " :\n", *current_client);
+				UserMessage("MODE", current_client->getNick() + " :+i\n", *current_client);
+				current_client->setInvisibility(true);
 			}
 		}
 		else
@@ -66,7 +65,6 @@ void Commands::USER( void ) {
 
 void Commands::PING( void ) {
 	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
-	// send(fd, pong.data(), pong.length(), 0);
 	current_client->pushSendBuff(pong);
 }
 
@@ -104,7 +102,6 @@ void Commands::QUIT( void ) {
 	sent.clear();
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
-	// close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 

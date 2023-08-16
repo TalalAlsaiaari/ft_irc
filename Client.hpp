@@ -48,7 +48,7 @@ class Client {
 		void registration( void );
 		bool isPassGood( void );
 		void passGood( void );
-		bool isInvisibile( void );
+		bool isInvisible( void );
 		void setInvisibility( bool invis );
 		bool isServerOp( void );
 		void setServerOp( bool oper );
