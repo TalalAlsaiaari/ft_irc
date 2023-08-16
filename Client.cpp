@@ -102,7 +102,7 @@ void Client::passGood( void ) {
 	pass_registered = true;
 }
 
-bool Client::isInvisibile( void ) {
+bool Client::isInvisible( void ) {
 	return is_invisible;
 }
 

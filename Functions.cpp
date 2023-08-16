@@ -155,7 +155,6 @@ bool Functions::isChanName( std::string name )
 	return false;
 }
 
-// @time=2023-08-16T09:23:45.099Z :aballers MODE aballers :-i
 void Functions::userMode(std::string modes)
 {
 	try {
@@ -166,13 +165,19 @@ void Functions::userMode(std::string modes)
 			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n", *current_client);
 		else {
 			try {
-				if (args.at(1).find("i") != std::string::npos && !current_client->isInvisibile()) {
-					current_client->setInvisibility(true);
-					UserMessage(cmd, args[0] + " :" + args[1] + "\n", *current_client);
+				if (args.at(1).find("i") != std::string::npos) {
+					if (modes.find("-") != modes.npos && current_client->isInvisible()) {
+						current_client->setInvisibility(false);
+						UserMessage(cmd, args[0] + " :" + args[1] + "\n", *current_client);	
+					}
+					else if (modes.find("+") != modes.npos && !current_client->isInvisible()) {
+						current_client->setInvisibility(true);
+						UserMessage(cmd, args[0] + " :" + args[1] + "\n", *current_client);
+					}
 				} else if (args.at(1).find("i") == std::string::npos)
 					ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
 			} catch (std::exception &e) {
-				if (target->second.isInvisibile())
+				if (target->second.isInvisible())
 					modes += "i";
 				if (target->second.isServerOp())
 					modes += "o";

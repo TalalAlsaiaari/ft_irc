@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 13:05:25 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 15:38:46 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <sys/errno.h>
+ #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
