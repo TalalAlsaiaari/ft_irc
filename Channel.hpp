@@ -14,11 +14,12 @@ class Channel
 		std::map<std::string, Client *> invited;
 		std::map<std::string, Client *> operators;
 		std::string		name;
-		// std::string 	pass;
+		std::string 	pass;
 		std::string		topic;
 		size_t			limit;
 		bool			inviteOnly;
 		bool			hasLimit;
+		bool			hasKey;
 		std::string		defKickMsg;
 		unsigned int	currentCount;
 		std::string		modes;
@@ -27,26 +28,29 @@ class Channel
 		Channel();
 		Channel( std::string, Client & );
 		~Channel();
-		// std::string getName( void );
-		// std::string getPass( void );
-		// size_t getLimit( void );
-		void addMember( Client & );
+		void addMember( Client &add , std::string key);
 		void echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
-		// void makeChanOp( Client &, Client & );
-		// void invite( Client &, Client & );
+		void makeChanOp( Client &, Client & );
 		void removeMember( Client & );
 		void updateMemberNick( Client &, std::string, std::string );
 		void whoIsChan( Client & );
-		bool isInChan( std::string );
-		bool isInvited( std::string );
+		void addInvite( std::string nick, Client &client );
+		void removeInvite( std::string nick );
 		void setTopic(std::string topic);
-		bool hasTopic(void);
-		std::string const getTopic(void) const;
+		void setChannelOp(Client& target);
+		void setModes(std::string modestring);
+		void setInviteOnly( bool invite );
+
 		unsigned int getCurrentCount(void) const;
+
+		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;
 		std::string const getModes(void) const;
-		void setModes(std::string modestring);
-		
-		void setChannelOp(Client& target);
+
+		bool isInviteOnly( void );
+		bool hasTopic(void);
+		bool isInChan( std::string );
+		bool isInvited( std::string );
+		bool checkEntrance( std::string nick, Client &client, std::string key );
 		bool isUserOp(std::string chanName, Client &user);
 };

@@ -102,6 +102,7 @@ void Commands::QUIT( void ) {
 	sent.clear();
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
+	close(fd);
 	throw IrcErrorException("Client has quit\n");
 }
 
@@ -110,9 +111,12 @@ void Commands::QUIT( void ) {
 void Commands::JOIN( void ) {
 	std::vector<std::string> multi_Chan;
 	std::string chanName;
+	std::string pass;
 	chan_it chan;
 
 	if (isEnoughParams(1)) {
+		if (args.size() > 1)
+			pass = args[1];
 		multi_Chan = split(args[0], ",");
 		while (!multi_Chan.empty()) {
 			chanName = multi_Chan.back();
@@ -122,7 +126,7 @@ void Commands::JOIN( void ) {
 				if (chan == channels.end())
 					channels[chanName] = Channel(chanName, *current_client);
 				else
-					chan->second.addMember(*current_client);
+					chan->second.addMember(*current_client, pass);
 			}
 			else
 				ServerMessage(ERR_BADCHANMASK, chanName + " :Bad Channel name\n", *current_client);
@@ -198,10 +202,10 @@ void Commands::INVITE(void)
 		chanName = args[1];
 		dest = nicks.find(args[0]);
 		chan = channels.find(chanName);
-		if (channelExist(chanName, chan) && userInChan(chanName, chan))
+		if (dest == nicks.end())
+			ServerMessage(ERR_NOSUCHNICK, args[0] + " :no such nick\n", *current_client);
+		else if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			if (dest == nicks.end())
-				return ;
 			//reject when channel is invite only and current user is not op
 			if (chan->second.isInChan(dest->second.getNick()))
 				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
@@ -272,20 +276,24 @@ void Commands::MOTD( void ) {
 }
 
 void Commands::MODE( void ) {
+	std::string name;
+	std::string modes;
+	chan_it chan;
 	// check for user modes, have to check same for channels
 	if (isEnoughParams(1))
 	{
-		if (!isChanName(args[0]))
-			userMode("+");
-		else
-		{
-			std::string chanName = args[0];
-			chan_it chan = channels.find(chanName);
-				if (channelExist(chanName, chan))
-				{
-					if (args.size() == 1)
-						ServerMessage(RPL_CHANNELMODEIS, chanName + " " + chan->second.getModes() + "\n", *current_client);
-				}
+		name = args[0];
+		if (args.size() > 1)
+			modes = args[1];
+		if (!isChanName(args[0])) {
+			userMode(modes, name);
+		} else {
+			chan = channels.find(name);
+			if (channelExist(name, chan) && userInChan(name, chan) && chan->second.isUserOp(name, *current_client))
+			{
+				if (args.size() == 1)
+					ServerMessage(RPL_CHANNELMODEIS, name + " " + chan->second.getModes() + "\n", *current_client);
+			}
 		}
 	}
 
@@ -369,12 +377,10 @@ void Commands::WHOIS( void ) {
 			ServerMessage(RPL_WHOISSERVER, user->second.getNick() + " " + user->second.getServerName() + " :ft_ircserv\n", *current_client);
 			ServerMessage(RPL_WHOISACTUALLY, user->second.getNick() + " " + user->second.getHostName() + " :actually using host\n", *current_client);
 			ServerMessage(RPL_ENDOFWHOIS, " :end of WHOIS\n",*current_client);
-		} else {
+		} else
 			ServerMessage(ERR_NOSUCHNICK, " :nobody here by that name\n", *current_client);
-		}
-	} else {
+	} else
 		ServerMessage(ERR_NONICKNAMEGIVEN, " :need nick name\n",  *current_client);
-	}
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ OPERATOR MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
