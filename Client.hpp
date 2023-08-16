@@ -28,7 +28,7 @@ class Client {
 		Client( int fd );
 		Client( int fd, std::string host_name );
 		~Client( );
-		Client &operator=(const Client &other);
+		Client &operator=( const Client &other );
 		void setNick( std::string nick );
 		void setRealName( std::string real_name );
 		void setHostName( std::string host_name );
@@ -42,7 +42,7 @@ class Client {
 		std::string getUserName( void );
 		std::string getServerName( void );
 		std::string &getBuff( void );
-		devector<std::string> &getSendBuff( void);
+		devector<std::string> &getSendBuff( void );
 		int getFD( void );
 		bool isRegistered( void );
 		void registration( void );

@@ -53,8 +53,10 @@ void Commands::NICK( void ) {
 void Commands::USER( void ) {
 	if (!current_client->isRegistered()) {
 		if (current_client->isPassGood()) {
-			if (RegisterUser())
+			if (RegisterUser()) {
 				MOTD();
+				UserMessage("MODE", current_client->getNick() + " :\n", *current_client);
+			}
 		}
 		else
 			ServerMessage(ERR_PASSWDMISMATCH, " :need to give password\n", *current_client);
@@ -274,19 +276,19 @@ void Commands::MOTD( void ) {
 
 void Commands::MODE( void ) {
 	// check for user modes, have to check same for channels
-	if (!isChanName(args[0]))
-		userMode("+");
-	else
+	if (isEnoughParams(1))
 	{
-		std::string chanName = args[0];
-		chan_it chan = channels.find(chanName);
-		if (isEnoughParams(1))
+		if (!isChanName(args[0]))
+			userMode("+");
+		else
 		{
-			if (channelExist(chanName, chan))
-			{
-				if (args.size() == 1)
-					ServerMessage(RPL_CHANNELMODEIS, chanName + " " + chan->second.getModes() + "\n", *current_client);
-			}
+			std::string chanName = args[0];
+			chan_it chan = channels.find(chanName);
+				if (channelExist(chanName, chan))
+				{
+					if (args.size() == 1)
+						ServerMessage(RPL_CHANNELMODEIS, chanName + " " + chan->second.getModes() + "\n", *current_client);
+				}
 		}
 	}
 

@@ -71,7 +71,7 @@ void Parser::findCmdArgs( void ) {
 			multi_cmd.push_back(args);
 			args.clear();
 		}
-		if (makeUpper(args.front()) == "PASS")
+		if (!args.empty() && makeUpper(args.front()) == "PASS")
 			this->findPass();
 	}
 	for (size_t i = 0; i < multi_cmd.size(); i++) {

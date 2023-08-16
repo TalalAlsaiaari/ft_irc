@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 13:12:02 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/16 14:23:28 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	Server::resizePfds(void)
 		this->pfds = temp;
 	}
 	this->pfds[this->fd_count].fd = this->new_client;
-	this->pfds[this->fd_count].events = POLLIN;
+	this->pfds[this->fd_count].events = POLLIN | POLLOUT | POLLHUP;
 	this->fd_count += 1;
 	return ;
 }
@@ -162,9 +162,9 @@ void	Server::checkNBytes(int index)
 {
 	if (this->nbytes < 0 && index != 0)
 		std::cout << "Error with recv" << std::endl;
-	if (!this->nbytes && index != 0)
-		std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
-	this->removeClient(index);
+	// if (!this->nbytes && index != 0)
+	// 	std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
+	// this->removeClient(index);
 	if (this->nbytes > 0 && index != 0)
 		this->ftSend();
 	return ;
@@ -194,7 +194,7 @@ void	Server::ftSend()
 		std::cout << input << std::endl;
 		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
 		// put this function somewhere when we figure out POLLOUT
-		this->sendToClient(this->clients[this->sender_fd]);
+		// this->sendToClient(this->clients[this->sender_fd]);
 		this->clients[this->sender_fd].getBuff().clear();
 	}
 	std::memset(this->buf, 0, 256);
@@ -205,11 +205,13 @@ void	Server::sendToClient(Client &client) {
 	devector<std::string> messages = client.getSendBuff();
 	std::string sending;
 	
+	sleep(1);
 	while (!messages.empty()) {
 		sending = messages.front();
 		messages.pop_front();
 		send(client.getFD(), sending.data(), sending.length(), 0);	
 	}
+	client.getSendBuff().clear();
 }
 
 void	Server::ftIRC(void)
@@ -220,7 +222,7 @@ void	Server::ftIRC(void)
 	this->ftBind();
 	this->ftListen();
 	this->pfds[0].fd = this->sockfd;
-	this->pfds[0].events = POLLIN;
+	this->pfds[0].events = POLLIN | POLLOUT;
 	std::memset(this->buf, 0, 256);
 	while(true)
 	{
@@ -233,6 +235,15 @@ void	Server::ftIRC(void)
 				this->ftRecv(i);
 				this->checkNBytes(i);
 			}
+			if (this->pfds[i].revents & POLLOUT)
+				this->sendToClient(this->clients[this->pfds[i].fd]);
+			else if (this->pfds[i].revents & POLLHUP)
+			{
+				if (!this->nbytes && i != 0)
+					std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
+				this->removeClient(i);
+			}
+			
 		}
 	}
 }
