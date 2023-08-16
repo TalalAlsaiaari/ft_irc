@@ -5,10 +5,12 @@ void Commands::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
 	if (isEnoughParams(1)) {
 		if (args[0] == "LS")
-			send(fd, mes.data(), mes.length(), 0);
+			current_client->pushSendBuff(mes);
+			// send(fd, mes.data(), mes.length(), 0);
 		if (args[0] == "REQ") {
 			mes = "CAP * ACK " + args[1] + "\n";
-			send(fd, mes.data(), mes.length(), 0);
+			current_client->pushSendBuff(mes);
+			// send(fd, mes.data(), mes.length(), 0);
 		}
 	}
 }
@@ -62,7 +64,8 @@ void Commands::USER( void ) {
 
 void Commands::PING( void ) {
 	std::string pong = ":" + current_client->getServerName() + " PONG " + current_client->getServerName() + " :" + current_client->getServerName() + "\n";
-	send(fd, pong.data(), pong.length(), 0);
+	// send(fd, pong.data(), pong.length(), 0);
+	current_client->pushSendBuff(pong);
 }
 
 void Commands::OPER(void)
