@@ -155,9 +155,10 @@ bool Functions::isChanName( std::string name )
 	return false;
 }
 
-void Functions::userMode(std::string modes)
+void Functions::userMode(std::string modes, std::string name)
 {
 	try {
+		std::cout << name << std::endl;
 		client_it target = nicks.find(args.at(0));
 		if (target == nicks.end())
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
