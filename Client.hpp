@@ -7,6 +7,7 @@
 #include <exception>
 #include <map>
 #include <stdexcept>
+#include "devector.hpp"
 
 class Client {
 	private:
@@ -16,7 +17,8 @@ class Client {
 		std::string	user_name;
 		std::string	server_name;
 		std::string	host_name;
-		std::string	buff;
+		std::string	recv_buff;
+		devector<std::string> send_buff;
 		bool		registered;
 		bool		pass_registered;
 		bool		is_serverOp;
@@ -24,7 +26,7 @@ class Client {
 	public:
 		Client( );
 		Client( int fd );
-		Client( int fd , std::string host_name );
+		Client( int fd, std::string host_name );
 		~Client( );
 		Client &operator=(const Client &other);
 		void setNick( std::string nick );
@@ -33,12 +35,14 @@ class Client {
 		void setUserName( std::string user_name );
 		void setServerName( std::string server_name );
 		void setBuff( std::string buff );
+		void pushSendBuff( std::string send );
 		std::string getNick( void );
 		std::string getRealName( void );
 		std::string getHostName( void );
 		std::string getUserName( void );
 		std::string getServerName( void );
 		std::string &getBuff( void );
+		devector<std::string> &getSendBuff( void);
 		int getFD( void );
 		bool isRegistered( void );
 		void registration( void );
