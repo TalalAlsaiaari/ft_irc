@@ -31,7 +31,11 @@ void Client::setNick( std::string nick ) {
 }
 
 void Client::setBuff( std::string buff ) {
-	this->buff = buff;
+	this->recv_buff = buff;
+}
+
+void pushSendBuff( std::string send ) {
+	send_buff.push_back(send);
 }
 
 void Client::setRealName( std::string real_name ) {
@@ -73,7 +77,11 @@ std::string Client::getServerName( void ) {
 }
 
 std::string &Client::getBuff( void ) {
-	return buff;
+	return recv_buff;
+}
+
+devector<std::string> &Client::getSendBuff( void) {
+	return send_buff;
 }
 
 int Client::getFD( void ) {
