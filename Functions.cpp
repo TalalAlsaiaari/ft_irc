@@ -206,9 +206,7 @@ void Functions::channelMode(std::string modes, chan_it chan) {
 		sign_pos = mode_pos - 1;
 		mode = modes[sign_pos];
 		while (mode_pos < modes.length()) {
-			std::cout << modes[mode_pos] << std::endl;
-			std::cout << modes[sign_pos] << std::endl;
-			chan->second.modeI(modes[mode_pos], modes[sign_pos]);
+			chan->second.chanModes(modes[mode_pos], modes[sign_pos], arguments);
 			mode += modes[mode_pos];
 			mode_pos++;
 			if (mode_pos == mode_end_pos) {

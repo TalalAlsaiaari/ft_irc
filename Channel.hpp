@@ -43,11 +43,12 @@ class Channel
 		void removeModes(char mode);
 		unsigned int getCurrentCount(void) const;
 
+		void chanModes(char mode, char sign, devector<std::string> &arguments);
 		void modeI(char mode, char sign);
-		// void modeO(std::string mode, std::string sign, devector<std::string> &args);
-		// void modeK(std::string mode, std::string sign, devector<std::string> &args);
-		// void modeL(std::string mode, std::string sign, devector<std::string> &args);
-		// void modeT(std::string mode, std::string sign);
+		void modeO(char mode, char sign, devector<std::string> &args);
+		void modeK(char mode, char sign, devector<std::string> &args);
+		void modeL(char mode, char sign, devector<std::string> &args);
+		void modeT(char mode, char sign);
 
 		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;
