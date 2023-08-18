@@ -177,38 +177,56 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
     }
 }
 
-void Channel::modeI(char mode, char sign) {
-    std::cout << "MODES  BITCH" << std::endl;
-    std::cout << mode << " " << sign << std::endl;
-    if (mode == 'i') {
-        if (sign == '+') {
-            std::cout << "yas invote\n";
-            inviteOnly = true;
-            setModes(mode);
-        }
-        if (sign == '-') {
-            std::cout << "not invite\n";
-            inviteOnly = false;
-            removeModes(mode);
-        }
+void Channel::chanModes(char mode, char sign, devector<std::string> &arguments)
+{
+    if (mode == 'i')
+        modeI(mode, sign);
+    if (mode == 'o')
+        modeO(mode, sign, arguments);
+    if (mode == 'k')
+        modeK(mode, sign, arguments);
+    if (mode == 'l')
+        modeL(mode, sign, arguments);
+    if (mode == 't')
+        modeT(mode, sign);
+}
+
+void Channel::modeI(char mode, char sign)
+{
+    if (sign == '+')
+    {
+        inviteOnly = true;
+        setModes(mode);
+    }
+    if (sign == '-')
+    {
+        inviteOnly = false;
+        removeModes(mode);
     }
 }
 
-// void Channel::modeO(std::string mode, std::string sign, devector<std::string> &args) {
+void Channel::modeO(std::string mode, std::string sign, devector<std::string> &args)
+{
+    iter member = members.find(args[0]);
+    if (member == members.end())
+        ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", );
+    if (sign == '+')
+    {
 
-// }
+    }
+}
 
-// void Channel::modeK(std::string mode, std::string sign, devector<std::string> &args) {
+void Channel::modeK(std::string mode, std::string sign, devector<std::string> &args) {
 
-// }
+}
 
-// void Channel::modeL(std::string mode, std::string sign, devector<std::string> &args) {
+void Channel::modeL(std::string mode, std::string sign, devector<std::string> &args) {
 
-// }
+}
 
-// void Channel::modeT(std::string mode, std::string sign) {
+void Channel::modeT(std::string mode, std::string sign) {
 
-// }
+}
 
 unsigned int Channel::getCurrentCount(void) const
 {
