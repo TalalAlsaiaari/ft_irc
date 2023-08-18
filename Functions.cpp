@@ -67,6 +67,7 @@ bool Functions::RegisterUser( void ) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 		nicks.erase(current_client->getNick());
 		// close(fd);
+		current_client->set_removal(true);
 		throw IrcErrorException("user not registered\n");
 	}
 	return false;
@@ -76,7 +77,6 @@ void Functions::killMsg(Client source, Client dest) {
 	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	message += " " + cmd + " " + dest.getNick() + " " + args[1] + "\n";
 	std::cout << message << std::endl;
-	// send(dest.getFD(), message.data(), message.length(), 0);
 	dest.pushSendBuff(message);
 }
 
@@ -85,7 +85,6 @@ void Functions::quitMsg(Client source, std::string msg)
 	std::string nick = source.getNick();
 	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	std::string mes = ":" + user_info + " QUIT :Quit: " + msg;
-	// send(source.getFD(), mes.data(), mes.length(), 0);
 	source.pushSendBuff(mes);
 	for (chan_it it = channels.begin(); it != channels.end(); it++) {
 		if (it->second.isInChan(nick)) {
@@ -100,8 +99,8 @@ void Functions::errMsg(client_it dest, std::string msg)
 {
 	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
 	dest->second.pushSendBuff(mes);
-	// send(dest->second.getFD(), mes.data(), mes.length(), 0);
 	// close(dest->second.getFD());
+	dest->second.set_removal(true);
 	nicks.erase(dest);
 }
 
@@ -111,8 +110,7 @@ std::vector<std::string> Functions::split(std::string str, std::string delim) {
 	while (!str.empty()) {
 		pos = str.find_first_of(delim);
 		ret.push_back(str.substr(0, pos));
-		if (pos != str.npos)
-			pos += delim.length();
+		pos = str.find_first_not_of(delim, pos);
 		str.erase(0, pos);
 	}
 	return ret;
@@ -188,4 +186,40 @@ void Functions::userMode(std::string modes, std::string name)
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":" + cmd + " need more params\n", *current_client);
 	}
+}
+
+void Functions::channelMode(std::string modes, chan_it chan) {
+	devector<std::string> arguments;
+	std::string mode;
+	size_t		mode_pos;
+	size_t		mode_end_pos;
+	size_t		sign_pos;
+	size_t		err;
+
+	err = modes.find_first_not_of("+-oilkt");
+	mode = modes[err];
+	if (err == modes.npos) {
+		for (size_t i = 2; i < args.size(); i++)
+			arguments.push_back(args[i]);
+		mode_pos = modes.find_first_not_of("+-");
+		mode_end_pos = modes.find_first_of("+-", mode_pos);
+		sign_pos = mode_pos - 1;
+		mode = modes[sign_pos];
+		while (mode_pos < modes.length()) {
+			std::cout << modes[mode_pos] << std::endl;
+			std::cout << modes[sign_pos] << std::endl;
+			mode += modes[mode_pos];
+			mode_pos++;
+			if (mode_pos == mode_end_pos) {
+				mode_pos = modes.find_first_not_of("+-", mode_end_pos);
+				mode_end_pos = modes.find_first_of("+-", mode_pos);
+				sign_pos = mode_pos - 1;
+				mode += modes[sign_pos];
+			}
+			chan->second.modeI(modes[mode_pos], modes[sign_pos]);
+		}
+		current_client->pushSendBuff(chan->second.echoToAll(*current_client, cmd, mode, true, sent));
+		sent.clear();
+	} else
+		ServerMessage(ERR_UNKNOWNMODE, mode + " :is an unknown mode to me\n", *current_client);
 }

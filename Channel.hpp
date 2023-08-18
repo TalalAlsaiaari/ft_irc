@@ -29,7 +29,7 @@ class Channel
 		Channel( std::string, Client & );
 		~Channel();
 		void addMember( Client &add , std::string key);
-		void echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
+		std::string echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
 		void makeChanOp( Client &, Client & );
 		void removeMember( Client & );
 		void updateMemberNick( Client &, std::string, std::string );
@@ -38,10 +38,16 @@ class Channel
 		void removeInvite( std::string nick );
 		void setTopic(std::string topic);
 		void setChannelOp(Client& target);
-		void setModes(std::string modestring);
 		void setInviteOnly( bool invite );
-
+		void setModes(char mode);
+		void removeModes(char mode);
 		unsigned int getCurrentCount(void) const;
+
+		void modeI(char mode, char sign);
+		// void modeO(std::string mode, std::string sign, devector<std::string> &args);
+		// void modeK(std::string mode, std::string sign, devector<std::string> &args);
+		// void modeL(std::string mode, std::string sign, devector<std::string> &args);
+		// void modeT(std::string mode, std::string sign);
 
 		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;

@@ -118,3 +118,10 @@ void Client::setServerOp( bool oper ) {
 	is_serverOp = oper;
 }
 
+bool Client::remove_me( void ) {
+	return remove;
+}
+
+void Client::set_removal( bool remove ) {
+	this->remove = remove;
+}
