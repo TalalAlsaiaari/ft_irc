@@ -14,7 +14,7 @@ Channel::Channel( std::string name, Client &creator ) {
     this->hasKey = false;
     this->defKickMsg = "Bye, miss you";
     this->currentCount = 1;
-    this->modes = "";
+    this->modes = "+";
     operators[creator.getNick()] = &creator;
     UserMessage("JOIN", name + " * :welcome\n", creator);
     whoIsChan(creator);
@@ -178,12 +178,16 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
 }
 
 void Channel::modeI(char mode, char sign) {
+    std::cout << "MODES  BITCH" << std::endl;
+    std::cout << mode << " " << sign << std::endl;
     if (mode == 'i') {
         if (sign == '+') {
+            std::cout << "yas invote\n";
             inviteOnly = true;
             setModes(mode);
         }
         if (sign == '-') {
+            std::cout << "not invite\n";
             inviteOnly = false;
             removeModes(mode);
         }
@@ -228,7 +232,7 @@ void Channel::setInviteOnly( bool invite ) {
 void Channel::setModes(char mode) {
     size_t pos = modes.find(mode);
     if (pos == modes.npos) 
-        modes += mode;
+        this->modes += mode;
 }
 
 void Channel::removeModes(char mode) {
