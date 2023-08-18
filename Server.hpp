@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 18:43:40 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 15:38:46 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/18 12:26:46 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ class	Server
 		std::string		port;
 		struct addrinfo	*res;
 
-		// // Channels that are created on the server
-		// std::map<std::string, Channel *>  channels;
-
 	public:
 		char					buf[256];
 		struct pollfd			*pfds;
@@ -56,10 +53,11 @@ class	Server
 		void					getAddrInfo(void);
 		void					ftSocket(void);
 		void					ftSetSockOpt(void);
+		void					ftFcntl(void);
 		void					ftBind(void);
 		void					ftListen(void);
 		void					ftPoll(void);
-		void					addNewClient(int);
+		void					addNewClient(void);
 		void					ftRecv(int);
 		void					checkNBytes(int);
 		void					ftSend(void);
