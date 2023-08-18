@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/16 20:03:48 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/18 12:57:13 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,16 @@ void	Server::ftSocket(void)
 	return ;
 }
 
+void	Server::ftFcntl(void)
+{
+	if ((fcntl(this->sockfd, F_SETFL, O_NONBLOCK)) < 0)
+	{
+		std::cout << "Error with fcntl" << std::endl;
+		std::exit(EXIT_FAILURE);
+	}
+	return ;
+}
+
 void	Server::ftSetSockOpt(void)
 {
 	int	yes = 1;
@@ -104,26 +114,22 @@ void	Server::ftPoll(void)
 	return ;
 }
 
-void	Server::addNewClient(int index)
+void	Server::addNewClient(void)
 {
 	struct sockaddr_in	new_client_addr;
 	socklen_t			new_client_addr_size;
 
 	new_client_addr_size = sizeof(new_client_addr);
-	if (this->pfds[index].fd == this->sockfd)
+	this->new_client = accept(this->sockfd, (struct sockaddr *)&new_client_addr,
+		&new_client_addr_size);
+	if (this->new_client < 0)
 	{
-		this->new_client = accept(this->sockfd, (struct sockaddr *)&new_client_addr,
-			&new_client_addr_size);
-		if (this->new_client < 0)
-		{
-			std::cout << "Error with accept" << std::endl;
-			std::exit(EXIT_FAILURE);
-		}
-		std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
-		this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
-		this->resizePfds();
-		fcntl(new_client, F_SETFL, O_NONBLOCK);
+		std::cout << "Error with accept" << std::endl;
+		std::exit(EXIT_FAILURE);
 	}
+	std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
+	this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
+	this->resizePfds();
 	return ;
 }
 
@@ -138,7 +144,6 @@ void	Server::resizePfds(void)
 		{
 			temp[i].fd = this->pfds[i].fd;
 			temp[i].events = this->pfds[i].events;
-			temp[i].revents = this->pfds[i].revents;
 		}
 		delete this->pfds;
 		this->pfds = temp;
@@ -151,21 +156,21 @@ void	Server::resizePfds(void)
 
 void	Server::ftRecv(int index)
 {
-	if (this->pfds[index].fd != this->sockfd )
-	{
-		this->nbytes = recv(this->pfds[index].fd, this->buf, sizeof(this->buf), 0);
-		this->sender_fd = this->pfds[index].fd;
-	}
+
+	this->nbytes = recv(this->pfds[index].fd, this->buf, sizeof(this->buf), 0);
+	this->sender_fd = this->pfds[index].fd;
 	return ;
 }
 
 void	Server::checkNBytes(int index)
 {
-	if (this->nbytes < 0 && index != 0)
-		std::cout << "Error with recv" << std::endl;
-	// if (!this->nbytes && index != 0)
-	// 	std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
-	// this->removeClient(index);
+	if (this->nbytes < 0)
+		return ;
+	if (this->nbytes == 0)
+	{
+		std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
+		this->removeClient(index);
+	}
 	if (this->nbytes > 0 && index != 0)
 		this->ftSend();
 	return ;
@@ -173,16 +178,11 @@ void	Server::checkNBytes(int index)
 
 void	Server::removeClient(int index)
 {
-	if ((index != 0))
-	{
-		close(this->pfds[index].fd);
-		(this->pfds[index]) = this->pfds[this->fd_count - 1];
-		// this->pfds[index].fd = -1;
-		this->fd_count--;
-		parser.removeClient(this->clients[this->sender_fd].getNick());
-		clients.erase(this->sender_fd);
-		std::cout << "Client " << this->sender_fd << " deleted" << std::endl;
-	}
+	close(this->sender_fd);
+	this->pfds[index].fd = -1;
+	parser.removeClient(this->clients[this->sender_fd].getNick());
+	clients.erase(this->sender_fd);
+	std::cout << "Client " << this->sender_fd << " deleted" << std::endl;
 	return ;
 }
 
@@ -218,32 +218,28 @@ void	Server::ftIRC(void)
 	this->getAddrInfo();
 	this->ftSocket();
 	this->ftSetSockOpt();
+	this->ftFcntl();
 	this->ftBind();
 	this->ftListen();
 	this->pfds[0].fd = this->sockfd;
-	this->pfds[0].events = POLLIN | POLLOUT;
-	fcntl(sockfd, F_SETFL, O_NONBLOCK);
+	this->pfds[0].events = POLLIN;
 	std::memset(this->buf, 0, 256);
 	while(true)
 	{
 		this->ftPoll();
-		for (int i = 0; i < this->fd_count; i++)
+		if (this->pfds[0].revents & POLLIN)
+			this->addNewClient();
+		for (int i = 1; i < this->fd_count; i++)
 		{
 			if (this->pfds[i].revents & POLLIN)
 			{
-				this->addNewClient(i);
 				this->ftRecv(i);
 				this->checkNBytes(i);
 			}
 			if (this->pfds[i].revents & POLLOUT)
 				this->sendToClient(this->clients[this->pfds[i].fd]);
-			else if (this->pfds[i].revents & POLLHUP)
-			{
-				if (!this->nbytes && i != 0) 
-					std::cout << "Client " << this->sender_fd << " disconnected" << std::endl;
+			if (this->pfds[i].revents == POLLNVAL)
 				this->removeClient(i);
-			}
-			
 		}
 	}
 }
