@@ -289,11 +289,11 @@ void Commands::MODE( void ) {
 			userMode(modes, name);
 		} else {
 			chan = channels.find(name);
-			if (channelExist(name, chan) && userInChan(name, chan) && chan->second.isUserOp(name, *current_client))
+			if (channelExist(name, chan) && userInChan(name, chan))
 			{
 				if (args.size() == 1)
 					ServerMessage(RPL_CHANNELMODEIS, name + " " + chan->second.getModes() + "\n", *current_client);
-				else
+				else if (chan->second.isUserOp(name, *current_client))
 					channelMode(modes, chan);
 			}
 		}
