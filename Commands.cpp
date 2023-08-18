@@ -279,7 +279,7 @@ void Commands::MODE( void ) {
 	std::string name;
 	std::string modes;
 	chan_it chan;
-	// check for user modes, have to check same for channels
+
 	if (isEnoughParams(1))
 	{
 		name = args[0];
@@ -293,6 +293,8 @@ void Commands::MODE( void ) {
 			{
 				if (args.size() == 1)
 					ServerMessage(RPL_CHANNELMODEIS, name + " " + chan->second.getModes() + "\n", *current_client);
+				else
+					channelMode(modes, chan);
 			}
 		}
 	}
@@ -301,7 +303,6 @@ void Commands::MODE( void ) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SENDING MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-// maybe check for comma list for nc -->DONE
 void Commands::PRIVMSG( void ) {
 	std::vector<std::string> multi_dest;
 	std::string dest;
@@ -331,7 +332,7 @@ void Commands::PRIVMSG( void ) {
 	} 
 }
 
-// can have them in comma list -->DONE
+
 void Commands::NOTICE( void ) {
 	std::vector<std::string> multi_dest;
 	std::string dest;

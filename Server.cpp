@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/18 12:57:13 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/18 15:34:38 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void	Server::ftSend()
 	return ;
 }
 
-void	Server::sendToClient(Client &client) {
+void	Server::sendToClient(Client &client, int index) {
 	devector<std::string> &messages = client.getSendBuff();
 	std::string sending;
 	
@@ -211,6 +211,8 @@ void	Server::sendToClient(Client &client) {
 		if (send(client.getFD(), sending.data(), sending.length(), 0) < 0)
 			std::cout << "send problems" << std::endl;	
 	}
+	if (client.remove_me())
+		this->removeClient(index);
 }
 
 void	Server::ftIRC(void)
@@ -237,7 +239,7 @@ void	Server::ftIRC(void)
 				this->checkNBytes(i);
 			}
 			if (this->pfds[i].revents & POLLOUT)
-				this->sendToClient(this->clients[this->pfds[i].fd]);
+				this->sendToClient(this->clients[this->pfds[i].fd], i);
 			if (this->pfds[i].revents == POLLNVAL)
 				this->removeClient(i);
 		}

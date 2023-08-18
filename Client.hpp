@@ -23,6 +23,7 @@ class Client {
 		bool		pass_registered;
 		bool		is_serverOp;
 		bool		is_invisible;
+		bool		remove;
 	public:
 		Client( );
 		Client( int fd );
@@ -52,6 +53,8 @@ class Client {
 		void setInvisibility( bool invis );
 		bool isServerOp( void );
 		void setServerOp( bool oper );
+		bool remove_me( void );
+		void set_removal( bool remove );
 };
 
 #endif

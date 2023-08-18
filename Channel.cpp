@@ -39,7 +39,7 @@ void Channel::addMember( Client &add, std::string key ) {
     }
 }
 
-void Channel::echoToAll(Client &client, std::string cmd, std::string trailing, bool chan, std::map<std::string, Client *> &sent) {
+std::string Channel::echoToAll(Client &client, std::string cmd, std::string trailing, bool chan, std::map<std::string, Client *> &sent) {
     std::string client_info = USER_FN(client.getNick(), client.getUserName(), client.getHostName());
     std::string message = ":" + client_info + " " + cmd;
 
@@ -60,28 +60,20 @@ void Channel::echoToAll(Client &client, std::string cmd, std::string trailing, b
             sent[it->second->getNick()] = it->second;
         }
     }
+    return message;
 }
 
 // @time=2023-08-16T14:28:51.727Z :aballers!~user@5.195.225.158 MODE #newtest42 +o aballiscool
 void Channel::makeChanOp( Client &src, Client &dst ) {
-    std::map<std::string, Client *> sent;
-    std::string client_info = USER_FN(src.getNick(), src.getUserName(), src.getHostName());
-    std::string message = ":" + client_info + " MODE ";
-    std::string trailing = name + " +o " + dst.getNick();
     iter member = members.find(dst.getNick());
 
-    if (isUserOp(name, src)) {
-        if (isInChan(dst.getNick())) {
-            if (member != members.end())
-                members.erase(member);
-            operators[dst.getNick()] = &dst;
-            src.pushSendBuff(client_info + message + trailing);
-            echoToAll(src, "MODE", " +o " + dst.getNick(), true, sent);
-        } else
-            ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
-    }
+    if (isInChan(dst.getNick())) {
+        if (member != members.end())
+            members.erase(member);
+        operators[dst.getNick()] = &dst;
+    } else
+        ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
 }
-
 
 void Channel::removeMember( Client & remove) {
     iter member = members.find(remove.getNick());
@@ -185,6 +177,35 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
     }
 }
 
+void Channel::modeI(char mode, char sign) {
+    if (mode == 'i') {
+        if (sign == '+') {
+            inviteOnly = true;
+            setModes(mode);
+        }
+        if (sign == '-') {
+            inviteOnly = false;
+            removeModes(mode);
+        }
+    }
+}
+
+// void Channel::modeO(std::string mode, std::string sign, devector<std::string> &args) {
+
+// }
+
+// void Channel::modeK(std::string mode, std::string sign, devector<std::string> &args) {
+
+// }
+
+// void Channel::modeL(std::string mode, std::string sign, devector<std::string> &args) {
+
+// }
+
+// void Channel::modeT(std::string mode, std::string sign) {
+
+// }
+
 unsigned int Channel::getCurrentCount(void) const
 {
     return this->currentCount;
@@ -200,14 +221,20 @@ std::string const Channel::getModes(void) const
     return this->modes;
 }
 
-void Channel::setModes(std::string modestring)
-{
-    //have to parse a little for assigning multiple modes in multiple mode commands
-    this->modes = modestring;
-}
-
 void Channel::setInviteOnly( bool invite ) {
     this->inviteOnly = invite;
+}
+
+void Channel::setModes(char mode) {
+    size_t pos = modes.find(mode);
+    if (pos == modes.npos) 
+        modes += mode;
+}
+
+void Channel::removeModes(char mode) {
+    size_t pos = modes.find(mode);
+    if (pos != modes.npos)
+        modes.erase(pos);
 }
 
 bool Channel::checkEntrance( std::string nick, Client &client, std::string key ) {
