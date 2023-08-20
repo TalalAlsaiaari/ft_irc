@@ -6,7 +6,7 @@
 /*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/20 14:09:43 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/20 20:20:02 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,5 +248,5 @@ void	Server::ftIRC(void)
 
 Server::~Server()
 {
-	delete this->pfds;
+	delete [] this->pfds;
 }
