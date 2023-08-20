@@ -3,17 +3,14 @@
 
 Client::Client() : registered(false), pass_registered(false), is_serverOp(false),
 	is_invisible(false), remove(false) {
-		std::cout << "client default" << std::endl;
 	}
 
 Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false),
 	is_serverOp(false), is_invisible(false), remove(false) {
-		std::cout << "Client by fd" << std::endl;
 	}
 
 Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name),
 	registered(false), pass_registered(false), is_serverOp(false), is_invisible(false), remove(false) {
-		std::cout << "server constructs client" << std::endl;
 	}
 
 Client &Client::operator=(const Client &other) {
