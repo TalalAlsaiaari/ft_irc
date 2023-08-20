@@ -208,7 +208,8 @@ void Commands::INVITE(void)
 			ServerMessage(ERR_NOSUCHNICK, args[0] + " :no such nick\n", *current_client);
 		else if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			//reject when channel is invite only and current user is not op
+			if (chan->second.isInviteOnly() && !chan->second.isUserOp(chanName, *current_client))
+				return ;
 			if (chan->second.isInChan(dest->second->getNick()))
 				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
 			else
@@ -221,7 +222,6 @@ void Commands::INVITE(void)
 	}
 }
 
-// can have user names separated by commas --> DONE
 void Commands::KICK(void)
 {
 	std::vector<std::string> multi_nick;
@@ -373,7 +373,6 @@ void Commands::WHOIS( void ) {
 		args.pop_front();
 		user = nicks.find(who);
 		if (user != nicks.end()) {
-			// send info, maybe restirct info if user invisible
 			who += " " + user->second->getUserName() + " " + user->second->getHostName() + " * :" + user->second->getRealName();
 			ServerMessage(RPL_WHOISUSER, who + "\n", *current_client);
 			if (user->second->isServerOp())
