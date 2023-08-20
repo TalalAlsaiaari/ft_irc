@@ -64,15 +64,38 @@ std::string Channel::echoToAll(Client &client, std::string cmd, std::string trai
 }
 
 // @time=2023-08-16T14:28:51.727Z :aballers!~user@5.195.225.158 MODE #newtest42 +o aballiscool
-void Channel::makeChanOp( Client &src, Client &dst ) {
+void Channel::makeChanOp( Client &src, Client &dst )
+{
     iter member = members.find(dst.getNick());
 
-    if (isInChan(dst.getNick())) {
-        if (member != members.end())
-            members.erase(member);
-        operators[dst.getNick()] = &dst;
-    } else
-        ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
+    if (isUserOp(this->name, src))
+    {
+        if (isInChan(dst.getNick()))
+        {
+            if (member != members.end())
+                members.erase(member);
+            operators[dst.getNick()] = &dst;
+        } 
+        else
+            ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
+    }
+}
+
+void Channel::unsetChanOp(Client &src, Client &dst)
+{
+    iter oper = operators.find(dst.getNick());
+
+    if (isUserOp(this->name, src))
+    {
+        if (isInChan(dst.getNick()))
+        {
+            if (oper != operators.end())
+                operators.erase(oper);
+            members[dst.getNick()] = &dst;
+        } 
+        else
+            ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
+    }
 }
 
 void Channel::removeMember( Client & remove) {
@@ -177,18 +200,18 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
     }
 }
 
-void Channel::chanModes(char mode, char sign, devector<std::string> &arguments)
+void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, Client &current_client)
 {
     if (mode == 'i')
         modeI(mode, sign);
     if (mode == 'o')
-        modeO(mode, sign, arguments);
-    if (mode == 'k')
-        modeK(mode, sign, arguments);
-    if (mode == 'l')
-        modeL(mode, sign, arguments);
-    if (mode == 't')
-        modeT(mode, sign);
+        modeO(sign, arguments, current_client);
+    // if (mode == 'k')
+    //     modeK(mode, sign, arguments);
+    // if (mode == 'l')
+    //     modeL(mode, sign, arguments);
+    // if (mode == 't')
+    //     modeT(mode, sign);
 }
 
 void Channel::modeI(char mode, char sign)
@@ -205,28 +228,36 @@ void Channel::modeI(char mode, char sign)
     }
 }
 
-void Channel::modeO(std::string mode, std::string sign, devector<std::string> &args)
+void Channel::modeO(char sign, devector<std::string> &args, Client &current_client)
 {
     iter member = members.find(args[0]);
-    if (member == members.end())
-        ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", );
-    if (sign == '+')
+    iter oper = operators.find(args[0]);
+    if (member == members.end() && oper == operators.end())
+        ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", current_client);
+    else
     {
-
+        if (sign == '+')
+            makeChanOp(current_client, *member->second);
+        else
+            unsetChanOp(current_client, *oper->second);
     }
 }
 
-void Channel::modeK(std::string mode, std::string sign, devector<std::string> &args) {
+// void Channel::modeK(char mode, char sign, devector<std::string> &args)
+// {
+//     ;
+// }
 
-}
 
-void Channel::modeL(std::string mode, std::string sign, devector<std::string> &args) {
+// void Channel::modeL(char mode, char sign, devector<std::string> &args)
+// {
+//     ;
+// }
 
-}
-
-void Channel::modeT(std::string mode, std::string sign) {
-
-}
+// void Channel::modeT(char mode, char sign)
+// {
+//     ;
+// }
 
 unsigned int Channel::getCurrentCount(void) const
 {

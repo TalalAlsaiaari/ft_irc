@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/18 15:34:38 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/20 14:09:43 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	Server::resizePfds(void)
 			temp[i].fd = this->pfds[i].fd;
 			temp[i].events = this->pfds[i].events;
 		}
-		delete this->pfds;
+		delete [] this->pfds;
 		this->pfds = temp;
 	}
 	this->pfds[this->fd_count].fd = this->new_client;
