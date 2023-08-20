@@ -396,7 +396,7 @@ void Channel::setChannelOp(Client &target)
 
 bool Channel::isUserOp(std::string chanName, Client& user)
 {
-	if (operators.find(user.getNick()) == operators.end()) //should check for channel op
+	if (operators.find(user.getNick()) == operators.end())
 	{
 		ServerMessage(ERR_CHANOPRIVSNEEDED, chanName + " :You're not a channel operator\n", user);
 		return false;
