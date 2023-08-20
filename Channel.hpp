@@ -25,7 +25,7 @@ class Channel
 		std::string		defKickMsg;
 		unsigned int	currentCount;
 		std::string		modes;
-		
+
 	public:
 		Channel();
 		Channel( std::string, Client & );
@@ -46,12 +46,12 @@ class Channel
 		void removeModes(char mode);
 		unsigned int getCurrentCount(void) const;
 
-		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current);
-		void modeI(char sign, Client &current);
-		void modeO(char sign, devector<std::string> &args, Client &current);
-		void modeK(char sign, devector<std::string> &args, Client &current);
-		void modeL(char sign, devector<std::string> &args, Client &current);
-		void modeT(char sign, Client &current_client);
+		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current, std::string &modes, std::string &trailing);
+		void modeI(char sign, Client &current, std::string &modes);
+		void modeO(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeK(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeL(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeT(char sign, Client &current_client, std::string &modes);
 
 		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;
