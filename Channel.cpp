@@ -204,28 +204,31 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
 void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, Client &current_client)
 {
     if (mode == 'i')
-        modeI(mode, sign);
+        modeI(mode, sign, current_client);
     if (mode == 'o')
         modeO(sign, arguments, current_client);
     if (mode == 'k')
         modeK(sign, arguments, current_client);
-    // if (mode == 'l')
-    //     modeL(mode, sign, arguments);
+    if (mode == 'l')
+        modeL(sign, arguments, current_client);
     // if (mode == 't')
     //     modeT(mode, sign);
 }
 
-void Channel::modeI(char mode, char sign)
+void Channel::modeI(char mode, char sign, Client &current_client)
 {
-    if (sign == '+')
+    if (isUserOp(this->name, current_client))
     {
-        inviteOnly = true;
-        setModes(mode);
-    }
-    if (sign == '-')
-    {
-        inviteOnly = false;
-        removeModes(mode);
+        if (sign == '+')
+        {
+            inviteOnly = true;
+            setModes(mode);
+        }
+        else
+        {
+            inviteOnly = false;
+            removeModes(mode);
+        }
     }
 }
 
@@ -247,25 +250,45 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
     }
 }
 
-void Channel::modeK(char sign, devector<std::string> &args, Client &curren_client)
+void Channel::modeK(char sign, devector<std::string> &args, Client &current_client)
 {
-    if (isUserOp(this->name, curren_client))
+    if (isUserOp(this->name, current_client))
     {
         if (args.size() && sign == '+')
         {
             this->pass = args[0];
             this->hasKey = true;
+            setModes('k');
         }
         else
+        {
             this->hasKey = false;
+            removeModes('k');
+        }
     }
 }
 
 
-// void Channel::modeL(char mode, char sign, devector<std::string> &args)
-// {
-//     ;
-// }
+void Channel::modeL(char sign, devector<std::string> &args, Client &current_client)
+{
+    std::stringstream conv;
+    size_t limit;
+
+    if (isUserOp(this->name, current_client))
+    {
+        if (args.size() && sign == '+')
+        {
+            conv << args[0];
+            conv >> limit;
+            if (limit <= 0)
+                return ;
+            this->limit = limit;
+            this->hasLimit = true;
+        }
+        else
+            this->hasLimit = false;
+    }
+}
 
 // void Channel::modeT(char mode, char sign)
 // {
@@ -306,7 +329,7 @@ void Channel::removeModes(char mode) {
 bool Channel::checkEntrance( std::string nick, Client &client, std::string key ) {
     if (hasLimit) {
         if (currentCount >= limit) {
-            ServerMessage(ERR_CHANNELISFULL, name + " :Cannot join channel (+l) - channel is full, try again later", client);
+            ServerMessage(ERR_CHANNELISFULL, name + " :Cannot join channel (+l) - channel is full, try again later\n", client);
             return false;
         }
     }
@@ -318,7 +341,7 @@ bool Channel::checkEntrance( std::string nick, Client &client, std::string key )
     }
     if (hasKey) {
         if (key != pass) {
-            ServerMessage(ERR_BADCHANNELKEY, name + " :Cannot join channel (+k) - bad key", client);
+            ServerMessage(ERR_BADCHANNELKEY, name + " :Cannot join channel (+k) - bad key\n", client);
             return false;
         }
     }

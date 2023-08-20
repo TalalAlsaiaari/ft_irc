@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <sstream>
 #include "Client.hpp"
 #include "Messages.hpp"
 #include "ErrorCodes.hpp"
@@ -45,10 +46,10 @@ class Channel
 		unsigned int getCurrentCount(void) const;
 
 		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current);
-		void modeI(char mode, char sign);
+		void modeI(char mode, char sign, Client &current);
 		void modeO(char sign, devector<std::string> &args, Client &current);
 		void modeK(char sign, devector<std::string> &args, Client &current);
-		// void modeL(char mode, char sign, devector<std::string> &args);
+		void modeL(char sign, devector<std::string> &args, Client &current);
 		// void modeT(char mode, char sign);
 
 		std::string const getTopic(void) const;

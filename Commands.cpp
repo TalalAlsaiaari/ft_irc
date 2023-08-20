@@ -213,6 +213,7 @@ void Commands::INVITE(void)
 			{
 				ServerMessage(RPL_INVITING, args[0] + " " + chanName + "\n", *current_client);
 				killMsg(*current_client, dest->second);
+				chan->second.addInvite(args[0], dest->second);
 			}
 		}
 	}
