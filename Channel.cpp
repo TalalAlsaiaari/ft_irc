@@ -77,7 +77,7 @@ void Channel::makeChanOp( Client &src, Client &dst )
             if (member != members.end())
                 members.erase(member);
             operators[dst.getNick()] = &dst;
-        } 
+        }
         else
             ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
     }
@@ -94,7 +94,7 @@ void Channel::unsetChanOp(Client &src, Client &dst)
             if (oper != operators.end())
                 operators.erase(oper);
             members[dst.getNick()] = &dst;
-        } 
+        }
         else
             ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
     }
@@ -187,7 +187,7 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
     iter mems = members.find(old_nick);
     iter oper = operators.find(old_nick);
     iter invite = invited.find(old_nick);
-    
+
     if (mems != members.end()) {
         members.erase(old_nick);
         members[new_nick] = &client;
@@ -202,21 +202,21 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
     }
 }
 
-void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, Client &current_client)
+void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, Client &current_client, std::string &modes, std::string &trailing)
 {
     if (mode == 'i')
-        modeI(sign, current_client);
+        modeI(sign, current_client, modes);
     if (mode == 'o')
-        modeO(sign, arguments, current_client);
+        modeO(sign, arguments, current_client, modes, trailing);
     if (mode == 'k')
-        modeK(sign, arguments, current_client);
+        modeK(sign, arguments, current_client, modes, trailing);
     if (mode == 'l')
-        modeL(sign, arguments, current_client);
+        modeL(sign, arguments, current_client, modes, trailing);
     if (mode == 't')
-        modeT(sign, current_client);
+        modeT(sign, current_client, modes);
 }
 
-void Channel::modeI(char sign, Client &current_client)
+void Channel::modeI(char sign, Client &current_client, std::string &modes)
 {
     if (isUserOp(this->name, current_client))
     {
@@ -230,10 +230,12 @@ void Channel::modeI(char sign, Client &current_client)
             inviteOnly = false;
             removeModes('i');
         }
+        if (modes.find('i', modes.find(sign)) == modes.npos)
+            modes += "i";
     }
 }
 
-void Channel::modeO(char sign, devector<std::string> &args, Client &current_client)
+void Channel::modeO(char sign, devector<std::string> &args, Client &current_client, std::string &modes, std::string &trailing)
 {
     if (isUserOp(this->name, current_client))
     {
@@ -251,17 +253,21 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
                 makeChanOp(current_client, *member->second);
             else
                 unsetChanOp(current_client, *oper->second);
+            trailing += " " + passed;
+            if (modes.find('o', modes.find(sign)) == modes.npos)
+                modes += "o";
         }
     }
 }
 
-void Channel::modeK(char sign, devector<std::string> &args, Client &current_client)
+void Channel::modeK(char sign, devector<std::string> &args, Client &current_client, std::string &modes, std::string &trailing)
 {
     if (isUserOp(this->name, current_client))
     {
         if (args.size() && sign == '+')
         {
             this->pass = args[0];
+            trailing += " " + args[0];
             args.pop_front();
             this->hasKey = true;
             setModes('k');
@@ -271,20 +277,24 @@ void Channel::modeK(char sign, devector<std::string> &args, Client &current_clie
             this->hasKey = false;
             removeModes('k');
         }
+        if (modes.find('k', modes.find(sign)) == modes.npos)
+            modes += "k";
     }
 }
 
 
-void Channel::modeL(char sign, devector<std::string> &args, Client &current_client)
+void Channel::modeL(char sign, devector<std::string> &args, Client &current_client, std::string &modes, std::string &trailing)
 {
     std::stringstream conv;
     size_t limit;
+    std::string l_str;
 
     if (isUserOp(this->name, current_client))
     {
         if (args.size() && sign == '+')
         {
             conv << args[0];
+            l_str = args[0];
             args.pop_front();
             if (!(conv >> limit))
                 return ;
@@ -293,16 +303,21 @@ void Channel::modeL(char sign, devector<std::string> &args, Client &current_clie
             this->limit = limit;
             this->hasLimit = true;
             setModes('l');
+            trailing += " " + l_str;
+            if (modes.find('l', modes.find(sign)) == modes.npos)
+                modes += "l";
         }
         else
         {
             this->hasLimit = false;
             removeModes('l');
+            if (modes.find('l', modes.find(sign)) == modes.npos)
+                modes += "l";
         }
     }
 }
 
-void Channel::modeT(char sign, Client &current_client)
+void Channel::modeT(char sign, Client &current_client, std::string &modes)
 {
     if (isUserOp(this->name, current_client))
     {
@@ -316,6 +331,8 @@ void Channel::modeT(char sign, Client &current_client)
             this->needOpStat = false;
             removeModes('t');
         }
+        if (modes.find('t', modes.find(sign)) == modes.npos)
+            modes += "t";
     }
 }
 
@@ -340,7 +357,7 @@ void Channel::setInviteOnly( bool invite ) {
 
 void Channel::setModes(char mode) {
     size_t pos = modes.find(mode);
-    if (pos == modes.npos) 
+    if (pos == modes.npos)
         this->modes += mode;
 }
 
