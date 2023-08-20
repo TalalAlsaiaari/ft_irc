@@ -47,7 +47,7 @@ class Channel
 		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current);
 		void modeI(char mode, char sign);
 		void modeO(char sign, devector<std::string> &args, Client &current);
-		// void modeK(char mode, char sign, devector<std::string> &args);
+		void modeK(char sign, devector<std::string> &args, Client &current);
 		// void modeL(char mode, char sign, devector<std::string> &args);
 		// void modeT(char mode, char sign);
 
@@ -62,4 +62,5 @@ class Channel
 		bool checkEntrance( std::string nick, Client &client, std::string key );
 		bool isUserOp(std::string chanName, Client &user);
 		void modeMsg(Client &src, Client &dst, std::string mode);
+		// bool isCorrectKey(std::string chanName, Client &user, std)
 };
