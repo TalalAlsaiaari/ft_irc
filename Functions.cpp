@@ -166,7 +166,7 @@ void Functions::userMode(std::string modes, std::string name)
 				if (args.at(1).find("i") != std::string::npos) {
 					if (modes.find("-") != modes.npos && current_client->isInvisible()) {
 						current_client->setInvisibility(false);
-						UserMessage(cmd, args[0] + " :" + args[1] + "\n", *current_client);	
+						UserMessage(cmd, args[0] + " :" + args[1] + "\n", *current_client);
 					}
 					else if (modes.find("+") != modes.npos && !current_client->isInvisible()) {
 						current_client->setInvisibility(true);
@@ -190,6 +190,7 @@ void Functions::userMode(std::string modes, std::string name)
 void Functions::channelMode(std::string modes, chan_it chan) {
 	devector<std::string> arguments;
 	std::string mode;
+	std::string trailing;
 	size_t		mode_pos;
 	size_t		mode_end_pos;
 	size_t		sign_pos;
@@ -205,8 +206,8 @@ void Functions::channelMode(std::string modes, chan_it chan) {
 		sign_pos = mode_pos - 1;
 		mode = modes[sign_pos];
 		while (mode_pos < modes.length()) {
-			chan->second.chanModes(modes[mode_pos], modes[sign_pos], arguments, *current_client);
-			mode += modes[mode_pos];
+			chan->second.chanModes(modes[mode_pos], modes[sign_pos], arguments, *current_client, mode, trailing);
+			// mode += modes[mode_pos];
 			mode_pos++;
 			if (mode_pos == mode_end_pos) {
 				mode_pos = modes.find_first_not_of("+-", mode_end_pos);
@@ -215,6 +216,7 @@ void Functions::channelMode(std::string modes, chan_it chan) {
 				mode += modes[sign_pos];
 			}
 		}
+		mode += trailing;
 		current_client->pushSendBuff(chan->second.echoToAll(*current_client, cmd, mode, true, sent));
 		sent.clear();
 	} else
