@@ -25,14 +25,14 @@ class Functions {
 		std::string cmd;
 		devector<devector<std::string> > multi_cmd;
 		devector<std::string> args;
-		std::map<std::string, Client> nicks;
+		std::map<std::string, Client *> nicks;
 		Client *current_client;
 		std::string pass;
 		std::string const serverOpPass;
 		std::map<std::string, Channel> channels;
 		std::map<std::string, Client *> sent;
 		typedef std::map<std::string, Channel>::iterator chan_it;
-		typedef std::map<std::string, Client>::iterator client_it;
+		typedef std::map<std::string, Client *>::iterator client_it;
 	public:
 		Functions( );
 		virtual ~Functions( );
@@ -43,8 +43,8 @@ class Functions {
 		bool checkNick( std::string nick );
 		bool RegisterUser( void );
 		void quitMsg(Client source, std::string msg);
-		void killMsg(Client source, Client dest);
-		void errMsg(std::map<std::string, Client>::iterator dest, std::string msg);
+		void killMsg(Client &source, Client &dest);
+		void errMsg(client_it dest, std::string msg);
 		std::vector<std::string> split(std::string str, std::string delim);
 		
 		bool isEnoughParams(unsigned int paramNum);
