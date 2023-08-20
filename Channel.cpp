@@ -12,6 +12,7 @@ Channel::Channel( std::string name, Client &creator ) {
     this->inviteOnly = false;
     this->hasLimit = false;
     this->hasKey = false;
+    this->needOpStat = true;
     this->defKickMsg = "Bye, miss you";
     this->currentCount = 1;
     this->modes = "+";
@@ -204,30 +205,30 @@ void Channel::updateMemberNick( Client &client, std::string old_nick, std::strin
 void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, Client &current_client)
 {
     if (mode == 'i')
-        modeI(mode, sign, current_client);
+        modeI(sign, current_client);
     if (mode == 'o')
         modeO(sign, arguments, current_client);
     if (mode == 'k')
         modeK(sign, arguments, current_client);
     if (mode == 'l')
         modeL(sign, arguments, current_client);
-    // if (mode == 't')
-    //     modeT(mode, sign);
+    if (mode == 't')
+        modeT(sign, current_client);
 }
 
-void Channel::modeI(char mode, char sign, Client &current_client)
+void Channel::modeI(char sign, Client &current_client)
 {
     if (isUserOp(this->name, current_client))
     {
         if (sign == '+')
         {
             inviteOnly = true;
-            setModes(mode);
+            setModes('i');
         }
         else
         {
             inviteOnly = false;
-            removeModes(mode);
+            removeModes('i');
         }
     }
 }
@@ -284,16 +285,32 @@ void Channel::modeL(char sign, devector<std::string> &args, Client &current_clie
                 return ;
             this->limit = limit;
             this->hasLimit = true;
+            setModes('l');
         }
         else
+        {
             this->hasLimit = false;
+            removeModes('l');
+        }
     }
 }
 
-// void Channel::modeT(char mode, char sign)
-// {
-//     ;
-// }
+void Channel::modeT(char sign, Client &current_client)
+{
+    if (isUserOp(this->name, current_client))
+    {
+        if (sign == '+')
+        {
+            this->needOpStat = true;
+            setModes('t');
+        }
+        else
+        {
+            this->needOpStat = false;
+            removeModes('t');
+        }
+    }
+}
 
 unsigned int Channel::getCurrentCount(void) const
 {
@@ -361,4 +378,11 @@ bool Channel::isUserOp(std::string chanName, Client& user)
 		return false;
 	}
 	return true;
+}
+
+bool Channel::needsOpStat(void)
+{
+    if (this->needOpStat)
+        return true;
+    return false;
 }
