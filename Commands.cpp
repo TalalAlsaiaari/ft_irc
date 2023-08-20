@@ -174,8 +174,10 @@ void Commands::TOPIC(void)
 		chan_it chan = channels.find(chanName);
 		if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
-			if (args.size() == 2 && chan->second.isUserOp(chanName, *current_client))
+			if (args.size() == 2)
 			{
+				if (chan->second.needsOpStat() && !chan->second.isUserOp(chanName, *current_client))
+					return ;
 				UserMessage(cmd, chanName + " :" + args[1] + "\n", *current_client);
 				chan->second.echoToAll(*current_client, cmd, ":" + args[1], true, sent);
 				chan->second.setTopic(args[1]);

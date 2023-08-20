@@ -21,6 +21,7 @@ class Channel
 		bool			inviteOnly;
 		bool			hasLimit;
 		bool			hasKey;
+		bool			needOpStat;
 		std::string		defKickMsg;
 		unsigned int	currentCount;
 		std::string		modes;
@@ -46,11 +47,11 @@ class Channel
 		unsigned int getCurrentCount(void) const;
 
 		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current);
-		void modeI(char mode, char sign, Client &current);
+		void modeI(char sign, Client &current);
 		void modeO(char sign, devector<std::string> &args, Client &current);
 		void modeK(char sign, devector<std::string> &args, Client &current);
 		void modeL(char sign, devector<std::string> &args, Client &current);
-		// void modeT(char mode, char sign);
+		void modeT(char sign, Client &current_client);
 
 		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;
@@ -62,6 +63,6 @@ class Channel
 		bool isInvited( std::string );
 		bool checkEntrance( std::string nick, Client &client, std::string key );
 		bool isUserOp(std::string chanName, Client &user);
+		bool needsOpStat(void);
 		void modeMsg(Client &src, Client &dst, std::string mode);
-		// bool isCorrectKey(std::string chanName, Client &user, std)
 };
