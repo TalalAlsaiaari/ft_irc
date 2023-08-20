@@ -235,12 +235,16 @@ void Channel::modeI(char sign, Client &current_client)
 
 void Channel::modeO(char sign, devector<std::string> &args, Client &current_client)
 {
-    iter member = members.find(args[0]);
-    iter oper = operators.find(args[0]);
     if (isUserOp(this->name, current_client))
     {
+        if (!args.size())
+            return ;
+        iter member = members.find(args[0]);
+        iter oper = operators.find(args[0]);
+        std::string passed = args[0];
+        args.pop_front();
         if (member == members.end() && oper == operators.end())
-            ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", current_client);
+            ServerMessage(ERR_NOSUCHNICK, passed + " :No such nick/channel\n", current_client);
         else
         {
             if (sign == '+')
@@ -258,6 +262,7 @@ void Channel::modeK(char sign, devector<std::string> &args, Client &current_clie
         if (args.size() && sign == '+')
         {
             this->pass = args[0];
+            args.pop_front();
             this->hasKey = true;
             setModes('k');
         }
@@ -280,7 +285,9 @@ void Channel::modeL(char sign, devector<std::string> &args, Client &current_clie
         if (args.size() && sign == '+')
         {
             conv << args[0];
-            conv >> limit;
+            args.pop_front();
+            if (!(conv >> limit))
+                return ;
             if (limit <= 0)
                 return ;
             this->limit = limit;

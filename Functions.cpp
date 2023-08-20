@@ -73,10 +73,9 @@ bool Functions::RegisterUser( void ) {
 	return false;
 }
 
-void Functions::killMsg(Client source, Client dest) {
+void Functions::killMsg(Client &source, Client &dest) {
 	std::string message = ":" + USER_FN(source.getNick(), source.getUserName(), source.getHostName());
 	message += " " + cmd + " " + dest.getNick() + " " + args[1] + "\n";
-	std::cout << message << std::endl;
 	dest.pushSendBuff(message);
 }
 
@@ -97,10 +96,10 @@ void Functions::quitMsg(Client source, std::string msg)
 
 void Functions::errMsg(client_it dest, std::string msg)
 {
-	std::string mes = ":" + dest->second.getServerName() + "Error: " + msg + "\n";
-	dest->second.pushSendBuff(mes);
+	std::string mes = ":" + dest->second->getServerName() + "Error: " + msg + "\n";
+	dest->second->pushSendBuff(mes);
 	// close(dest->second.getFD());
-	dest->second.set_removal(true);
+	dest->second->set_removal(true);
 	nicks.erase(dest);
 }
 
@@ -160,7 +159,7 @@ void Functions::userMode(std::string modes, std::string name)
 		client_it target = nicks.find(args.at(0));
 		if (target == nicks.end())
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);
-		else if (target->second.getFD() != fd)
+		else if (target->second->getFD() != fd)
 			ServerMessage(ERR_USERSDONTMATCH, " :Can't touch this\n", *current_client);
 		else {
 			try {
@@ -176,9 +175,9 @@ void Functions::userMode(std::string modes, std::string name)
 				} else if (args.at(1).find("i") == std::string::npos)
 					ServerMessage(ERR_UMODEUNKOWNFLAG, ":Unknown MODE flag " + args.at(1) + "\n", *current_client);
 			} catch (std::exception &e) {
-				if (target->second.isInvisible())
+				if (target->second->isInvisible())
 					modes += "i";
-				if (target->second.isServerOp())
+				if (target->second->isServerOp())
 					modes += "o";
 				ServerMessage(RPL_UMODEIS, modes + "\n", *current_client);
 			}

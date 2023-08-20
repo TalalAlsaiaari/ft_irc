@@ -209,13 +209,13 @@ void Commands::INVITE(void)
 		else if (channelExist(chanName, chan) && userInChan(chanName, chan))
 		{
 			//reject when channel is invite only and current user is not op
-			if (chan->second.isInChan(dest->second.getNick()))
+			if (chan->second.isInChan(dest->second->getNick()))
 				ServerMessage(ERR_USERONCHANNEL, args[0] + " " + chanName + " :User already on channel\n", *current_client);
 			else
 			{
 				ServerMessage(RPL_INVITING, args[0] + " " + chanName + "\n", *current_client);
-				killMsg(*current_client, dest->second);
-				chan->second.addInvite(args[0], dest->second);
+				killMsg(*current_client, *dest->second);
+				chan->second.addInvite(args[0], *dest->second);
 			}
 		}
 	}
@@ -245,13 +245,13 @@ void Commands::KICK(void)
 				reason = args[2];
 			if (channelExist(chanName, chan) && userInChan(chanName, chan))
 			{
-				if (!chan->second.isInChan(dest->second.getNick()))
-					ServerMessage(ERR_USERNOTINCHANNEL, dest->second.getNick() + " " + chanName + " :User is not on channel\n", *current_client);
+				if (!chan->second.isInChan(dest->second->getNick()))
+					ServerMessage(ERR_USERNOTINCHANNEL, dest->second->getNick() + " " + chanName + " :User is not on channel\n", *current_client);
 				else if (chan->second.isUserOp(chanName, *current_client))
 				{
-					UserMessage(cmd, chanName + " " + dest->second.getNick() + " " + reason + "\n", *current_client);
-					chan->second.echoToAll(*current_client, cmd, dest->second.getNick() + " " + reason, true, sent);
-					chan->second.removeMember(dest->second);
+					UserMessage(cmd, chanName + " " + dest->second->getNick() + " " + reason + "\n", *current_client);
+					chan->second.echoToAll(*current_client, cmd, dest->second->getNick() + " " + reason, true, sent);
+					chan->second.removeMember(*dest->second);
 					sent.clear();
 					if (!chan->second.getCurrentCount())
 						channels.erase(chan);
@@ -327,7 +327,7 @@ void Commands::PRIVMSG( void ) {
 			} else {
 				client = nicks.find(dest);
 				if (client != nicks.end())
-					UsertoUser(*current_client, client->second, cmd, args[1] + "\n");
+					UsertoUser(*current_client, *client->second, cmd, args[1] + "\n");
 				else
 					ServerMessage(ERR_NOSUCHNICK, ":" + dest + "\n", *current_client);
 			}
@@ -355,7 +355,7 @@ void Commands::NOTICE( void ) {
 			} else {
 				client = nicks.find(dest);
 				if (client != nicks.end())
-					UsertoUser(*current_client, client->second, cmd, args[1] + "\n");
+					UsertoUser(*current_client, *client->second, cmd, args[1] + "\n");
 			}
 		}
 	} 
@@ -374,12 +374,12 @@ void Commands::WHOIS( void ) {
 		user = nicks.find(who);
 		if (user != nicks.end()) {
 			// send info, maybe restirct info if user invisible
-			who += " " + user->second.getUserName() + " " + user->second.getHostName() + " * :" + user->second.getRealName();
+			who += " " + user->second->getUserName() + " " + user->second->getHostName() + " * :" + user->second->getRealName();
 			ServerMessage(RPL_WHOISUSER, who + "\n", *current_client);
-			if (user->second.isServerOp())
-				ServerMessage(RPL_WHOISOPERATOR, user->second.getNick() + " :is a local operator\n", *current_client);
-			ServerMessage(RPL_WHOISSERVER, user->second.getNick() + " " + user->second.getServerName() + " :ft_ircserv\n", *current_client);
-			ServerMessage(RPL_WHOISACTUALLY, user->second.getNick() + " " + user->second.getHostName() + " :actually using host\n", *current_client);
+			if (user->second->isServerOp())
+				ServerMessage(RPL_WHOISOPERATOR, user->second->getNick() + " :is a local operator\n", *current_client);
+			ServerMessage(RPL_WHOISSERVER, user->second->getNick() + " " + user->second->getServerName() + " :ft_ircserv\n", *current_client);
+			ServerMessage(RPL_WHOISACTUALLY, user->second->getNick() + " " + user->second->getHostName() + " :actually using host\n", *current_client);
 			ServerMessage(RPL_ENDOFWHOIS, " :end of WHOIS\n",*current_client);
 		} else
 			ServerMessage(ERR_NOSUCHNICK, " :nobody here by that name\n", *current_client);
@@ -401,8 +401,8 @@ void Commands::KILL(void)
 			ServerMessage(ERR_NOSUCHNICK, " :Who dat?\n", *current_client);
 		else
 		{
-			killMsg(*current_client, user->second);
-			quitMsg(user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
+			killMsg(*current_client, *user->second);
+			quitMsg(*user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
 		}
 	} 
