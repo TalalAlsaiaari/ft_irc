@@ -15,6 +15,7 @@ Channel::Channel( std::string name, Client &creator ) {
     this->defKickMsg = "Bye, miss you";
     this->currentCount = 1;
     this->modes = "+";
+    this->pass = "";
     operators[creator.getNick()] = &creator;
     UserMessage("JOIN", name + " * :welcome\n", creator);
     whoIsChan(creator);
@@ -206,8 +207,8 @@ void Channel::chanModes(char mode, char sign, devector<std::string> &arguments, 
         modeI(mode, sign);
     if (mode == 'o')
         modeO(sign, arguments, current_client);
-    // if (mode == 'k')
-    //     modeK(mode, sign, arguments);
+    if (mode == 'k')
+        modeK(sign, arguments, current_client);
     // if (mode == 'l')
     //     modeL(mode, sign, arguments);
     // if (mode == 't')
@@ -232,21 +233,33 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
 {
     iter member = members.find(args[0]);
     iter oper = operators.find(args[0]);
-    if (member == members.end() && oper == operators.end())
-        ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", current_client);
-    else
+    if (isUserOp(this->name, current_client))
     {
-        if (sign == '+')
-            makeChanOp(current_client, *member->second);
+        if (member == members.end() && oper == operators.end())
+            ServerMessage(ERR_NOSUCHNICK, args[0] + " :No such nick/channel\n", current_client);
         else
-            unsetChanOp(current_client, *oper->second);
+        {
+            if (sign == '+')
+                makeChanOp(current_client, *member->second);
+            else
+                unsetChanOp(current_client, *oper->second);
+        }
     }
 }
 
-// void Channel::modeK(char mode, char sign, devector<std::string> &args)
-// {
-//     ;
-// }
+void Channel::modeK(char sign, devector<std::string> &args, Client &curren_client)
+{
+    if (isUserOp(this->name, curren_client))
+    {
+        if (args.size() && sign == '+')
+        {
+            this->pass = args[0];
+            this->hasKey = true;
+        }
+        else
+            this->hasKey = false;
+    }
+}
 
 
 // void Channel::modeL(char mode, char sign, devector<std::string> &args)
