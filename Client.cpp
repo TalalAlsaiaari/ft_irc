@@ -2,13 +2,13 @@
 
 
 Client::Client() : registered(false), pass_registered(false), is_serverOp(false),
-	is_invisible(false) {}
+	is_invisible(false), remove(false) {}
 
 Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false),
-	is_serverOp(false), is_invisible(false) {}
+	is_serverOp(false), is_invisible(false), remove(false) {}
 
 Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name),
-	registered(false), pass_registered(false), is_serverOp(false), is_invisible(false) {}
+	registered(false), pass_registered(false), is_serverOp(false), is_invisible(false), remove(false) {}
 
 Client &Client::operator=(const Client &other) {
 	this->fd = other.fd;
