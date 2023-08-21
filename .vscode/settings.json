@@ -74,5 +74,12 @@
         "numeric": "cpp",
         "random": "cpp",
         "numbers": "cpp"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/home/ballzball/Desktop/cursus/ft_irc",
+            "binaryPath": "/home/ballzball/Desktop/cursus/ft_irc/ircserv",
+            "binaryArgs": []
+        }
+    ]
 }
