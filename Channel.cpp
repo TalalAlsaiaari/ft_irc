@@ -69,6 +69,7 @@ std::string Channel::echoToAll(Client &client, std::string cmd, std::string trai
 void Channel::makeChanOp( Client &src, Client &dst )
 {
     iter member = members.find(dst.getNick());
+    iter oper = operators.find(dst.getNick());
 
     if (isUserOp(this->name, src))
     {
@@ -76,7 +77,8 @@ void Channel::makeChanOp( Client &src, Client &dst )
         {
             if (member != members.end())
                 members.erase(member);
-            operators[dst.getNick()] = &dst;
+            if (oper == operators.end())
+                operators[dst.getNick()] = &dst;
         }
         else
             ServerMessage(ERR_USERNOTINCHANNEL, dst.getNick() + " " + name + " :Not on channel\n", src);
@@ -249,9 +251,9 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
             ServerMessage(ERR_NOSUCHNICK, passed + " :No such nick/channel\n", current_client);
         else
         {
-            if (sign == '+')
+            if (sign == '+' && member != members.end())
                 makeChanOp(current_client, *member->second);
-            else
+            else if (oper != operators.end())
                 unsetChanOp(current_client, *oper->second);
             trailing += " " + passed;
             if (modes.find('o', modes.find(sign)) == modes.npos)
@@ -262,12 +264,13 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
 
 void Channel::modeK(char sign, devector<std::string> &args, Client &current_client, std::string &modes, std::string &trailing)
 {
+    std::string save;
     if (isUserOp(this->name, current_client))
     {
         if (args.size() && sign == '+')
         {
             this->pass = args[0];
-            trailing += " " + args[0];
+            save = args[0];
             args.pop_front();
             this->hasKey = true;
             setModes('k');
@@ -277,8 +280,10 @@ void Channel::modeK(char sign, devector<std::string> &args, Client &current_clie
             this->hasKey = false;
             removeModes('k');
         }
-        if (modes.find('k', modes.find(sign)) == modes.npos)
+        if (modes.find('k', modes.find(sign)) == modes.npos) {
+            trailing += " " + save;
             modes += "k";
+        }
     }
 }
 
