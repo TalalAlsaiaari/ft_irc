@@ -1,4 +1,4 @@
 *.o
 ircserv
 .DS_Store
-.vs_code
+.vs_code/*
