@@ -74,12 +74,12 @@ void Parser::findCmdArgs( void ) {
 		if (!args.empty() && makeUpper(args.front()) == "PASS")
 			this->findPass();
 	}
-	for (size_t i = 0; i < multi_cmd.size(); i++) {
-		for (size_t j = 0; j < multi_cmd[i].size(); j++) {
-			std::cout << "|" << multi_cmd[i][j] << "|" << std::endl;
-		}
-		std::cout << std::endl;
-	}
+	// for (size_t i = 0; i < multi_cmd.size(); i++) {
+	// 	for (size_t j = 0; j < multi_cmd[i].size(); j++) {
+	// 		std::cout << "|" << multi_cmd[i][j] << "|" << std::endl;
+	// 	}
+	// 	std::cout << std::endl;
+	// }
 }
 
 std::string Parser::makeUpper( std::string str) {

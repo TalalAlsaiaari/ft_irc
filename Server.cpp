@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 16:44:08 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 17:33:37 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	Server::addNewClient(void)
 		return ;
 	}
 	std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
+	std::cout << "Client fd: " << this->new_client << std::endl;
 	this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
 	this->resizePfds();
 	return ;
@@ -177,7 +178,6 @@ void	Server::ftSend()
 	this->clients[this->sender_fd].getBuff() += buf;
 	input = this->clients[this->sender_fd].getBuff();
 	if (input.find("\n") != std::string::npos) {
-		std::cout << "|" << input << "|" << std::endl;
 		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
 		this->clients[this->sender_fd].getBuff().clear();
 	}
@@ -224,7 +224,7 @@ void	Server::ftIRC(void)
 			}
 			if (this->pfds[i].revents & POLLOUT)
 				this->sendToClient(this->clients[this->pfds[i].fd], i);
-			if (this->pfds[i].revents == POLLNVAL)
+			if (this->pfds[i].revents == POLLHUP)
 				this->removeClient(i);
 		}
 	}
