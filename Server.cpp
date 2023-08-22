@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 13:57:00 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 15:34:29 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,11 +178,11 @@ void	Server::checkNBytes(int index)
 
 void	Server::removeClient(int index)
 {
-	close(this->pfds[index].fd);
-	this->pfds[index].fd = -1;
+	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
 	parser.removeClient(this->clients[this->pfds[index].fd].getNick());
 	clients.erase(this->pfds[index].fd);
-	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
+	close(this->pfds[index].fd);
+	this->pfds[index].fd = -1;
 	return ;
 }
 
