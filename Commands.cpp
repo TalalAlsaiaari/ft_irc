@@ -102,7 +102,7 @@ void Commands::QUIT( void ) {
 	sent.clear();
 	if (cli_nick != nicks.end())
 		nicks.erase(cli_nick);
-	close(fd);
+	current_client->set_removal(true);
 	throw IrcErrorException("Client has quit\n");
 }
 
@@ -404,7 +404,6 @@ void Commands::KILL(void)
 			quitMsg(*user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
 			user->second->set_removal(true);
-			// close(user->second->getFD());
 		}
 	} 
 }
