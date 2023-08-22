@@ -1,6 +1,7 @@
 #include "Commands.hpp"
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ CONNECTION MESSAGES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 void Commands::CAP( void ) {
 	std::string mes = "CAP * LS :multi-prefix userhost-in-names\n";
 	if (isEnoughParams(1)) {
@@ -164,7 +165,6 @@ void Commands::PART(void)
 		}
 	}
 }
-
 
 void Commands::TOPIC(void)
 {	
@@ -334,7 +334,6 @@ void Commands::PRIVMSG( void ) {
 		}
 	} 
 }
-
 
 void Commands::NOTICE( void ) {
 	std::vector<std::string> multi_dest;
