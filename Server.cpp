@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 16:03:48 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 16:28:30 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	Server::ftPoll(void)
 	if (this->poll_count < 0)
 	{
 		std::cout << "Error with poll" << std::endl;
-		std::exit(EXIT_FAILURE);
+		return ;
 	}
 	return ;
 }
@@ -125,7 +125,7 @@ void	Server::addNewClient(void)
 	if (this->new_client < 0)
 	{
 		std::cout << "Error with accept" << std::endl;
-		std::exit(EXIT_FAILURE);
+		return ;
 	}
 	std::cout << "Client IP: " << inet_ntoa(new_client_addr.sin_addr) << std::endl;
 	this->clients[this->new_client] = Client(this->new_client, inet_ntoa(new_client_addr.sin_addr));
