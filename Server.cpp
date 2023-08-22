@@ -6,12 +6,13 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 16:28:30 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 16:44:08 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
+#include "IrcErrorException.hpp"
 
 Server::Server()
 {
@@ -41,10 +42,7 @@ void	Server::getAddrInfo(void)
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_protocol = IPPROTO_TCP;
 	if ((getaddrinfo(NULL, &this->port[0], &hints, &this->res)) != 0)
-	{
-		std::cout << "Error with getaddrinfo" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with getaddrinfo");
 	return ;
 }
 
@@ -53,20 +51,14 @@ void	Server::ftSocket(void)
 	this->sockfd = socket(this->res->ai_family, this->res->ai_socktype,
 		this->res->ai_protocol);
 	if (this->sockfd < 0)
-	{
-		std::cout << "Error with socket" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with socket");
 	return ;
 }
 
 void	Server::ftFcntl(void)
 {
 	if ((fcntl(this->sockfd, F_SETFL, O_NONBLOCK)) < 0)
-	{
-		std::cout << "Error with fcntl" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with fcntl");
 	return ;
 }
 
@@ -76,30 +68,21 @@ void	Server::ftSetSockOpt(void)
 
 	if ((setsockopt(this->sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)))
 		< 0)
-	{
-		std::cout << "Error with setsockopt" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with setsockopt");
 	return ;
 }
 
 void	Server::ftBind(void)
 {
 	if ((bind(this->sockfd, this->res->ai_addr, this->res->ai_addrlen)) < 0)
-	{
-		std::cout << "Error with bind" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with bind");
 	return ;
 }
 
 void	Server::ftListen(void)
 {
 	if ((listen(this->sockfd, 10)) < 0)
-	{
-		std::cout << "Error with listen" << std::endl;
-		std::exit(EXIT_FAILURE);
-	}
+		throw IrcErrorException("Error with listen");
 	return ;
 }
 
