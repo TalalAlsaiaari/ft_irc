@@ -303,7 +303,7 @@ void Channel::modeL(char sign, devector<std::string> &args, Client &current_clie
             args.pop_front();
             if (!(conv >> limit))
                 return ;
-            if (limit <= 0)
+            if (limit <= (int)this->currentCount)
                 return ;
             this->limit = limit;
             this->hasLimit = true;
