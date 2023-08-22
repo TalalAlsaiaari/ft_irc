@@ -219,7 +219,8 @@ void Functions::channelMode(std::string modes, chan_it chan) {
 			}
 		}
 		mode += trailing;
-		current_client->pushSendBuff(chan->second.echoToAll(*current_client, cmd, mode, true, sent));
+		if (mode != "+")
+			current_client->pushSendBuff(chan->second.echoToAll(*current_client, cmd, mode, true, sent));
 		sent.clear();
 	} else
 		ServerMessage(ERR_UNKNOWNMODE, mode + " :is an unknown mode to me\n", *current_client);
