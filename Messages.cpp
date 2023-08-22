@@ -6,7 +6,7 @@ void ConnectionMessage( Client &client) {
 	ServerMessage(RPL_YOURHOST, " :Your host is " + client.getHostName() + "\n", client);
 	ServerMessage(RPL_CREATED, " :This server was created some time recently\n", client);
 	ServerMessage(RPL_MYINFO, client.getHostName() + "\n", client);
-	ServerMessage(RPL_ISUPPORT, "MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n",client);
+	ServerMessage(RPL_ISUPPORT, "CHANMODES=,k,l,it MODES=2 MAXNICKLEN=16 NICKLEN=16 CHANNELLEN=50 CHANTYPES=# :are supported by this server\n",client);
 }
 
 void ServerMessage(std::string error, std::string message, Client &client) {

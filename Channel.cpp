@@ -253,7 +253,7 @@ void Channel::modeO(char sign, devector<std::string> &args, Client &current_clie
         {
             if (sign == '+' && member != members.end())
                 makeChanOp(current_client, *member->second);
-            else if (oper != operators.end())
+            else if (sign == '-' && oper != operators.end())
                 unsetChanOp(current_client, *oper->second);
             trailing += " " + passed;
             if (modes.find('o', modes.find(sign)) == modes.npos)
@@ -291,7 +291,7 @@ void Channel::modeK(char sign, devector<std::string> &args, Client &current_clie
 void Channel::modeL(char sign, devector<std::string> &args, Client &current_client, std::string &modes, std::string &trailing)
 {
     std::stringstream conv;
-    size_t limit;
+    int limit;
     std::string l_str;
 
     if (isUserOp(this->name, current_client))
@@ -369,7 +369,7 @@ void Channel::setModes(char mode) {
 void Channel::removeModes(char mode) {
     size_t pos = modes.find(mode);
     if (pos != modes.npos)
-        modes.erase(pos);
+        modes.erase(pos, 1);
 }
 
 bool Channel::checkEntrance( std::string nick, Client &client, std::string key ) {
