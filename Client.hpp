@@ -24,19 +24,26 @@ class Client {
 		bool		is_serverOp;
 		bool		is_invisible;
 		bool		remove;
+
 	public:
 		Client( );
 		Client( int fd );
 		Client( int fd, std::string host_name );
 		~Client( );
 		Client &operator=( const Client &other );
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		void setNick( std::string nick );
 		void setRealName( std::string real_name );
 		void setHostName( std::string host_name );
 		void setUserName( std::string user_name );
 		void setServerName( std::string server_name );
 		void setBuff( std::string buff );
-		void pushSendBuff( std::string send );
+		void setInvisibility( bool invis );
+		void setServerOp( bool oper );
+		void set_removal( bool remove );
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Getters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		std::string getNick( void );
 		std::string getRealName( void );
 		std::string getHostName( void );
@@ -45,16 +52,18 @@ class Client {
 		std::string &getBuff( void );
 		devector<std::string> &getSendBuff( void );
 		int getFD( void );
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Booleans ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		bool isRegistered( void );
-		void registration( void );
 		bool isPassGood( void );
-		void passGood( void );
 		bool isInvisible( void );
-		void setInvisibility( bool invis );
 		bool isServerOp( void );
-		void setServerOp( bool oper );
 		bool remove_me( void );
-		void set_removal( bool remove );
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+		void registration( void );
+		void passGood( void );
+		void pushSendBuff( std::string send );
 };
 
 #endif

@@ -31,16 +31,10 @@ Client &Client::operator=(const Client &other) {
 Client::~Client( ) {
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 void Client::setNick( std::string nick ) {
 	this->nick = nick;
-}
-
-void Client::setBuff( std::string buff ) {
-	this->recv_buff = buff;
-}
-
-void Client::pushSendBuff( std::string send ) {
-	send_buff.push_back(send);
 }
 
 void Client::setRealName( std::string real_name ) {
@@ -58,6 +52,24 @@ void Client::setUserName( std::string user_name ) {
 void Client::setServerName( std::string server_name ) {
 	this->server_name = server_name;
 }
+
+void Client::setBuff( std::string buff ) {
+	this->recv_buff = buff;
+}
+
+void Client::setInvisibility( bool invis ) {
+	is_invisible = invis;
+}
+
+void Client::setServerOp( bool oper ) {
+	is_serverOp = oper;
+}
+
+void Client::set_removal( bool remove ) {
+	this->remove = remove;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Getters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 std::string Client::getNick( void ) {
 	return nick;
@@ -91,42 +103,38 @@ int Client::getFD( void ) {
 	return fd;
 }
 
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Booleans ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
 bool Client::isRegistered( void ) {
 	return registered;
-}
-
-void Client::registration( void ) {
-	registered = true;
 }
 
 bool Client::isPassGood( void ) {
 	return pass_registered;
 }
 
-void Client::passGood( void ) {
-	pass_registered = true;
-}
-
 bool Client::isInvisible( void ) {
 	return is_invisible;
-}
-
-void Client::setInvisibility( bool invis ) {
-	is_invisible = invis;
 }
 
 bool Client::isServerOp( void ) {
 	return is_serverOp;
 }
 
-void Client::setServerOp( bool oper ) {
-	is_serverOp = oper;
-}
-
 bool Client::remove_me( void ) {
 	return remove;
 }
 
-void Client::set_removal( bool remove ) {
-	this->remove = remove;
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+void Client::registration( void ) {
+	registered = true;
+}
+
+void Client::passGood( void ) {
+	pass_registered = true;
+}
+
+void Client::pushSendBuff( std::string send ) {
+	send_buff.push_back(send);
 }
