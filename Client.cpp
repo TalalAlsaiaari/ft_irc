@@ -11,6 +11,7 @@ Client::Client( int fd ) : fd(fd), registered(false), pass_registered(false),
 
 Client::Client( int fd, std::string host_name ) : fd(fd), host_name(host_name),
 	registered(false), pass_registered(false), is_serverOp(false), is_invisible(false), remove(false) {
+
 	}
 
 Client &Client::operator=(const Client &other) {
@@ -27,7 +28,8 @@ Client &Client::operator=(const Client &other) {
 	return *this;
 }
 
-Client::~Client( ) {}
+Client::~Client( ) {
+}
 
 void Client::setNick( std::string nick ) {
 	this->nick = nick;

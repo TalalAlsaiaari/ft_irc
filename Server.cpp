@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 15:34:29 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:03:48 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void	Server::removeClient(int index)
 {
 	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
 	parser.removeClient(this->clients[this->pfds[index].fd].getNick());
+	this->clients[this->sender_fd].getBuff().clear();
 	clients.erase(this->pfds[index].fd);
 	close(this->pfds[index].fd);
 	this->pfds[index].fd = -1;
@@ -193,7 +194,7 @@ void	Server::ftSend()
 	this->clients[this->sender_fd].getBuff() += buf;
 	input = this->clients[this->sender_fd].getBuff();
 	if (input.find("\n") != std::string::npos) {
-		std::cout << input << std::endl;
+		std::cout << "|" << input << "|" << std::endl;
 		this->parser.takeInput(input, this->sender_fd, this->clients[this->sender_fd]);
 		this->clients[this->sender_fd].getBuff().clear();
 	}
