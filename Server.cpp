@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 17:33:37 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 19:53:02 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	Server::removeClient(int index)
 {
 	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
 	parser.removeClient(this->clients[this->pfds[index].fd].getNick());
-	this->clients[this->sender_fd].getBuff().clear();
+	this->clients[this->pfds[index].fd].getBuff().clear();
 	clients.erase(this->pfds[index].fd);
 	close(this->pfds[index].fd);
 	this->pfds[index].fd = -1;
