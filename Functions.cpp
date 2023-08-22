@@ -32,7 +32,6 @@ bool Functions::checkNick( std::string nick ) {
 		else {
 			ServerMessage("ERROR ", "13 your nick is unavailable, get a better name and try connecting again\n", *current_client);
 			multi_cmd.clear();
-			// close(fd);
 			throw IrcErrorException("user tried to register with nick already in use\n");
 		}
 		return false;
@@ -68,7 +67,6 @@ bool Functions::RegisterUser( void ) {
 	} catch (std::exception &e) {
 		ServerMessage(ERR_NEEDMOREPARAMS, ":need more params\n", *current_client);
 		nicks.erase(current_client->getNick());
-		// close(fd);
 		current_client->set_removal(true);
 		throw IrcErrorException("user not registered\n");
 	}
@@ -100,7 +98,6 @@ void Functions::errMsg(client_it dest, std::string msg)
 {
 	std::string mes = ":" + dest->second->getServerName() + "Error: " + msg + "\n";
 	dest->second->pushSendBuff(mes);
-	// close(dest->second.getFD());
 	dest->second->set_removal(true);
 	nicks.erase(dest);
 }
@@ -209,7 +206,6 @@ void Functions::channelMode(std::string modes, chan_it chan) {
 		mode = modes[sign_pos];
 		while (mode_pos < modes.length()) {
 			chan->second.chanModes(modes[mode_pos], modes[sign_pos], arguments, *current_client, mode, trailing);
-			// mode += modes[mode_pos];
 			mode_pos++;
 			if (mode_pos == mode_end_pos) {
 				mode_pos = modes.find_first_not_of("+-", mode_end_pos);
