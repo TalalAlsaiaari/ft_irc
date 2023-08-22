@@ -3,6 +3,10 @@
 #include "Commands.hpp"
 
 class Parser : public Commands {
+	private:
+		typedef void (Parser::*Funcs)(void);
+		std::map<std::string, Funcs> func;
+	
 	public:
 		Parser( );
 		~Parser( );
@@ -13,7 +17,4 @@ class Parser : public Commands {
 		bool checkRegistration( void );
 		std::string makeUpper( std::string str);
 		void removeClient(std::string remove);
-	private:
-		typedef void (Parser::*Funcs)(void);
-		std::map<std::string, Funcs> func;
 };
