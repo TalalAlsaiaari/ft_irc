@@ -403,6 +403,8 @@ void Commands::KILL(void)
 			killMsg(*current_client, *user->second);
 			quitMsg(*user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
+			user->second->set_removal(true);
+			// close(user->second->getFD());
 		}
 	} 
 }

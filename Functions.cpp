@@ -22,8 +22,10 @@ bool Functions::checkNick( std::string nick ) {
 	client_it it;
 
 	it = nicks.find(nick);
-	if (nick.find_first_of("#&\x03") != nick.npos)
+	if (nick.find_first_of("#&\x03") != nick.npos) {
 		ServerMessage(ERR_ERRONEUSNICKNAME, ":" + nick + " erroneus nick name\n", *current_client);
+		return false;
+	}
 	else if (it != nicks.end()) {
 		if (current_client->isRegistered())
 			ServerMessage(ERR_NICKNAMEINUSE, nick + " :Nickname is already in use\n", *current_client);
