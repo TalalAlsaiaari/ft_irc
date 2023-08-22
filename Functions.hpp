@@ -57,8 +57,8 @@ class Functions {
 		void channelMode(std::string modes, chan_it chan);
 		void updateChannel(Client &client, std::string old_nick, std::string new_nick);
 		std::vector<std::string> split(std::string str, std::string delim);
-		void quitMsg(Client source, std::string msg);
 		void killMsg(Client &source, Client &dest);
+		void quitMsg(Client &source, std::string msg);
 		void errMsg(client_it dest, std::string msg);
 		
 		virtual void takeInput( std::string input, int fd, Client &client ) = 0;

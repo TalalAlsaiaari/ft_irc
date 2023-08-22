@@ -207,7 +207,7 @@ void Functions::killMsg(Client &source, Client &dest) {
 	dest.pushSendBuff(message);
 }
 
-void Functions::quitMsg(Client source, std::string msg)
+void Functions::quitMsg(Client &source, std::string msg)
 {
 	std::string nick = source.getNick();
 	std::string user_info = USER_FN(source.getNick(), source.getUserName(), source.getHostName());
@@ -224,7 +224,7 @@ void Functions::quitMsg(Client source, std::string msg)
 
 void Functions::errMsg(client_it dest, std::string msg)
 {
-	std::string mes = ":" + dest->second->getServerName() + "Error: " + msg + "\n";
+	std::string mes = ": " + dest->second->getServerName() + "Error: " + msg + "\n";
 	dest->second->pushSendBuff(mes);
 	dest->second->set_removal(true);
 	nicks.erase(dest);
