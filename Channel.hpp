@@ -30,33 +30,20 @@ class Channel
 		Channel();
 		Channel( std::string, Client & );
 		~Channel();
-		void addMember( Client &add , std::string key);
-		std::string echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
-		void makeChanOp( Client &, Client & );
-		void unsetChanOp(Client &src, Client &dst);
-		void removeMember( Client & );
-		void updateMemberNick( Client &, std::string, std::string );
-		void whoIsChan( Client & );
-		void addInvite( std::string nick, Client &client );
-		void removeInvite( std::string nick );
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		void setTopic(std::string topic);
 		void setChannelOp(Client& target);
 		void setInviteOnly( bool invite );
 		void setModes(char mode);
-		void removeModes(char mode);
-		unsigned int getCurrentCount(void) const;
 
-		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current, std::string &modes, std::string &trailing);
-		void modeI(char sign, Client &current, std::string &modes);
-		void modeO(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
-		void modeK(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
-		void modeL(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
-		void modeT(char sign, Client &current_client, std::string &modes);
-
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Getters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		std::string const getTopic(void) const;
 		std::string const getDefKickMsg(void) const;
 		std::string const getModes(void) const;
+		unsigned int getCurrentCount(void) const;
 
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Booleans ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 		bool isInviteOnly( void );
 		bool hasTopic(void);
 		bool isInChan( std::string );
@@ -64,5 +51,23 @@ class Channel
 		bool checkEntrance( std::string nick, Client &client, std::string key );
 		bool isUserOp(std::string chanName, Client &user);
 		bool needsOpStat(void);
-		void modeMsg(Client &src, Client &dst, std::string mode);
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+		std::string echoToAll(Client &client, std::string cmd, std::string trailng, bool chan, std::map<std::string, Client *>&sent );
+		void addMember( Client &add , std::string key);
+		void makeChanOp( Client &, Client & );
+		void unsetChanOp(Client &src, Client &dst);
+		void removeMember( Client & );
+		void updateMemberNick( Client &, std::string, std::string );
+		void whoIsChan( Client & );
+		void addInvite( std::string nick, Client &client );
+		void removeInvite( std::string nick );
+		void removeModes(char mode);
+		void chanModes(char mode, char sign, devector<std::string> &arguments, Client &current, std::string &modes, std::string &trailing);
+		void modeI(char sign, Client &current, std::string &modes);
+		void modeO(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeK(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeL(char sign, devector<std::string> &args, Client &current, std::string &modes, std::string &trailing);
+		void modeT(char sign, Client &current_client, std::string &modes);
+
 };
