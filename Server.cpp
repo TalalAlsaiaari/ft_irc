@@ -6,7 +6,7 @@
 /*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 16:02:24 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/22 16:03:48 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,12 +178,12 @@ void	Server::checkNBytes(int index)
 
 void	Server::removeClient(int index)
 {
-	close(this->pfds[index].fd);
-	this->pfds[index].fd = -1;
+	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
 	parser.removeClient(this->clients[this->pfds[index].fd].getNick());
 	this->clients[this->sender_fd].getBuff().clear();
 	clients.erase(this->pfds[index].fd);
-	std::cout << "Client " << this->pfds[index].fd << " deleted" << std::endl;
+	close(this->pfds[index].fd);
+	this->pfds[index].fd = -1;
 	return ;
 }
 
