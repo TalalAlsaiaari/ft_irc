@@ -11,6 +11,13 @@ int	main(int ac, char **av)
         std::cout << "expected params: <port> <password>\n";
         return 1;
     }
-	server.ftIRC();
+    try
+	{
+        server.ftIRC();
+    }
+    catch(std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 	return 0;
 }
