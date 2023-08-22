@@ -75,21 +75,21 @@ Main Loop                  |
 	- [x] QUIT _(Alex)_
 	- [x] NOTICE  _(Alex)_
 	- [x] OPER _(Talal)_
-- [ ] create channels _(Alex)_
-	- [ ] create channel operators _(Talal)_
-	- [ ] forward channel messages to all clients in channel _(Alex)_
-	- [ ] create channel functions _(Talal)_
+- [x] create channels _(Alex)_
+	- [x] create channel operators _(Talal)_
+	- [x] forward channel messages to all clients in channel _(Alex)_
+	- [x] create channel functions _(Talal)_
 		- [x] JOIN _(Alex)_
 		- [x] PART _(Talal)_
 		- [x] INVITE _(Talal)_
 		- [x] KICK _(Talal)_
 		- [x] TOPIC _(Talal)_
-		- [ ] MODE _(Talal)_
-			- [ ] i (Set/remove Invite-only channel) _(Talal)_
-			- [ ] t (Set/remove the restrictions of the TOPIC command to channel operators) _(Talal)_
-			- [ ] k (Set/remove the channel key (password)) _(Talal)_
-			- [ ] o (Give/take channel operator privilege) _(Talal)_
-			- [ ] l (Set/remove the user limit to channel) _(Talal)_
+		- [x] MODE _(Talal)_
+			- [x] i (Set/remove Invite-only channel) _(Talal)_
+			- [x] t (Set/remove the restrictions of the TOPIC command to channel operators) _(Talal)_
+			- [x] k (Set/remove the channel key (password)) _(Talal)_
+			- [x] o (Give/take channel operator privilege) _(Talal)_
+			- [x] l (Set/remove the user limit to channel) _(Talal)_
 
 ### Requirements
 
