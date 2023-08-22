@@ -44,9 +44,9 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 # Code Flow
 
-Main Loop                  |  Parsing loop
-:-------------------------:|:-------------------------:
-![general](general.png)    |  ![parsing](parsing.png)
+Main Loop                  |
+:-------------------------:|
+![general](general.png)    |
 
 # TO DO
 
