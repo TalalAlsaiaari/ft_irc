@@ -42,12 +42,54 @@ They are a way to speak to other programs using standard UNIX file descriptors. 
 I/O. File descriptors are an integer associated with an open file, but that file can be a network connection, a FIFO, a pipe, a terminal, a real on-the-disk file, or just about
 anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
+# Code Flow
+
+Main Loop                  |
+:-------------------------:|
+![general](general.png)    |
+
 # TO DO
 
-- [x] Make awesome README
-- [ ] Create Server
-	- [ ] figure it out
-- [ ] Parse Client Input
+- [x] Make awesome README _(Alex)_
+- [x] Create Server _(Talal)_
+	- [x] Simple Server with one client _(Talal)_
+	- [x] Server accepting multiple clients _(Talal)_
+	- [x] DNS lookup _(Talal)_
+- [x] Parse Client Input _(Alex)_
+	- [x] error handling (wrong command/not enough parmas/etc.) _(Alex)_
+- [x] Create server operators _(Talal)_
+	- [x] Create operator functions _(Talal)_
+		- [x] KILL _(Talal)_
+- [x] Create server query / functions _(Alex)_
+	- [x] CAP registration _(Alex)_
+	- [x] MOTD (message of the day) _(Alex)_
+	- [x] PASS _(Alex)_
+	- [x] NICK _(Alex)_
+	- [x] USER  _(Alex)_
+	- [x] PING/PONG  _(Alex)_
+	- [x] PRIVMSG _(Alex)_
+	- [x] MODE _(Alex)_
+		- [x] +i {invisible}
+		- [x] +o {operator}
+	- [x] WHOIS _(Alex)_
+	- [x] QUIT _(Alex)_
+	- [x] NOTICE  _(Alex)_
+	- [x] OPER _(Talal)_
+- [x] create channels _(Alex)_
+	- [x] create channel operators _(Talal)_
+	- [x] forward channel messages to all clients in channel _(Alex)_
+	- [x] create channel functions _(Talal)_
+		- [x] JOIN _(Alex)_
+		- [x] PART _(Talal)_
+		- [x] INVITE _(Talal)_
+		- [x] KICK _(Talal)_
+		- [x] TOPIC _(Talal)_
+		- [x] MODE _(Talal)_
+			- [x] i (Set/remove Invite-only channel) _(Talal)_
+			- [x] t (Set/remove the restrictions of the TOPIC command to channel operators) _(Talal)_
+			- [x] k (Set/remove the channel key (password)) _(Talal)_
+			- [x] o (Give/take channel operator privilege) _(Talal)_
+			- [x] l (Set/remove the user limit to channel) _(Talal)_
 
 ### Requirements
 
@@ -71,11 +113,12 @@ anything else. **EVERYTHING IS A FILE DESCRIPTOR.**
 
 ## Run irssi in Docker
 ``` bash
-	docker run -it --name irssi --network host irssi
+	docker run -it --rm --name irssi --network host irssi
 	/set nick <name>
-	/connect host.docker.internal <port>
+	/connect host.docker.internal <port> <password>
 	/join #<channel_name>
 	/msg <nick> <message>
+	...
 ```
 ## Run Executable
 ``` bash
@@ -783,6 +826,20 @@ defined in <poll.h>:
 	outstanding data in the channel has been consumed.
 </details>
 
+# Connection registration
+
+The recommended order of commands during registration is as follows:
+
+1. CAP LS 302
+2. PASS
+3. NICK and USER
+4. Capability Negotiation
+5. SASL (if negotiated)
+6. CAP END
+
+> Upon successful completion of the registration process, the server MUST send, in this order, the RPL_WELCOME (001), RPL_YOURHOST (002), RPL_CREATED (003), RPL_MYINFO (004), and at least one RPL_ISUPPORT (005) numeric to the client.
+> The first parameter of the RPL_WELCOME (001) message is the nickname assigned by the network to the client. Since it may differ from the nickname the client requested with the NICK command (due to, e.g. length limits or policy restrictions on nicknames), the client SHOULD use this parameter to determine its actual nickname at the time of connection. Subsequent nickname changes, client-initiated or not, will be communicated by the server sending a NICK message.
+
 # Random Info dump
 
 From Karim use rawlog to see commands and expected replies "/help rawlog"
@@ -971,8 +1028,22 @@ messages starting with ">>" are from the server to the client
 
 [ 7 ] <https://beej.us/guide/bgnet/>
 
+first documentation for IRC protocol
 [ 8 ] <https://www.rfc-editor.org/rfc/rfc1459>
 
+CAP LS command and client registration
 [ 9 ] <https://ircv3.net/specs/extensions/capability-negotiation.html>
 
 [ 10 ] <http://chi.cs.uchicago.edu/chirc/irc_examples.html>
+
+more recent documentation for IRC protocol
+[ 11 ] <https://www.rfc-editor.org/rfc/rfc2813>
+
+[ 12 ] <https://ircv3.net/registry#capabilities>
+
+
+modern irc docs (very useful)
+[ 13 ] <https://modern.ircdocs.horse/>
+
+sasl registration
+[ 14 ] <https://libera.chat/guides/registration>
