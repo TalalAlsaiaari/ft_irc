@@ -19,7 +19,7 @@ void UserMessage(std::string cmd, std::string message, Client &client) {
 	client.pushSendBuff(mes);
 }
 
-void UsertoUser(Client origin, Client dest, std::string cmd, std::string mess) {
+void UsertoUser(Client &origin, Client &dest, std::string cmd, std::string mess) {
 	std::string message = ":" + USER_FN(origin.getNick(), origin.getUserName(), origin.getHostName());
 	message += " " + cmd + " " + origin.getNick() + " ";
 	message += ":";

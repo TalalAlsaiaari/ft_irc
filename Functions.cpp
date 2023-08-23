@@ -111,7 +111,6 @@ bool Functions::RegisterUser( void ) {
 void Functions::userMode(std::string modes, std::string name)
 {
 	try {
-		std::cout << name << std::endl;
 		client_it target = nicks.find(args.at(0));
 		if (target == nicks.end())
 			ServerMessage(ERR_NOSUCHNICK, ":" + args[0] + "\n", *current_client);

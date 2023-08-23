@@ -32,7 +32,7 @@ void Parser::takeInput( std::string Input, int fd, Client &client ) {
 		this->excecuteCommand();
 		nicks[current_client->getNick()] = current_client;
 	} catch (std::exception &e) {
-		std::cout << "Exception caught: " << e.what();
+		std::cout << e.what();
 	}
 }
 
