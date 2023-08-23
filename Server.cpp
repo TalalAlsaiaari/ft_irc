@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/22 19:53:02 by talsaiaa         ###   ########.fr       */
+/*   Updated: 2023/08/23 14:56:07 by aball            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	Server::resizePfds(void)
 void	Server::ftRecv(int index)
 {
 
-	this->nbytes = recv(this->pfds[index].fd, this->buf, sizeof(this->buf), 0);
+	this->nbytes = recv(this->pfds[index].fd, this->buf, 255, 0);
 	this->sender_fd = this->pfds[index].fd;
 	return ;
 }
