@@ -289,7 +289,7 @@ void Commands::MODE( void ) {
 		if (args.size() > 1)
 			modes = args[1];
 		if (!isChanName(args[0])) {
-			userMode(modes, name);
+			userMode(modes);
 		} else {
 			chan = channels.find(name);
 			if (channelExist(name, chan) && userInChan(name, chan))

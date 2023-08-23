@@ -108,7 +108,7 @@ bool Functions::RegisterUser( void ) {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-void Functions::userMode(std::string modes, std::string name)
+void Functions::userMode(std::string modes)
 {
 	try {
 		client_it target = nicks.find(args.at(0));

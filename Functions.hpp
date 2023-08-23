@@ -53,7 +53,7 @@ class Functions {
 		bool RegisterUser( void );
 
 		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-		void userMode(std::string modes, std::string name);
+		void userMode(std::string modes);
 		void channelMode(std::string modes, chan_it chan);
 		void updateChannel(Client &client, std::string old_nick, std::string new_nick);
 		std::vector<std::string> split(std::string str, std::string delim);
