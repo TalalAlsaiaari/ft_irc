@@ -1012,6 +1012,27 @@ messages starting with ">>" are from the server to the client
 
 ![PRIVMSG](http://chi.cs.uchicago.edu/_images/privmsg.png) <sup>[ [10] ](http://chi.cs.uchicago.edu/chirc/irc_examples.html)</sup>
 
+# ERRORS
+
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=1125899907526656, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=1125899907526656, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=1125899907526656, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=1125899907526656, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=1125899907526656, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+> ircserv(16824,0x114d6cdc0) malloc: can't allocate region
+> :*** mach_vm_map(size=3347427345368633344, flags: 100) failed (error code=3)
+> ircserv(16824,0x114d6cdc0) malloc: *** set a breakpoint in malloc_error_break to debug
+
 # REFERENCES
 
 [ 1 ]  <https://www.cs.cmu.edu/~srini/15-441/F06/project1/chapter1.html>
