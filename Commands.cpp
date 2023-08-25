@@ -399,10 +399,10 @@ void Commands::KILL(void)
 			ServerMessage(ERR_NOSUCHNICK, " :Who dat?\n", *current_client);
 		else
 		{
+			user->second->set_removal(true);
 			killMsg(*current_client, *user->second);
 			quitMsg(*user->second, "Killed (" + current_client->getNick() + "(" + args[1] + ")" + ")" + "\n" );
 			errMsg(user, args[1]);
-			user->second->set_removal(true);
 		}
 	} 
 }

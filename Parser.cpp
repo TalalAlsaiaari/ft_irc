@@ -114,6 +114,11 @@ bool Parser::checkRegistration( void ) {
 void Parser::removeClient( std::string remove ) {
 	client_it client = nicks.find(remove);
 	
+	for (chan_it channel = channels.begin(); channel != channels.end(); ++channel)
+	{
+		if (channel->second.isInChan(remove))
+			channel->second.removeMember(*client->second);
+	}
 	if (client != nicks.end())
 		nicks.erase(client);
 }
