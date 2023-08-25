@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aball <aball@student.42.fr>                +#+  +:+       +#+        */
+/*   By: talsaiaa <talsaiaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 19:20:51 by talsaiaa          #+#    #+#             */
-/*   Updated: 2023/08/23 14:56:07 by aball            ###   ########.fr       */
+/*   Updated: 2023/08/25 18:32:48 by talsaiaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ Server::Server()
 
 void	Server::setPort(char *port)
 {
+	std::stringstream conv;
+	int iport;
+
+	conv << port;
+	conv >> iport;
+	if (iport >= 0 && iport <= 1023)
+		throw IrcErrorException("ports 0 - 1023 are reserved ports! Please use a different port.");
 	this->port = port;
 	return ;
 }
